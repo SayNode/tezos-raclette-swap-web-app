@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:tezos_swap_frontend/services/contract_caller.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,7 +35,15 @@ class _HomePageState extends State<HomePage> {
                   provider.address,
                   style: Theme.of(context).textTheme.headline4,
                 );
-              })
+              }),
+                        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                onPressed: () async {
+                  //await callContract();
+                },
+                child: Text('call contract')),
+          ),
         ],
       )),
     );
