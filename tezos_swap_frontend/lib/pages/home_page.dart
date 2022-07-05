@@ -10,6 +10,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final WalletProvider provider = WalletProvider();
+  String? adr;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,13 +19,26 @@ class _HomePageState extends State<HomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-          child: ElevatedButton(
-              onPressed: () async {
-                WalletProvider provider = WalletProvider();
-                //await provider.connectMetamask();
-                provider.connect({"type":"PERMISSION_REQUEST","network":"mainnet","appMeta":{"name":"TezosSwap"},"force":true});
-              },
-              child: Text('Connect Wallet'))),
+          child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                onPressed: () async {
+                  await provider.requestPermission();
+                },
+                child: Text('Connect Wallet')),
+          ),
+          AnimatedBuilder(
+              animation: provider,
+              builder: (context, child) {
+                return Text(
+                  '${provider.address}',
+                  style: Theme.of(context).textTheme.headline4,
+                );
+              })
+        ],
+      )),
     );
   }
 }
