@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  blake2b:
+    dependency: transitive
+    description:
+      name: blake2b
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -228,6 +235,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_sodium:
+    dependency: transitive
+    description:
+      name: flutter_sodium
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -530,6 +544,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
+  tezster_dart:
+    dependency: "direct main"
+    description:
+      path: "assets/packages/tezster_dart"
+      relative: true
+    source: path
+    version: "2.1.2-beta.2"
   thor_devkit_dart:
     dependency: "direct main"
     description:
@@ -544,6 +565,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.1"
+  unorm_dart:
+    dependency: transitive
+    description:
+      name: unorm_dart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   uuid:
     dependency: transitive
     description:
