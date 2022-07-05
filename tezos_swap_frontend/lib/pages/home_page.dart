@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () async {
                 WalletProvider provider = WalletProvider();
                 //await provider.connectMetamask();
-                provider.connect('test');
+                provider.connect({"type":"PERMISSION_REQUEST","network":"mainnet","appMeta":{"name":"TezosSwap"},"force":true});
               },
               child: Text('Connect Wallet'))),
     );
