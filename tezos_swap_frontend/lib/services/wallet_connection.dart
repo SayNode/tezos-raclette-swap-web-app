@@ -1,8 +1,6 @@
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
-import 'package:tezos_swap_frontend/pages/home_page.dart';
-import 'package:thor_devkit_dart/crypto/address.dart';
-import 'package:thor_devkit_dart/utils.dart';
 
 class WalletProvider extends ChangeNotifier {
   String address = 'Not Connected';
@@ -26,13 +24,11 @@ class WalletProvider extends ChangeNotifier {
       if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_RESPONSE') {
-        print(evt.data['payload']['pkh']);
         address = evt.data['payload']['pkh'] as String;
         notifyListeners();
       } else if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_ERROR_RESPONSE') {
-        print(evt.data);
       }
     }, true);
   }

@@ -37,6 +37,7 @@ dependencies:
   base58check: ^2.0.0
   thor_devkit_dart: ^1.0.0
   webview_flutter: ^3.0.4
+  easy_localization: ^3.0.1
 
 dev_dependencies:
   flutter_test:
@@ -54,7 +55,8 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - assets/translations/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

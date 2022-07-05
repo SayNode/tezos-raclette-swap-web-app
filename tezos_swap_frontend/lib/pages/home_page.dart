@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 
@@ -27,13 +28,13 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () async {
                   await provider.requestPermission();
                 },
-                child: Text('Connect Wallet')),
+                child: Text('connect'.tr())),
           ),
           AnimatedBuilder(
               animation: provider,
               builder: (context, child) {
                 return Text(
-                  '${provider.address}',
+                  provider.address,
                   style: Theme.of(context).textTheme.headline4,
                 );
               })
