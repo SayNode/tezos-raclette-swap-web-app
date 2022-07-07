@@ -1,19 +1,18 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class PasswordGenerator {
-
   static String generatePassword(
-      {@required double length,
-      bool isWithLetters,
-      bool isWithUppercase,
-      bool isWithNumbers,
-      bool isWithSpecial}) {
+      {required double length,
+      bool isWithLetters = false,
+      bool isWithUppercase = false,
+      bool isWithNumbers = false,
+      bool isWithSpecial = false}) {
     String _lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
     String _upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String _numbers = "0123456789";
-    String _special = r'!@#$%^&*()+_-=}{[]|:;"/?.><,`~';  
+    String _special = r'!@#$%^&*()+_-=}{[]|:;"/?.><,`~';
 
     String _allowedChars = "";
 

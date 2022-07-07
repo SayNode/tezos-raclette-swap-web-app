@@ -3,8 +3,8 @@ import 'dart:io';
 
 class HttpHelper {
   static Future<dynamic> performPostRequest(server, command, payload,
-      {required Map<String, String> headers}) async {
-    HttpClient httpClient = new HttpClient();
+      {Map<String, String>? headers}) async {
+    HttpClient httpClient = HttpClient();
     HttpClientRequest request = await httpClient.postUrl(
         command.isEmpty ? Uri.parse(server) : Uri.parse('$server/$command'));
     request.headers.set('content-type', 'application/json');
@@ -24,7 +24,7 @@ class HttpHelper {
   }
 
   static Future<dynamic> performGetRequest(server, command) async {
-    HttpClient httpClient = new HttpClient();
+    HttpClient httpClient = HttpClient();
     HttpClientRequest request =
         await httpClient.getUrl(Uri.parse('$server/$command'));
     HttpClientResponse response = await request.close();

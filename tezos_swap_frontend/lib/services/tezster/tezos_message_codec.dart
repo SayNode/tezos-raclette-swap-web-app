@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:tezos_swap_frontend/services/tezster/tezos_language_util.dart';
+import 'package:tezos_swap_frontend/services/tezster/tezos_message_utils.dart';
 import 'models/operation_model.dart';
 
 class TezosMessageCodec {
@@ -32,7 +33,7 @@ class TezosMessageCodec {
     if (message.parameters != null) {
       var composite = message.parameters;
       var result = TezosLanguageUtil.translateMichelineToHex(
-          jsonEncode(composite['value']));
+          jsonEncode(composite!['value']));
       if ((composite['entrypoint'] == 'default' ||
               composite['entrypoint'] == '') &&
           result == '030b') {
@@ -75,7 +76,7 @@ class TezosMessageCodec {
     hex += TezosMessageUtils.writeInt(message.counter);
     hex += TezosMessageUtils.writeInt(message.gasLimit);
     hex += TezosMessageUtils.writeInt(message.storageLimit);
-    hex += TezosMessageUtils.writePublicKey(message.publicKey);
+    hex += TezosMessageUtils.writePublicKey(message.publicKey!);
     return hex;
   }
 
@@ -86,9 +87,9 @@ class TezosMessageCodec {
     hex += TezosMessageUtils.writeInt(delegation.counter);
     hex += TezosMessageUtils.writeInt(delegation.gasLimit);
     hex += TezosMessageUtils.writeInt(delegation.storageLimit);
-    if (delegation.delegate != null && delegation.delegate.isNotEmpty) {
+    if (delegation.delegate != null && delegation.delegate!.isNotEmpty) {
       hex += TezosMessageUtils.writeBoolean(true);
-      hex += TezosMessageUtils.writeAddress(delegation.delegate).substring(2);
+      hex += TezosMessageUtils.writeAddress(delegation.delegate!).substring(2);
     } else {
       hex += TezosMessageUtils.writeBoolean(false);
     }
@@ -106,14 +107,14 @@ class TezosMessageCodec {
 
     if (origination.delegate != null) {
       hex += TezosMessageUtils.writeBoolean(true);
-      hex += TezosMessageUtils.writeAddress(origination.delegate).substring(2);
+      hex += TezosMessageUtils.writeAddress(origination.delegate!).substring(2);
     } else {
       hex += TezosMessageUtils.writeBoolean(false);
     }
     if (origination.script != null) {
       var parts = [];
-      parts.add(origination.script['code']);
-      parts.add(origination.script['storage']);
+      parts.add(origination.script!['code']);
+      parts.add(origination.script!['storage']);
       hex += parts
           .map((p) => jsonEncode(p))
           .map((p) => TezosLanguageUtil.translateMichelineToHex(p))

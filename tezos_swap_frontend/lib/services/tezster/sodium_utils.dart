@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:flutter_sodium/flutter_sodium.dart';
 
 class SodiumUtils {

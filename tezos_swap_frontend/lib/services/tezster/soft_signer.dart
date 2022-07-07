@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:tezster_dart/chain/tezos/tezos_message_utils.dart';
-import 'package:tezster_dart/helper/password_generater.dart';
-import 'package:tezster_dart/utils/crypto_utils.dart';
+import 'package:tezos_swap_frontend/services/tezster/crypto_utils.dart';
+import 'package:tezos_swap_frontend/services/tezster/password_generater.dart';
+import 'package:tezos_swap_frontend/services/tezster/tezos_message_utils.dart';
 
 enum SignerCurve { ED25519, SECP256K1, SECP256R1 }
 
@@ -15,10 +15,10 @@ class SoftSigner {
   var _key;
 
   SoftSigner(
-      {Uint8List secretKey,
+      {required Uint8List secretKey,
       int validity = -1,
       String passphrase = '',
-      Uint8List salt}) {
+      Uint8List? salt}) {
     this._secretKey = secretKey;
     this._lockTimout = validity;
     this._passphrase = passphrase;
@@ -47,8 +47,9 @@ class SoftSigner {
         passphrase: passphrase,
         salt: salt,
       );
-    } else
-      return new SoftSigner(secretKey: secretKey);
+    } else {
+      return SoftSigner(secretKey: secretKey);
+    }
   }
 
   Uint8List getKey() {
