@@ -2,7 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sodium_libs/sodium_libs.dart';
 import 'package:tezos_swap_frontend/services/contract_caller.dart';
+import 'package:tezos_swap_frontend/services/tezster/sodium_web_init.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
+import 'package:tezos_swap_frontend/services/tezster/sodium_web_init.dart'
+    as sod;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -40,8 +43,8 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
                 onPressed: () async {
-                  final sodium = await SodiumInit.init();
-                  print(sodium.version);
+                  final sodium = sod.SodiumWeb();
+                  print(await sodium.loadSodium());
                 },
                 child: Text('check sodium')),
           ),
