@@ -14,16 +14,14 @@ import 'package:tezos_swap_frontend/services/tezster/tezos_node_reader.dart';
 
 callContract() async {
   var server = '';
-
   var keyStore = KeyStoreModel(
     publicKey: 'edpkvQtuhdZQmjdjVfaY9Kf4hHfrRJYugaJErkCGvV3ER1S7XWsrrj',
     secretKey:
         'edskRgu8wHxjwayvnmpLDDijzD3VZDoAH7ZLqJWuG4zg7LbxmSWZWhtkSyM5Uby41rGfsBGk4iPKWHSDniFyCRv3j7YFCknyHH',
     publicKeyHash: 'tz1QSHaKpTFhgHLbqinyYRjxD5sLcbfbzhxy',
   );
-
   var signer = await createSigner(writeKeyWithHint(keyStore.secretKey, 'edsk'));
-
+  print(signer);
   var contractAddress = 'KT1KA7DqFjShLC4CPtChPX8QtRYECUb99xMY';
 
   var resultInvoke = await sendContractInvocationOperation(
@@ -109,7 +107,7 @@ Future<Map<String, Object>> sendOperation(String server,
   var blockHead = await TezosNodeReader.getBlockAtOffset(server, offset);
   var blockHash = blockHead['hash'].toString().substring(0, 51);
   var forgedOperationGroup = forgeOperations(blockHash, operations);
-  var opSignature = signer.signOperation(Uint8List.fromList(hex
+  var opSignature = await signer.signOperation(Uint8List.fromList(hex
       .decode(TezosConstants.OperationGroupWatermark + forgedOperationGroup)));
   var signedOpGroup = Uint8List.fromList(
       hex.decode(forgedOperationGroup) + opSignature.toList());

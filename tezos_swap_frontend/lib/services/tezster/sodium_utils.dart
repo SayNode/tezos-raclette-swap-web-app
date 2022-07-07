@@ -1,48 +1,81 @@
+import 'dart:convert';
 import 'dart:typed_data';
-import 'package:flutter_sodium/flutter_sodium.dart';
+import 'dart:math';
+
+//import 'package:flutter_sodium/flutter_sodium.dart';
+import 'package:sodium_libs/sodium_libs.dart';
 
 class SodiumUtils {
   static Uint8List rand(length) {
-    return Sodium.randombytesBuf(length);
+    final Random _random = Random.secure();
+    var values = List<int>.generate(length, (i) => _random.nextInt(256));
+
+    return Uint8List.fromList(values);
   }
 
-  static Uint8List salt() {
-    return Uint8List.fromList(rand(Sodium.cryptoPwhashSaltbytes).toList());
+  static Future<Uint8List> salt() async {
+    final sodium = await SodiumInit.init();
+    print(sodium);
+
+    return Uint8List.fromList(rand(sodium.crypto.pwhash.saltBytes).toList());
   }
 
-  static Uint8List pwhash(String passphrase, Uint8List salt) {
-    return Sodium.cryptoPwhash(
-        Sodium.cryptoBoxSeedbytes,
-        Uint8List.fromList(passphrase.codeUnits),
-        salt,
-        4,
-        33554432,
-        Sodium.cryptoPwhashAlgArgon2i13);
+  static Future<Uint8List> pwhash(String passphrase, Uint8List salt) async {
+    final sodium = await SodiumInit.init();
+
+    return sodium.crypto.pwhash
+        .call(
+            outLen: sodium.crypto.box.seedBytes,
+            password: Int8List.fromList(passphrase.codeUnits),
+            salt: salt,
+            opsLimit: 4,
+            memLimit: 33554432,
+            alg: CryptoPwhashAlgorithm.argon2i13)
+        .extractBytes();
   }
 
-  static Uint8List nonce() {
-    return rand(Sodium.cryptoBoxNoncebytes);
+  static Future<Uint8List> nonce() async {
+    final sodium = await SodiumInit.init();
+    return rand(sodium.crypto.box.nonceBytes);
   }
 
-  static Uint8List close(
-      Uint8List message, Uint8List nonce, Uint8List keyBytes) {
-    return Sodium.cryptoSecretboxEasy(message, nonce, keyBytes);
+  static Future<Uint8List> close(
+      Uint8List message, Uint8List nonce, Uint8List keyBytes) async {
+    final sodium = await SodiumInit.init();
+
+    return sodium.crypto.secretBox.easy(
+        message: message,
+        nonce: nonce,
+        key: SecureKey.fromList(sodium, keyBytes));
   }
 
-  static Uint8List open(Uint8List nonceAndCiphertext, Uint8List key) {
-    var nonce = nonceAndCiphertext.sublist(0, Sodium.cryptoSecretboxNoncebytes);
-    var ciphertext =
-        nonceAndCiphertext.sublist(Sodium.cryptoSecretboxNoncebytes);
+  static Future<Uint8List> open(
+      Uint8List nonceAndCiphertext, Uint8List key) async {
+    final sodium = await SodiumInit.init();
 
-    return Sodium.cryptoSecretboxOpenEasy(ciphertext, nonce, key);
+    var nonce =
+        nonceAndCiphertext.sublist(0, sodium.crypto.secretBox.nonceBytes);
+    var cipherText =
+        nonceAndCiphertext.sublist(sodium.crypto.secretBox.nonceBytes);
+
+    return sodium.crypto.secretBox.openEasy(
+        cipherText: cipherText,
+        nonce: nonce,
+        key: SecureKey.fromList(sodium, key));
   }
 
-  static Uint8List sign(Uint8List simpleHash, Uint8List key) {
-    return Sodium.cryptoSignDetached(simpleHash, key);
+  static Future<Uint8List> sign(Uint8List simpleHash, Uint8List key) async {
+    final sodium = await SodiumInit.init();
+
+    return sodium.crypto.sign.detached(
+        message: simpleHash, secretKey: SecureKey.fromList(sodium, key));
   }
 
-  static KeyPair publicKey(Uint8List sk) {
-    var seed = Sodium.cryptoSignEd25519SkToSeed(sk);
-    return Sodium.cryptoSignSeedKeypair(seed);
+  static Future<KeyPair> publicKey(Uint8List sk) async {
+    final sodium = await SodiumInit.init();
+
+    var seed = sodium.crypto.sign.skToSeed(SecureKey.fromList(sodium, sk));
+
+    return sodium.crypto.sign.seedKeyPair(seed);
   }
 }

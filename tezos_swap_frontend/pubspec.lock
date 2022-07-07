@@ -235,13 +235,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_sodium:
-    dependency: "direct main"
-    description:
-      name: flutter_sodium
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -252,6 +245,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.3"
   glob:
     dependency: transitive
     description:
@@ -495,6 +495,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sodium:
+    dependency: transitive
+    description:
+      name: sodium
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.2"
+  sodium_libs:
+    dependency: "direct main"
+    description:
+      name: sodium_libs
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.3"
   source_span:
     dependency: transitive
     description:
@@ -530,6 +544,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  synchronized:
+    dependency: transitive
+    description:
+      name: synchronized
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0+2"
   term_glyph:
     dependency: transitive
     description:

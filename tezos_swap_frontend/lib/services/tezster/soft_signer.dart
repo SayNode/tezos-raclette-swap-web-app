@@ -30,7 +30,8 @@ class SoftSigner {
     }
   }
 
-  static SoftSigner createSigner(Uint8List secretKey, int validity) {
+  static Future<SoftSigner> createSigner(
+      Uint8List secretKey, int validity) async {
     if (validity >= 0) {
       var passphrase = PasswordGenerator.generatePassword(
         length: 32,
@@ -39,8 +40,9 @@ class SoftSigner {
         isWithSpecial: true,
         isWithUppercase: true,
       );
-      var salt = CryptoUtils.generateSaltForPwHash();
-      secretKey = CryptoUtils.encryptMessage(secretKey, passphrase, salt);
+      var salt = await CryptoUtils.generateSaltForPwHash();
+      print(salt);
+      secretKey = await CryptoUtils.encryptMessage(secretKey, passphrase, salt);
       return SoftSigner(
         secretKey: secretKey,
         validity: validity,
@@ -52,9 +54,9 @@ class SoftSigner {
     }
   }
 
-  Uint8List getKey() {
+  Future<Uint8List> getKey() async {
     if (!_unlocked) {
-      var k = CryptoUtils.decryptMessage(_secretKey, _passphrase, _salt);
+      var k = await CryptoUtils.decryptMessage(_secretKey, _passphrase, _salt);
       if (_lockTimout == 0) {
         return k;
       }
@@ -71,9 +73,10 @@ class SoftSigner {
     return _key;
   }
 
-  Uint8List signOperation(Uint8List uint8list) {
-    return CryptoUtils.signDetached(TezosMessageUtils.simpleHash(uint8list, 32),
-        Uint8List.fromList(getKey()));
+  Future<Uint8List> signOperation(Uint8List uint8list) async {
+    return await CryptoUtils.signDetached(
+        TezosMessageUtils.simpleHash(uint8list, 32),
+        Uint8List.fromList(await getKey()));
   }
 
   SignerCurve getSignerCurve() {
