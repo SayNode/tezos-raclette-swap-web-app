@@ -267,7 +267,7 @@ packages:
     source: hosted
     version: "0.2.0"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -509,6 +509,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.3"
+  sodium_web:
+    dependency: "direct main"
+    description:
+      name: sodium_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.5"
   source_span:
     dependency: transitive
     description:

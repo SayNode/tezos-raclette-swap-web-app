@@ -41,7 +41,6 @@ class SoftSigner {
         isWithUppercase: true,
       );
       var salt = await CryptoUtils.generateSaltForPwHash();
-      print(salt);
       secretKey = await CryptoUtils.encryptMessage(secretKey, passphrase, salt);
       return SoftSigner(
         secretKey: secretKey,

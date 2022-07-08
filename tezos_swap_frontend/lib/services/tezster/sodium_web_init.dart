@@ -3,7 +3,6 @@ library sodium_libs_plugin_web;
 
 import 'dart:async';
 import 'dart:html';
-
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart';
@@ -35,6 +34,7 @@ class SodiumWeb extends SodiumPlatform {
         onload: allowInterop(completer.complete),
       ),
     );
+
     final script = ScriptElement()
       ..type = 'text/javascript'
       ..async = true
@@ -42,6 +42,7 @@ class SodiumWeb extends SodiumPlatform {
       ..src = 'sodium.js';
     document.head!.append(script);
 
+    await Future.delayed(Duration(seconds: 10));
     await completer.future;
 
     return SodiumInit.init();

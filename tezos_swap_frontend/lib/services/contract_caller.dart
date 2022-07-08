@@ -21,7 +21,6 @@ callContract() async {
     publicKeyHash: 'tz1QSHaKpTFhgHLbqinyYRjxD5sLcbfbzhxy',
   );
   var signer = await createSigner(writeKeyWithHint(keyStore.secretKey, 'edsk'));
-  print(signer);
   var contractAddress = 'KT1KA7DqFjShLC4CPtChPX8QtRYECUb99xMY';
 
   var resultInvoke = await sendContractInvocationOperation(
@@ -37,7 +36,7 @@ callContract() async {
     '"Cryptonomicon"',
   );
 
-  print(resultInvoke);
+  print('Result: $resultInvoke');
 }
 
 sendContractInvocationOperation(
