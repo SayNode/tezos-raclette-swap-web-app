@@ -13,7 +13,7 @@ import 'package:tezos_swap_frontend/services/tezster/tezos_message_utils.dart';
 import 'package:tezos_swap_frontend/services/tezster/tezos_node_reader.dart';
 
 callContract() async {
-  var server = '';
+  var server = 'https://mainnet-tezos.giganode.io';
   var keyStore = KeyStoreModel(
     publicKey: 'edpkvQtuhdZQmjdjVfaY9Kf4hHfrRJYugaJErkCGvV3ER1S7XWsrrj',
     secretKey:

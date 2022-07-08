@@ -15,6 +15,7 @@ class HttpHelper {
 
   static Future<dynamic> performGetRequest(server, command,
       {bool responseJson = true}) async {
+    print(Uri.parse('$server/$command'));
     var response = (await http.get(Uri.parse('$server/$command'))).body;
     if (responseJson) return jsonDecode(response);
     return response;
