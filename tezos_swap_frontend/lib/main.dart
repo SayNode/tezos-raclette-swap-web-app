@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'pages/home_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import 'theme/ThemeRaclette.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -23,10 +25,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Raclette Swap',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+
+          primarySwatch: ThemeRaclette().primaryColor(),
+          fontFamily: 'Monument',
+          scaffoldBackgroundColor: ThemeRaclette.black,
+
+          textTheme: Theme.of(context).textTheme.apply(
+            bodyColor: ThemeRaclette.white,
+            displayColor: ThemeRaclette.white,
+          )),
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
