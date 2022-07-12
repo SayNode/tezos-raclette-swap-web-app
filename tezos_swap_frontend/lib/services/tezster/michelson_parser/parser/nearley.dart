@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
-
-import '../grammar/michelson_grammar_tokenizer.dart';
-
+import 'package:tezos_swap_frontend/services/tezster/michelson_parser/grammar/michelson_grammar_tokenizer.dart';
 var fail = {};
 
 class Nearley {
@@ -89,7 +87,7 @@ class Nearley {
 
       if (nextColumn.states.length == 0) {
         var err = new NearleyError(reportError(token));
-        err.offset = this.current;
+        err.offset = current;
         err.token = token;
         throw Exception(err.error);
       }
@@ -99,18 +97,18 @@ class Nearley {
     }
 
     if (column != null) {
-      this.lexerState = lexer.save();
+      lexerState = lexer.save();
     }
 
-    results = this.finish();
+    results = finish();
 
     return this;
   }
 
   finish() {
     var considerations = [];
-    var start = this.grammar.start;
-    var column = this.table[this.table.length - 1];
+    var start = grammar.start;
+    var column = table[table.length - 1];
     column.states.forEach((t) {
       if (t.rule.name == start &&
           t.dot == t.rule.symbols.length &&
@@ -125,17 +123,15 @@ class Nearley {
   }
 
   reportError(token) {
-    print(token);
     var lines = [];
     var tokenDisplay =
         (token['type'] != null ? token['type'] + " token: " : "") +
             jsonEncode(token['value'] != null ? token['value'] : token);
-    lines.add(this.lexer.formatError(token, "Syntax error"));
-    lines.add('Unexpected ' +
-        tokenDisplay +
-        '. Instead, I was expecting to see one of the following:\n');
-    var lastColumnIndex = this.table.length - 2;
-    var lastColumn = this.table[lastColumnIndex];
+    lines.add(lexer.formatError(token, "Syntax error"));
+    lines.add('${'Unexpected ' +
+        tokenDisplay}. Instead, I was expecting to see one of the following:\n');
+    var lastColumnIndex = table.length - 2;
+    var lastColumn = table[lastColumnIndex];
     var expectantStates = lastColumn.states.where((state) {
       if (state.rule.symbols.isNotEmpty) {
         var nextSymbol =
@@ -147,16 +143,16 @@ class Nearley {
     }).toList();
 
     var stateStacks = expectantStates.map((state) {
-      return this.buildFirstStateStack(state, []);
+      return buildFirstStateStack(state, []);
     }).toList();
 
     stateStacks.forEach((stateStack) {
       var state = stateStack[0];
       var nextSymbol =
           state.rule.symbols[state.dot - 1 < 0 ? 0 : state.dot - 1];
-      var symbolDisplay = this.getSymbolDisplay(nextSymbol);
-      lines.add('A ' + symbolDisplay + ' based on:');
-      this.displayStateStack(stateStack, lines);
+      var symbolDisplay = getSymbolDisplay(nextSymbol);
+      lines.add('${'A ' + symbolDisplay} based on:');
+      displayStateStack(stateStack, lines);
     });
 
     lines.add("");
@@ -168,45 +164,43 @@ class Nearley {
 
     var token = lexerError.token;
     if (token) {
-      tokenDisplay = "input " + jsonEncode(token.text[0]) + " (lexer error)";
-      lexerMessage = this.lexer.formatError(token, "Syntax error");
+      tokenDisplay = "input ${jsonEncode(token.text[0])} (lexer error)";
+      lexerMessage = lexer.formatError(token, "Syntax error");
     } else {
       tokenDisplay = "input (lexer error)";
       lexerMessage = lexerError.message;
     }
-    return this.reportErrorCommon(lexerMessage, tokenDisplay);
+    return reportErrorCommon(lexerMessage, tokenDisplay);
   }
 
   reportErrorCommon(lexerMessage, tokenDisplay) {
     var lines = [];
     lines.add(lexerMessage);
-    var lastColumnIndex = this.table.length - 1;
-    var lastColumn = this.table[lastColumnIndex];
+    var lastColumnIndex = table.length - 1;
+    var lastColumn = table[lastColumnIndex];
     var expectantStates = lastColumn.states.where((state) {
       var nextSymbol = state.rule.symbols[state.dot] ?? null;
       return nextSymbol != null && !(nextSymbol is String);
     }).toList();
 
     if (expectantStates.length == 0) {
-      lines.add('Unexpected ' +
-          tokenDisplay +
-          '. I did not expect any more input. Here is the state of my parse table:\n');
-      this.displayStateStack(lastColumn.states, lines);
+      lines.add('${'Unexpected ' +
+          tokenDisplay}. I did not expect any more input. Here is the state of my parse table:\n');
+      displayStateStack(lastColumn.states, lines);
     } else {
-      lines.add('Unexpected ' +
-          tokenDisplay +
-          '. Instead, I was expecting to see one of the following:\n');
+      lines.add('${'Unexpected ' +
+          tokenDisplay}. Instead, I was expecting to see one of the following:\n');
 
       var stateStacks = expectantStates.map((state) {
-        return this.buildFirstStateStack(state, []) ?? [state];
+        return buildFirstStateStack(state, []) ?? [state];
       });
 
       stateStacks.forEach((stateStack) {
         var state = stateStack[0];
         var nextSymbol = state.rule.symbols[state.dot];
-        var symbolDisplay = this.getSymbolDisplay(nextSymbol);
-        lines.add('A ' + symbolDisplay + ' based on:');
-        this.displayStateStack(stateStack, lines);
+        var symbolDisplay = getSymbolDisplay(nextSymbol);
+        lines.add('${'A ' + symbolDisplay} based on:');
+        displayStateStack(stateStack, lines);
       });
     }
     lines.add("");
@@ -222,7 +216,7 @@ class Nearley {
     }
     var prevState = state.wantedBy[0];
     var childVisited = [state]..addAll(visited);
-    var childResult = this.buildFirstStateStack(prevState, childVisited);
+    var childResult = buildFirstStateStack(prevState, childVisited);
     if (childResult == null) {
       return null;
     }
@@ -239,9 +233,7 @@ class Nearley {
         sameDisplayCount++;
       } else {
         if (sameDisplayCount > 0) {
-          lines.add('    ^ ' +
-              sameDisplayCount.toString() +
-              ' more lines identical to this');
+          lines.add('    ^ $sameDisplayCount more lines identical to this');
         }
         sameDisplayCount = 0;
         lines.add('    ' + display);
@@ -260,13 +252,13 @@ class Nearley {
     } else if (symbol is Map) {
       return jsonEncode(symbol['literal'] ?? '');
     } else if (symbol is RegExp) {
-      return 'character matching ' + symbol.toString();
+      return 'character matching $symbol';
     } else if (symbol['type'] != null) {
       return symbol['type'] + ' token';
     } else if (symbol['test'] ?? null != null) {
-      return 'token matching ' + symbol['test'].toString();
+      return 'token matching ${symbol['test']}';
     } else {
-      throw new Exception('Unknown symbol type: ' + symbol.toString());
+      throw new Exception('Unknown symbol type: $symbol');
     }
   }
 }
@@ -298,9 +290,9 @@ class Column {
   }
 
   void process() {
-    var _states = this.states;
-    var _wants = this.wants;
-    var _completed = this.completed;
+    var _states = states;
+    var _wants = wants;
+    var _completed = completed;
 
     for (var w = 0; w < _states.length; w++) {
       var state = _states[w];
@@ -311,19 +303,19 @@ class Column {
 
           for (var i = wantBy.length - 1; 0 <= i; i--) {
             var left = wantBy[i];
-            this.complete(left, state);
+            complete(left, state);
           }
 
           if (state.reference == index) {
             var exp = state.rule.name;
-            this.completed[exp] = this.completed[exp] ?? [];
-            this.completed[exp].add(state);
+            completed[exp] = completed[exp] ?? [];
+            completed[exp].add(state);
           }
         }
       } else {
         var exp = state.rule.symbols[state.dot];
         if (!(exp is String)) {
-          this.scannable.add(state);
+          scannable.add(state);
         }
 
         if (_wants[exp] != null) {
@@ -337,7 +329,7 @@ class Column {
           }
         } else {
           _wants[exp] = _wants[exp] is List ? _wants[exp].add(state) : [state];
-          this.predict(exp);
+          predict(exp);
         }
       }
     }
@@ -353,9 +345,9 @@ class ColumnState {
   Rule rule;
   var dot;
   var reference;
-  late var data;
+  var data;
   var wantedBy;
-  late var isComplete;
+  var isComplete;
 
   late ColumnState left;
   var right;
@@ -368,7 +360,7 @@ class ColumnState {
   void finish() {
     if (rule.postprocess != null) {
       try {
-        data = rule.postprocess(data);
+        data = rule.postprocess(data);  
       } catch (e) {
         print("Error In ===> " + rule.name);
       }
@@ -413,10 +405,10 @@ class NearleyGrammar {
   var byName;
 
   NearleyGrammar(this.rules, this.start) {
-    this.rules = rules;
-    this.start = start ?? this.rules[0].name;
+    rules = rules;
+    start = start ?? rules[0].name;
     var byName = this.byName = {};
-    this.rules.forEach((rule) {
+    rules.forEach((rule) {
       if (!byName.containsKey(rule.name)) {
         byName[rule.name] = [];
       }
@@ -441,19 +433,17 @@ class Rule {
     }
 
     var symbolSequence = (withCursorAt == null)
-        ? this.symbols.map(stringifySymbolSequence).join(' ')
-        : (this
-                .symbols
+        ? symbols.map(stringifySymbolSequence).join(' ')
+        : (symbols
                 .take(withCursorAt - 1 < 0 ? 0 : withCursorAt - 1)
                 .map(stringifySymbolSequence)
                 .join(' ') +
             " ● " +
-            this
-                .symbols
+            symbols
                 .take(withCursorAt)
                 .map(stringifySymbolSequence)
                 .join(' '));
-    return this.name + " → " + symbolSequence;
+    return name + " → " + symbolSequence;
   }
 }
 
@@ -464,7 +454,7 @@ class StreamLexer {
   var lastLineBreak;
 
   StreamLexer() {
-    this.reset("");
+    reset("");
   }
 
   has(tokenType) {
@@ -472,16 +462,16 @@ class StreamLexer {
   }
 
   reset(data, {state}) {
-    this.buffer = data;
-    this.index = 0;
-    this.line = state != null ? state.line : 1;
-    this.lastLineBreak = state != null ? -state.col : 0;
+    buffer = data;
+    index = 0;
+    line = state != null ? state.line : 1;
+    lastLineBreak = state != null ? -state.col : 0;
   }
 
   save() {
     return {
-      'line': this.line,
-      'col': this.index - this.lastLineBreak,
+      'line': line,
+      'col': index - lastLineBreak,
     };
   }
 
@@ -493,28 +483,24 @@ class StreamLexer {
 
     var buffer = this.buffer;
     if (buffer is String) {
-      var lines = buffer.split("\n").sublist(max(0, this.line - 5), this.line);
+      var lines = buffer.split("\n").sublist(max(0, line - 5), line);
 
-      var nextLineBreak = buffer.indexOf('\n', this.index);
+      var nextLineBreak = buffer.indexOf('\n', index);
       if (nextLineBreak == -1) nextLineBreak = buffer.length;
-      var col = this.index - this.lastLineBreak;
-      var lastLineDigits = (this.line).toString().length;
-      message += " at line " +
-          this.line.toString() +
-          " col " +
-          col.toString() +
-          ":\n\n";
+      var col = index - lastLineBreak;
+      var lastLineDigits = (line).toString().length;
+      message += " at line $line col $col:\n\n";
       var msg = [];
       for (var i = 0; i < lines.length; i++) {
         var line = lines[i];
         msg.add(
-            pad(this.line - lines.length + i + 1, lastLineDigits) + " " + line);
+            "${pad(this.line - lines.length + i + 1, lastLineDigits)} $line");
       }
       message += msg.join("\n");
-      message += "\n" + pad("", lastLineDigits + col) + "^\n";
+      message += "\n${pad("", lastLineDigits + col)}^\n";
       return message;
     } else {
-      return message + " at index " + (this.index - 1);
+      return message + " at index " + (index - 1);
     }
   }
 }

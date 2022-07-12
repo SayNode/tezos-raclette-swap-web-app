@@ -19,7 +19,7 @@ class MichelinGrammarTokenizer {
   var numindex = 0;
 
   next() {
-    if (tokens.isEmpty) feed(this.buffer.toString());
+    if (tokens.isEmpty) feed(buffer.toString());
     var result = tokens.length > numindex
         ? {
             "type": tokens[numindex].type,
@@ -38,16 +38,16 @@ class MichelinGrammarTokenizer {
   }
 
   reset(data, {state}) {
-    this.buffer = data;
-    this.index = 0;
-    this.line = state != null ? state.line : 1;
-    this.lastLineBreak = state != null ? -state.col : 0;
+    buffer = data;
+    index = 0;
+    line = state != null ? state.line : 1;
+    lastLineBreak = state != null ? -state.col : 0;
   }
 
   save() {
     return {
-      'line': this.line,
-      'col': this.index - this.lastLineBreak,
+      'line': line,
+      'col': index - lastLineBreak,
     };
   }
 
@@ -55,15 +55,12 @@ class MichelinGrammarTokenizer {
     var value = token['text'];
     int index = token['col'];
     var start = max(0, index - token['col']);
-    var firstLine = this.buffer.substring(start, index + value.length);
-    message += " at line " +
-        token['line'] +
-        " col " +
-        token['col'].toString() +
-        ":\n\n";
-    message += "  " + firstLine + "\n";
+    var firstLine = buffer.substring(start, index + value.length);
+    message += "${" at line " +
+        token['line']} col ${token['col']}:\n\n";
+    message += "${"  " + firstLine}\n";
     message +=
-        "  " + List.generate(token['col'] + 1, (e) => '').join(" ") + "^";
+        "  ${List.generate(token['col'] + 1, (e) => '').join(" ")}^";
     return message;
   }
 

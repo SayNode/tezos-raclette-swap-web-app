@@ -21,19 +21,19 @@ callContract() async {
     publicKeyHash: 'tz1QSHaKpTFhgHLbqinyYRjxD5sLcbfbzhxy',
   );
   var signer = await createSigner(writeKeyWithHint(keyStore.secretKey, 'edsk'));
-  var contractAddress = 'KT1KA7DqFjShLC4CPtChPX8QtRYECUb99xMY';
+  var contractAddress = 'KT1K16JFj1L5u4HqVtd4H8dnaBVUxvLG4mjR';
 
   var resultInvoke = await sendContractInvocationOperation(
     server,
     signer,
     keyStore,
     contractAddress,
-    10000,
+    1,
     100000,
     1000,
     100000,
-    '',
-    '"Cryptonomicon"',
+    'tezToTokenPayment',
+    """"value":{"prim":"Pair","args":[{"int":"1180"}""",
   );
 
   print('Result: $resultInvoke');

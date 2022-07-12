@@ -10,7 +10,7 @@ class GenerateKeys {
     Uint8List blake2bHash = Blake2bHash.hashWithDigestSize(160, publicKey);
     String uintToString = String.fromCharCodes(blake2bHash);
     String stringToHexString = hex.encode(uintToString.codeUnits);
-    String finalStringToDecode = "06a19f" + stringToHexString;
+    String finalStringToDecode = "06a19f$stringToHexString";
     List<int> listOfHexDecodedInt = hex.decode(finalStringToDecode);
     String publicKeyHash =
         bs58check.encode(Uint8List.fromList(listOfHexDecodedInt));
@@ -42,7 +42,8 @@ class GenerateKeys {
         hint == '2bf64e07' ||
         hint == '0d0f25d9') {
       return bs58check.decode(key).sublist(4);
-    } else
+    } else {
       throw Exception("Unrecognized key hint, '$hint'");
+    }
   }
 }

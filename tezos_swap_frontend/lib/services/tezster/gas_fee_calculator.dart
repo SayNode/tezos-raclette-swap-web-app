@@ -10,8 +10,8 @@ class Estimate {
   // ignore: non_constant_identifier_names
   var GAS_BUFFER = 100;
 
-  var _milligasLimit;
-  var _storageLimit;
+  final _milligasLimit;
+  final _storageLimit;
   var opSize;
   var minimalFeePerStorageByteMutez;
   var baseFeeMutez;
@@ -21,7 +21,7 @@ class Estimate {
 
   /// @description The number of Mutez that will be burned for the storage of the [operation](https://tezos.gitlab.io/user/glossary.html#operations). (Storage + Allocation fees)
   get burnFeeMutez {
-    return this.roundUp(this.storageLimit * this.minimalFeePerStorageByteMutez);
+    return roundUp(storageLimit * minimalFeePerStorageByteMutez);
   }
 
   /// @description  The limit on the amount of storage an [operation](https://tezos.gitlab.io/user/glossary.html#operations) can use.
@@ -32,13 +32,13 @@ class Estimate {
 
   /// @description The limit on the amount of [gas](https://tezos.gitlab.io/user/glossary.html#gas) a given operation can consume.
   get gasLimit {
-    return this.roundUp(this._milligasLimit / 1000 + this.GAS_BUFFER);
+    return roundUp(_milligasLimit / 1000 + GAS_BUFFER);
   }
 
   get operationFeeMutez {
-    return ((this._milligasLimit / 1000 + this.GAS_BUFFER) *
-                this.MINIMAL_FEE_PER_GAS_MUTEZ +
-            this.opSize * this.MINIMAL_FEE_PER_BYTE_MUTEZ)
+    return ((_milligasLimit / 1000 + GAS_BUFFER) *
+                MINIMAL_FEE_PER_GAS_MUTEZ +
+            opSize * MINIMAL_FEE_PER_BYTE_MUTEZ)
         .round();
   }
 
@@ -48,32 +48,32 @@ class Estimate {
 
   /// @description Minimum fees for the [operation](https://tezos.gitlab.io/user/glossary.html#operations) according to [baker](https://tezos.gitlab.io/user/glossary.html#baker) defaults.
   get minimalFeeMutez {
-    return this.roundUp(this.MINIMAL_FEE_MUTEZ + this.operationFeeMutez);
+    return roundUp(MINIMAL_FEE_MUTEZ + operationFeeMutez);
   }
 
   /// @description The suggested fee for the operation which includes minimal fees and a small buffer.
   get suggestedFeeMutez {
-    return this.roundUp(this.operationFeeMutez + this.MINIMAL_FEE_MUTEZ * 2);
+    return roundUp(operationFeeMutez + MINIMAL_FEE_MUTEZ * 2);
   }
 
   /// @description Fees according to your specified base fee will ensure that at least minimum fees are used.
 
   get usingBaseFeeMutez {
     return (max(
-            int.parse(this.baseFeeMutez.toString()), this.MINIMAL_FEE_MUTEZ) +
-        this.roundUp(this.operationFeeMutez));
+            int.parse(baseFeeMutez.toString()), MINIMAL_FEE_MUTEZ) +
+        roundUp(operationFeeMutez));
   }
 
   /// @description The sum of `minimalFeeMutez` + `burnFeeMutez`.
 
   get totalCost {
-    return int.parse(this.minimalFeeMutez.toString()) +
-        int.parse(this.burnFeeMutez.toString());
+    return int.parse(minimalFeeMutez.toString()) +
+        int.parse(burnFeeMutez.toString());
   }
 
   /// @description Since Delphinet, consumed gas is provided in milligas for more precision.
   /// This function returns an estimation of the gas that operation will consume in milligas.
   get consumedMilligas {
-    return int.parse(this._milligasLimit.toString());
+    return int.parse(_milligasLimit.toString());
   }
 }

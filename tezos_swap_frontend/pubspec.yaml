@@ -39,9 +39,9 @@ dependencies:
   webview_flutter: ^3.0.4
   easy_localization: ^3.0.1
   blake2b: ^0.2.2
-  sodium_libs: ^1.2.3
   sodium_web: ^0.0.5
   http: ^0.13.4
+  nanoid: ^1.0.0
 
 dev_dependencies:
   flutter_test:

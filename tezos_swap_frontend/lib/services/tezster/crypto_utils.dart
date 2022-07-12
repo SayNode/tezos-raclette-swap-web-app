@@ -14,7 +14,7 @@ class CryptoUtils {
     var nonce = _sodium.nonce();
     var s = _sodium.close(message, nonce, keyBytes);
 
-    return new Uint8List.fromList(nonce.toList() + s.toList());
+    return Uint8List.fromList(nonce.toList() + s.toList());
   }
 
   static Uint8List decryptMessage(message, passphrase, salt) {
