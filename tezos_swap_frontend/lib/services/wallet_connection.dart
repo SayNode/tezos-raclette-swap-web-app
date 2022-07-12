@@ -42,7 +42,6 @@ class WalletProvider extends ChangeNotifier {
   }
 
   _request(Map payload) {
-    //TODO: generate unique id
     String id = nanoid();;
     var msg = {'type': 'TEMPLE_PAGE_REQUEST', 'payload': payload, 'reqId': id};
     html.window.postMessage(msg, "*");
