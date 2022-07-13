@@ -4,10 +4,6 @@ PODS:
     - Flutter
   - shared_preferences_ios (0.0.1):
     - Flutter
-  - Sodium (0.8.0)
-  - sodium_libs (1.2.0):
-    - Flutter
-    - Sodium
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
 
@@ -15,12 +11,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - r_crypto (from `.symlinks/plugins/r_crypto/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
-  - sodium_libs (from `.symlinks/plugins/sodium_libs/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
-
-SPEC REPOS:
-  trunk:
-    - Sodium
 
 EXTERNAL SOURCES:
   Flutter:
@@ -29,8 +20,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/r_crypto/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
-  sodium_libs:
-    :path: ".symlinks/plugins/sodium_libs/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
 
@@ -38,8 +27,6 @@ SPEC CHECKSUMS:
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   r_crypto: eee8ce78a1682f290fd5788da6089edfe00b0729
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
-  Sodium: 63c0ca312a932e6da481689537d4b35568841bdc
-  sodium_libs: 3d81718dc8222b2826ac6f5836241f5e0bec5cf8
   webview_flutter_wkwebview: b7e70ef1ddded7e69c796c7390ee74180182971f
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c

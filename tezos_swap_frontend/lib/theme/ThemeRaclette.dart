@@ -60,11 +60,17 @@ class ThemeRaclette {
   }
 
   static TextStyle invertedButtonTextStyle = const TextStyle(
-      color: ThemeRaclette.primaryStatic
+      color: ThemeRaclette.primaryStatic,
+    fontSize: 24
   );
 
   static var invertedButtonStyle = ButtonStyle(
       backgroundColor: MaterialStateProperty.resolveWith(ThemeRaclette.getInvertedButtonBackground),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+        )
+    )
   );
 
   static Color getButtonBackground(Set<MaterialState> states) {
