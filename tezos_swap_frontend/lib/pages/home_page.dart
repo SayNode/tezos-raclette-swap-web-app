@@ -39,10 +39,8 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text('Swap', style: TextStyle(fontSize: 24),),
                   SizedBox(width: 24,),
-                  Text('Pool', style: TextStyle(fontSize: 24)),                  SizedBox(width: 24,),
-
-                  Text('Vote', style: TextStyle(fontSize: 24)),                  SizedBox(width: 24,),
-
+                  Text('Pool', style: TextStyle(fontSize: 24)),SizedBox(width: 24,),
+                  Text('Vote', style: TextStyle(fontSize: 24)),SizedBox(width: 24,),
                   Text('Chart', style: TextStyle(fontSize: 24)),
                 ],
               ),
