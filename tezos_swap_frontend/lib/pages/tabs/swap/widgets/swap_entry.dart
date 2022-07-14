@@ -61,6 +61,12 @@ class _SwapEntryState extends State<SwapEntry> {
                                   decoration: InputDecoration(
                                     labelText: 'Search name or paste address',
                                     labelStyle: TextStyle(color: ThemeRaclette.gray100),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: ThemeRaclette.white),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(color: ThemeRaclette.white),
+                                    ),
                                   ),
                                 ),
                               ),
