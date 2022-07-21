@@ -22,6 +22,9 @@ class WalletConnectButton extends StatelessWidget {
           showModalBottomSheet<void>(
             context: context,
             backgroundColor: Colors.transparent,
+            constraints: BoxConstraints(
+              maxWidth:  600,
+            ),
             builder: (BuildContext context) {
               return Padding(
                 padding: const EdgeInsets.only(left: 50, right: 50),
