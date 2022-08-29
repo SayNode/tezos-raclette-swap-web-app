@@ -18,46 +18,48 @@ class _SwapState extends State<Swap> {
   TextEditingController upperController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 600,
-      height: 400,
-      padding: EdgeInsets.all(24),
-      decoration: BoxDecoration(
-          color: ThemeRaclette.black,
-          borderRadius: BorderRadius.circular(12)
-      ),
-      child: Form(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Swap', style: TextStyle(fontSize: 20),),
-                IconButton(onPressed: (){
-                  debugPrint('pressing settings');
-                }, icon: Icon(Icons.settings, color: ThemeRaclette.white,))
-              ],
-            ),
-            SwapEntry(upperController: upperController),
-            SizedBox(height: 15,),
-            SwapEntry(upperController: upperController),
-            SizedBox(height: 30,),
-            SizedBox(
-              width: double.infinity,
-              height: 60,
-                child: ElevatedButton(
-                    style: ThemeRaclette.invertedButtonStyle,
-                    onPressed: () async {
-                      await widget.provider.requestPermission();
-                    },
-                    child: Text(
-                      'connect'.tr(),
-                      style: ThemeRaclette.invertedButtonTextStyle,
-                    )),
-            ),
-          ],
+    return Center(
+      child: Container(
+        width: 600,
+        height: 400,
+        padding: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+            color: ThemeRaclette.black,
+            borderRadius: BorderRadius.circular(12)
         ),
-      ) ,
+        child: Form(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Swap', style: TextStyle(fontSize: 20),),
+                  IconButton(onPressed: (){
+                    debugPrint('pressing settings');
+                  }, icon: Icon(Icons.settings, color: ThemeRaclette.white,))
+                ],
+              ),
+              SwapEntry(upperController: upperController),
+              SizedBox(height: 15,),
+              SwapEntry(upperController: upperController),
+              SizedBox(height: 30,),
+              SizedBox(
+                width: double.infinity,
+                height: 60,
+                  child: ElevatedButton(
+                      style: ThemeRaclette.invertedButtonStyle,
+                      onPressed: () async {
+                        await widget.provider.requestPermission();
+                      },
+                      child: Text(
+                        'connect'.tr(),
+                        style: ThemeRaclette.invertedButtonTextStyle,
+                      )),
+              ),
+            ],
+          ),
+        ) ,
+      ),
     );
   }
 }
