@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/pool/pool.dart';
 import 'package:tezos_swap_frontend/pages/swap/swap.dart';
-import 'package:tezos_swap_frontend/services/balance_provider.dart';
-import 'package:tezos_swap_frontend/services/wallet_connection.dart';
+import 'package:tezos_swap_frontend/pages/vote/vote_page.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+
+import '../services/balance_provider.dart';
+import '../utils/globals.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,7 +16,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final WalletProvider provider = WalletProvider();
   String? adr;
   int index = 0;
   @override
@@ -91,21 +92,40 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(fontSize: 24))),
                     ),
                   ),
-                  const SizedBox(
-                    width: 24,
+                                    Container(
+                    decoration: BoxDecoration(
+                        color: (index == 2) ? Colors.green : null,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(18))),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              index = 2;
+                            });
+                          },
+                          style: ButtonStyle(
+                            foregroundColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                              if (states.contains(MaterialState.hovered)) {
+                                return Colors.grey;
+                              }
+                              return Colors.black;
+                            }),
+                          ),
+                          child: const Text('Vote',
+                              style: TextStyle(fontSize: 24))),
+                    ),
                   ),
-                  const Text('Vote', style: TextStyle(fontSize: 24)),
-                  const SizedBox(
-                    width: 24,
-                  ),
-                  const Text('Chart', style: TextStyle(fontSize: 24)),
                 ],
               ),
             ),
             Expanded(
                 child: Align(
               alignment: Alignment.centerRight,
-              child: Obx(() => _connectWallet(provider.address.string)),
+              child: Obx(() => _connectWallet(walletProvider.address.string)),
             )),
           ],
         ),
@@ -117,10 +137,9 @@ class _HomePageState extends State<HomePage> {
         child: IndexedStack(
           index: index,
           children: [
-            Swap(provider: provider),
+            Swap(provider: walletProvider),
             const Pool(),
-            Swap(provider: provider),
-            Swap(provider: provider)
+            const VotePage()
           ],
         ),
       ),
@@ -152,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                     if (snapshot.hasError) {
-                      return Text('Error');
+                      return const Text('Error');
                     }
                     return Text('${snapshot.data} XTZ');
                   }),
@@ -174,7 +193,7 @@ class _HomePageState extends State<HomePage> {
       return ElevatedButton(
           style: ThemeRaclette.invertedButtonStyle,
           onPressed: () async {
-            await provider.requestPermission();
+            await walletProvider.requestPermission();
           },
           child: Text(
             'Connect Wallet',

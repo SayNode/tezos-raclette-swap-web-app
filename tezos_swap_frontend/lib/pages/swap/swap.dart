@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
 import '../../models/token.dart';
+import '../../utils/globals.dart';
 
 class Swap extends StatefulWidget {
   final WalletProvider provider;
@@ -59,21 +61,36 @@ class _SwapState extends State<Swap> {
               SizedBox(
                 width: double.infinity,
                 height: 60,
-                child: ElevatedButton(
-                    style: ThemeRaclette.invertedButtonStyle,
-                    onPressed: () async {
-                      await widget.provider.requestPermission();
-                    },
-                    child: Text(
-                      'Connect Wallet',
-                      style: ThemeRaclette.invertedButtonTextStyle,
-                    )),
+                child: Obx(() => _connectWallet(walletProvider.address.string)),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  _connectWallet(String address) {
+    if (address.isNotEmpty) {
+      return ElevatedButton(
+        style: ThemeRaclette.invertedButtonStyle,
+        onPressed: () async {
+          await widget.provider.requestPermission();
+        },
+        child: Text(
+          'Swap',
+          style: ThemeRaclette.invertedButtonTextStyle,
+        ));
+    }
+    return ElevatedButton(
+        style: ThemeRaclette.invertedButtonStyle,
+        onPressed: () async {
+          await widget.provider.requestPermission();
+        },
+        child: Text(
+          'Connect Wallet',
+          style: ThemeRaclette.invertedButtonTextStyle,
+        ));
   }
 }
 

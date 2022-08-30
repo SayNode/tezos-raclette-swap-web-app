@@ -22,21 +22,21 @@ class _PoolState extends State<Pool> {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        width: 1000,
         height: 700,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
             color: ThemeRaclette.black,
             borderRadius: BorderRadius.circular(12)),
-        child: Form(
+        child: IntrinsicWidth(
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
                     'Add Liquidity',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 24),
                   ),
                   IconButton(
                       onPressed: () {
@@ -52,27 +52,47 @@ class _PoolState extends State<Pool> {
                 color: Colors.white,
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Select Pair',
-                        style: TextStyle(fontSize: 14),
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text(
+                          'Select Pair',
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ),
-                      Row(
-                        children: [
-                          TokenSelectButton(TokenProvider()),
-                          TokenSelectButton(TokenProvider()),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TokenSelectButton(TokenProvider()),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TokenSelectButton(TokenProvider()),
+                            ),
+                          ],
+                        ),
                       )
                     ],
                   ),
+                  const SizedBox(
+                    width: 20,
+                  ),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: const [
                       Text(
                         'Select Price Range',
-                        style: TextStyle(fontSize: 14),
+                        style: TextStyle(fontSize: 20),
                       ),
                     ],
                   )
