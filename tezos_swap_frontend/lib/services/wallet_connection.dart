@@ -1,10 +1,11 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:nanoid/nanoid.dart';
 
 class WalletProvider extends ChangeNotifier {
-  String address = 'Not Connected';
+  RxString address = ''.obs;
 
   requestPermission() {
     _request({
@@ -42,18 +43,16 @@ class WalletProvider extends ChangeNotifier {
   }
 
   _request(Map payload) {
-    String id = nanoid();;
+    String id = nanoid();
     var msg = {'type': 'TEMPLE_PAGE_REQUEST', 'payload': payload, 'reqId': id};
     html.window.postMessage(msg, "*");
 
     html.window.addEventListener("message", (event) {
       final evt = (event as html.MessageEvent);
-      print(evt.data);
       if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_RESPONSE') {
-        print(evt.data);
-        address = evt.data['payload']['pkh'] as String;
+        address.value = evt.data['payload']['pkh'];
         notifyListeners();
       } else if (evt.source == html.window &&
           evt.data['reqId'] == id &&

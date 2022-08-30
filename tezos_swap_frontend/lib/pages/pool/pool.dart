@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
+import 'package:tezos_swap_frontend/services/token_provider.dart';
 
+import '../../models/token.dart';
 import '../../theme/ThemeRaclette.dart';
 
 class Pool extends StatefulWidget {
@@ -13,6 +16,8 @@ class Pool extends StatefulWidget {
 
 class _PoolState extends State<Pool> {
   TextEditingController upperController = TextEditingController();
+  Token? token1;
+  Token? token2;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -50,11 +55,17 @@ class _PoolState extends State<Pool> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Column(
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'Select Pair',
                         style: TextStyle(fontSize: 14),
                       ),
+                      Row(
+                        children: [
+                          TokenSelectButton(TokenProvider()),
+                          TokenSelectButton(TokenProvider()),
+                        ],
+                      )
                     ],
                   ),
                   Column(

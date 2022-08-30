@@ -42,6 +42,8 @@ dependencies:
   sodium_web: ^0.0.5
   http: ^0.13.4
   nanoid: ^1.0.0
+  get: ^4.6.5
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_test:

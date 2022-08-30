@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ThemeRaclette {
   // singleton setting
-  static final ThemeRaclette _ThemeRaclette = ThemeRaclette._internal();
+  static final ThemeRaclette themeRaclette = ThemeRaclette._internal();
 
   factory ThemeRaclette() {
-    return _ThemeRaclette;
+    return themeRaclette;
   }
   ThemeRaclette._internal();
 
@@ -45,7 +45,10 @@ class ThemeRaclette {
   static const Color green = Color.fromARGB(255, 59, 178, 115);
   static const Color red = Color.fromARGB(255, 230, 38, 38);
 
-  static const LinearGradient mainGradient = LinearGradient(colors: [gradientBase,gradientAccent], begin: Alignment.bottomLeft, end: AlignmentDirectional(8, -8));
+  static const LinearGradient mainGradient = LinearGradient(
+      colors: [gradientBase, gradientAccent],
+      begin: Alignment.bottomLeft,
+      end: AlignmentDirectional(8, -8));
 
   static Color getInvertedButtonBackground(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -59,19 +62,16 @@ class ThemeRaclette {
     return ThemeRaclette.invertedButtonBackground;
   }
 
-  static TextStyle invertedButtonTextStyle = const TextStyle(
-      color: ThemeRaclette.primaryStatic,
-    fontSize: 24
-  );
+  static TextStyle invertedButtonTextStyle =
+      const TextStyle(color: ThemeRaclette.primaryStatic, fontSize: 24);
 
   static var invertedButtonStyle = ButtonStyle(
-      backgroundColor: MaterialStateProperty.resolveWith(ThemeRaclette.getInvertedButtonBackground),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-        )
-    )
-  );
+      backgroundColor: MaterialStateProperty.resolveWith(
+          ThemeRaclette.getInvertedButtonBackground),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      )));
 
   static Color getButtonBackground(Set<MaterialState> states) {
     const Set<MaterialState> interactiveStates = <MaterialState>{
@@ -85,13 +85,11 @@ class ThemeRaclette {
     return ThemeRaclette.primaryStatic;
   }
 
-  static TextStyle buttonTextStyle = const TextStyle(
-      color: ThemeRaclette.black
-  );
+  static TextStyle buttonTextStyle =
+      const TextStyle(color: ThemeRaclette.black);
 
   static var buttonStyle = ButtonStyle(
-    backgroundColor: MaterialStateProperty.resolveWith(ThemeRaclette.getButtonBackground),
+    backgroundColor:
+        MaterialStateProperty.resolveWith(ThemeRaclette.getButtonBackground),
   );
-
-
 }
