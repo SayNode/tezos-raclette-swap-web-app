@@ -1,5 +1,15 @@
+import 'package:flutter/cupertino.dart';
+
 import '../models/token.dart';
 
-class TokenProvider {
-  Token? token;
+class TokenProvider extends ValueNotifier<Token?> {
+  TokenProvider({Token? token}) : super(null);
+  Token? _token;
+
+  Token? get token => _token;
+
+  set token(Token? token) {
+    _token = token;
+    notifyListeners();
+  }
 }

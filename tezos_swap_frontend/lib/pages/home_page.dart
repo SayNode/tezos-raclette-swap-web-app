@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
                 height: 50,
               ),
               FutureBuilder<String>(
-                  future: getBalance(address, 'https://mainnet.api.tez.ie/'),
+                  future: BalanceProvider.getBalanceTezos(address, 'https://mainnet.api.tez.ie/'),
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (!snapshot.hasData) {

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
-
-import '../../models/token.dart';
 import '../../theme/ThemeRaclette.dart';
 
 class Pool extends StatefulWidget {
@@ -16,8 +14,8 @@ class Pool extends StatefulWidget {
 
 class _PoolState extends State<Pool> {
   TextEditingController upperController = TextEditingController();
-  Token? token1;
-  Token? token2;
+  TokenProvider token1 = TokenProvider();
+  TokenProvider token2 = TokenProvider();
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -68,18 +66,167 @@ class _PoolState extends State<Pool> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TokenSelectButton(TokenProvider()),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: TokenSelectButton(TokenProvider()),
-                            ),
-                          ],
+                        padding: const EdgeInsets.all(16.0),
+                        child: SizedBox(
+                          width: 400,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TokenSelectButton(token1),
+                                ),
+                              ),
+
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(.0),
+                                  child: TokenSelectButton(token2),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          width: 400,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.green),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(18))),
+                          child: Row(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text('fee tier'),
+                              ),
+                              const Expanded(child: SizedBox()),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      print('clicked edit');
+                                    },
+                                    child: const Text('Edit')),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text('Deposit Amounts'),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(24.0),
+                          width: 400,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              color: ThemeRaclette.gray500,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: upperController,
+                                  decoration: const InputDecoration.collapsed(
+                                      hintText: '0.0',
+                                      hintStyle: TextStyle(
+                                          color: ThemeRaclette.white)),
+                                  style: const TextStyle(
+                                      fontSize: 30, color: ThemeRaclette.white),
+                                ),
+                              ),
+                              ValueListenableBuilder(
+                                valueListenable: token1,
+                                builder: (context, value, child) => Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    (token1.token != null)
+                                        ? Image.asset(
+                                            token1.token!.icon,
+                                            width: 25,
+                                          )
+                                        : const SizedBox(),
+                                    (token1.token != null)
+                                        ? Text(
+                                            token1.token!.symbol,
+                                            style: const TextStyle(
+                                                color: ThemeRaclette.black),
+                                          )
+                                        : const Text(
+                                            "Select Token",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(24.0),
+                          width: 400,
+                          height: 100,
+                          decoration: BoxDecoration(
+                              color: ThemeRaclette.gray500,
+                              borderRadius: BorderRadius.circular(12)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: upperController,
+                                  decoration: const InputDecoration.collapsed(
+                                      hintText: '0.0',
+                                      hintStyle: TextStyle(
+                                          color: ThemeRaclette.white)),
+                                  style: const TextStyle(
+                                      fontSize: 30, color: ThemeRaclette.white),
+                                ),
+                              ),
+                              ValueListenableBuilder(
+                                valueListenable: token2,
+                                builder: (context, value, child) => Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    (token2.token != null)
+                                        ? Image.asset(
+                                            token2.token!.icon,
+                                            width: 25,
+                                          )
+                                        : const SizedBox(),
+                                    (token2.token != null)
+                                        ? Text(
+                                            token2.token!.symbol,
+                                            style: const TextStyle(
+                                                color: ThemeRaclette.black),
+                                          )
+                                        : const Text(
+                                            "Select Token",
+                                            style:
+                                                TextStyle(color: Colors.black),
+                                          ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       )
                     ],

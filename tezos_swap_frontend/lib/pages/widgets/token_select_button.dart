@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
-import '../../models/token.dart';
 import '../../theme/ThemeRaclette.dart';
 import 'card_route.dart';
 import 'select_token_card.dart';
@@ -13,7 +12,6 @@ class TokenSelectButton extends StatefulWidget {
 
   @override
   State<TokenSelectButton> createState() => _TokenSelectButtonState();
-  Token? token;
 }
 
 class _TokenSelectButtonState extends State<TokenSelectButton> {
@@ -27,7 +25,7 @@ class _TokenSelectButtonState extends State<TokenSelectButton> {
           }));
 
           setState(() {
-            widget.token = newToken;
+            widget.provider.token = newToken;
           });
         },
         style: ThemeRaclette.buttonStyle,
@@ -36,15 +34,15 @@ class _TokenSelectButtonState extends State<TokenSelectButton> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              (widget.token != null)
+              (widget.provider.token  != null)
                   ? Image.asset(
-                      widget.token!.icon,
+                      widget.provider.token !.icon,
                       width: 25,
                     )
                   : const SizedBox(),
-              (widget.token != null)
+              (widget.provider.token  != null)
                   ? Text(
-                      widget.token!.symbol,
+                      widget.provider.token !.symbol,
                       style: const TextStyle(color: ThemeRaclette.black),
                     )
                   : const Text(
