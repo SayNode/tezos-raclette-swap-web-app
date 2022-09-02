@@ -22,9 +22,8 @@ void main() {
     });
 
     List<Token> tokenList = [token1, token2];
-
   });
-    test('test balance of token', () async {
+  test('test balance of token', () async {
     Token token = Token.fromJson({
       "id": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi",
       "name": "",
@@ -33,7 +32,8 @@ void main() {
       "iconBlack": "",
       "tokenAddress": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
     });
-    var res = await BalanceProvider.getBalanceTokens([token]);
+    var res = await BalanceProvider.getBalance(
+        'tz1RKAK88z71SGmipocZqVXQrtWJxo7dfH7Z', [token]);
     print('Response: $res');
   });
 }

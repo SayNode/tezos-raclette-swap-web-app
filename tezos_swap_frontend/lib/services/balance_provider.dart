@@ -9,7 +9,8 @@ class BalanceProvider {
     return json.decode(response.body)['balance'];
   }
 
-  static Future getBalanceTokens(List<Token> tokenList) async {
+  static Future<List<Map>> getBalanceTokens(
+      String address, List<Token> tokenList) async {
     var headers = {
       'accept': 'application/json',
     };
@@ -18,8 +19,8 @@ class BalanceProvider {
         tokenList.map((e) => e.tokenAddress).toList();
 
     Map params = {
-      "account": 'tz1RKAK88z71SGmipocZqVXQrtWJxo7dfH7Z',
-      "token.contract": "KT1U6EHmNxJTkvaWJ4ThczG4FSDaHC21ssvi"
+      "account": address,
+      "token.contract": tokenAddressList.join(',')
     };
 
     String query = params.entries.map((p) => '${p.key}=${p.value}').join('&');
@@ -39,5 +40,31 @@ class BalanceProvider {
       });
     }
     return out;
+  }
+
+  static Future<List<Map>> getBalance(String address, List<Token> token) async {
+    if (token.length == 1) {
+      if (token[0].id == 'tezos') {
+        var balance = await BalanceProvider.getBalanceTezos(
+            address, 'https://mainnet.api.tez.ie/');
+        return [
+          {'tezos': balance}
+        ];
+      } else {
+        var balance = await BalanceProvider.getBalanceTokens(address, token);
+        return balance;
+      }
+    } else {
+      if (token.any((element) => element.id == 'tezos')) {
+        var balance = await BalanceProvider.getBalanceTokens(address, token);
+        var tezosBalance = await BalanceProvider.getBalanceTezos(
+            address, 'https://mainnet.api.tez.ie/');
+        balance.add({'tezos': tezosBalance});
+        return balance;
+      } else {
+        var balance = await BalanceProvider.getBalanceTokens(address, token);
+        return balance;
+      }
+    }
   }
 }
