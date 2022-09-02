@@ -10,7 +10,7 @@ class WalletProvider extends ChangeNotifier {
   requestPermission() {
     _request({
       "type": "PERMISSION_REQUEST",
-      "network": "ghostnet",
+      "network": "jakartanet",
       "appMeta": {"name": "TezosSwap"},
       "force": true
     });

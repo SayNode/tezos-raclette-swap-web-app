@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:tezos_swap_frontend/models/chart_datapoint.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import '../../theme/ThemeRaclette.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:syncfusion_flutter_charts/charts.dart' as chart;
 
 class Pool extends StatefulWidget {
   const Pool({
@@ -16,6 +19,23 @@ class _PoolState extends State<Pool> {
   TextEditingController upperController = TextEditingController();
   TokenProvider token1 = TokenProvider();
   TokenProvider token2 = TokenProvider();
+  SfRangeValues initSliderValue = const SfRangeValues(5, 15);
+  double min = 0;
+  double max = 20;
+
+//mock ratio
+  double tokenRatio = 2.4;
+  //example ChartDatapoint
+  final List<ChartDatapoint> _chartChartDatapoint = <ChartDatapoint>[
+    ChartDatapoint(x: 11, y: 3.4),
+    ChartDatapoint(x: 12, y: 2.8),
+    ChartDatapoint(x: 13, y: 1.6),
+    ChartDatapoint(x: 14, y: 2.3),
+    ChartDatapoint(x: 15, y: 2.5),
+    ChartDatapoint(x: 16, y: 2.9),
+    ChartDatapoint(x: 17, y: 3.8),
+    ChartDatapoint(x: 18, y: 2.0),
+  ];
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -25,7 +45,8 @@ class _PoolState extends State<Pool> {
         decoration: BoxDecoration(
             color: ThemeRaclette.black,
             borderRadius: BorderRadius.circular(12)),
-        child: IntrinsicWidth(
+        child: SizedBox(
+          width: 1000,
           child: Column(
             children: [
               Row(
@@ -77,7 +98,6 @@ class _PoolState extends State<Pool> {
                                   child: TokenSelectButton(token1),
                                 ),
                               ),
-
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(.0),
@@ -236,10 +256,51 @@ class _PoolState extends State<Pool> {
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    children: const [
-                      Text(
+                    children: [
+                      const Text(
                         'Select Price Range',
-                        style: TextStyle(fontSize: 20),
+                        style:  TextStyle(fontSize: 20),
+                      ),
+                      const Text(
+                        'Current Price:',
+                      ),
+                      SizedBox(
+                        width: 300,
+                        child: SfRangeSelector(
+                          min: min,
+                          max: max,
+                          onChangeStart: ((value) => print(value)),
+                          initialValues: initSliderValue,
+                          labelPlacement: LabelPlacement.onTicks,
+                          interval: 5,
+                          showTicks: true,
+                          showLabels: true,
+                          child: SizedBox(
+                            height: 200,
+                            child: chart.SfCartesianChart(
+                              margin: const EdgeInsets.all(0),
+                              primaryXAxis: chart.NumericAxis(
+                                minimum: min,
+                                maximum: max,
+                                isVisible: false,
+                              ),
+                              primaryYAxis: chart.NumericAxis(
+                                  isVisible: false, maximum: 4),
+                              series: <
+                                  chart.SplineAreaSeries<ChartDatapoint,
+                                      double>>[
+                                chart.SplineAreaSeries<ChartDatapoint, double>(
+                                    dataSource: _chartChartDatapoint,
+                                    xValueMapper:
+                                        (ChartDatapoint sales, int index) =>
+                                            sales.x,
+                                    yValueMapper:
+                                        (ChartDatapoint sales, int index) =>
+                                            sales.y)
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   )

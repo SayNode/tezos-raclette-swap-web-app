@@ -4,7 +4,6 @@ import 'package:tezos_swap_frontend/pages/pool/pool.dart';
 import 'package:tezos_swap_frontend/pages/swap/swap.dart';
 import 'package:tezos_swap_frontend/pages/vote/vote_page.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
-
 import '../services/balance_provider.dart';
 import '../utils/globals.dart';
 

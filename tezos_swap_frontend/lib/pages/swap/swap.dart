@@ -20,12 +20,18 @@ class Swap extends StatefulWidget {
 
 class _SwapState extends State<Swap> {
   TextEditingController upperController = TextEditingController();
+  TextEditingController lowerController = TextEditingController();
+  bool tokenPairSelected = false;
+  final tokenProvider1 = TokenProvider();
+  final tokenProvider2 = TokenProvider();
+  //mock ratio
+  double tokenRatio = 13.45;
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Container(
         width: 600,
-        height: 400,
+        height: 500,
         padding: const EdgeInsets.all(24),
         decoration: BoxDecoration(
             color: ThemeRaclette.black,
@@ -50,19 +56,96 @@ class _SwapState extends State<Swap> {
                       ))
                 ],
               ),
-              SwapEntry(upperController: upperController),
+              Container(
+                padding: const EdgeInsets.all(24.0),
+                height: 100,
+                decoration: BoxDecoration(
+                    color: ThemeRaclette.gray500,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 300,
+                      height: 30,
+                      child: TextFormField(
+                        enabled: tokenPairSelected,
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          lowerController.text =
+                              (int.parse(value) * tokenRatio).toString();
+                        },
+                        controller: upperController,
+                        decoration: const InputDecoration.collapsed(
+                            hintText: '0.0',
+                            hintStyle: TextStyle(color: ThemeRaclette.white)),
+                        style: const TextStyle(
+                            fontSize: 30, color: ThemeRaclette.white),
+                      ),
+                    ),
+                    TokenSelectButton(tokenProvider1),
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 15,
               ),
-              SwapEntry(upperController: upperController),
+              Container(
+                padding: const EdgeInsets.all(24.0),
+                height: 100,
+                decoration: BoxDecoration(
+                    color: ThemeRaclette.gray500,
+                    borderRadius: BorderRadius.circular(12)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 300,
+                      height: 30,
+                      child: TextFormField(
+                        enabled: tokenPairSelected,
+                        onChanged: (value) {
+                          upperController.text =
+                              (int.parse(value) / tokenRatio).toString();
+                        },
+                        controller: lowerController,
+                        decoration: const InputDecoration.collapsed(
+                            hintText: '0.0',
+                            hintStyle: TextStyle(color: ThemeRaclette.white)),
+                        style: const TextStyle(
+                            fontSize: 30, color: ThemeRaclette.white),
+                      ),
+                    ),
+                    TokenSelectButton(tokenProvider2),
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 30,
               ),
+              /*
+              SwapEntry(controller: upperController),
+              const SizedBox(
+                height: 15,
+              ),
+              SwapEntry(controller: lowerController),
+              const SizedBox(
+                height: 30,
+              ),
+              */
               SizedBox(
                 width: double.infinity,
                 height: 60,
                 child: Obx(() => _connectWallet(walletProvider.address.string)),
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    walletProvider.requestTransaction(
+                        0,
+                        'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf',
+                        'KT1LanjD6jr5EMYqRNRbQ6oDVAB9AD3xAKvR');
+                  },
+                  child: const Text('call contract'))
             ],
           ),
         ),
@@ -73,14 +156,14 @@ class _SwapState extends State<Swap> {
   _connectWallet(String address) {
     if (address.isNotEmpty) {
       return ElevatedButton(
-        style: ThemeRaclette.invertedButtonStyle,
-        onPressed: () async {
-          await widget.provider.requestPermission();
-        },
-        child: Text(
-          'Swap',
-          style: ThemeRaclette.invertedButtonTextStyle,
-        ));
+          style: ThemeRaclette.invertedButtonStyle,
+          onPressed: () async {
+            await widget.provider.requestPermission();
+          },
+          child: Text(
+            'Swap',
+            style: ThemeRaclette.invertedButtonTextStyle,
+          ));
     }
     return ElevatedButton(
         style: ThemeRaclette.invertedButtonStyle,
@@ -97,10 +180,10 @@ class _SwapState extends State<Swap> {
 class SwapEntry extends StatefulWidget {
   const SwapEntry({
     Key? key,
-    required this.upperController,
+    required this.controller,
   }) : super(key: key);
 
-  final TextEditingController upperController;
+  final TextEditingController controller;
 
   @override
   State<SwapEntry> createState() => _SwapEntryState();
@@ -124,7 +207,8 @@ class _SwapEntryState extends State<SwapEntry> {
             width: 300,
             height: 30,
             child: TextFormField(
-              controller: widget.upperController,
+              onChanged: (value) {},
+              controller: widget.controller,
               decoration: const InputDecoration.collapsed(
                   hintText: '0.0',
                   hintStyle: TextStyle(color: ThemeRaclette.white)),

@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  r_crypto
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

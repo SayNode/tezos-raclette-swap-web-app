@@ -24,7 +24,6 @@ class BalanceProvider {
     };
 
     String query = params.entries.map((p) => '${p.key}=${p.value}').join('&');
-    print(query);
 
     var url = Uri.parse('https://api.tzkt.io/v1/tokens/balances?$query');
     var res = await http.get(url, headers: headers);
@@ -32,12 +31,20 @@ class BalanceProvider {
       throw Exception('http.get error: statusCode= ${res.statusCode}');
     }
     var resDecoded = json.decode(res.body);
-    List<Map> out = [];
+    List<Map> listMapRes = [];
     for (Map element in resDecoded) {
-      out.add({
+      listMapRes.add({
         element['token']['contract']['address']: element['balance'],
         'id': element['token']['tokenId']
       });
+    }
+    List<Map> out = [];
+    for (var token in tokenAddressList) {
+      if (listMapRes.any((element) => element.containsKey(token))) {
+        out.add(listMapRes.firstWhere((element) => element.containsKey(token)));
+      } else {
+        out.add({token: '0'});
+      }
     }
     return out;
   }
