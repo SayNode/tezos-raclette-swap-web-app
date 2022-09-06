@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/models/chart_datapoint.dart';
+import 'package:tezos_swap_frontend/pages/pool/widgets/price_card.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../theme/ThemeRaclette.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' as chart;
@@ -20,8 +23,8 @@ class _PoolState extends State<Pool> {
   TokenProvider token1 = TokenProvider();
   TokenProvider token2 = TokenProvider();
   SfRangeValues initSliderValue = const SfRangeValues(5, 15);
-  double min = 0;
-  double max = 20;
+  RxDouble min = 0.0.obs;
+  RxDouble max = 20.0.obs;
 
 //mock ratio
   double tokenRatio = 2.4;
@@ -36,6 +39,7 @@ class _PoolState extends State<Pool> {
     ChartDatapoint(x: 17, y: 3.8),
     ChartDatapoint(x: 18, y: 2.0),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -259,7 +263,7 @@ class _PoolState extends State<Pool> {
                     children: [
                       const Text(
                         'Select Price Range',
-                        style:  TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 20),
                       ),
                       const Text(
                         'Current Price:',
@@ -267,9 +271,12 @@ class _PoolState extends State<Pool> {
                       SizedBox(
                         width: 300,
                         child: SfRangeSelector(
-                          min: min,
-                          max: max,
-                          onChangeStart: ((value) => print(value)),
+                          min: min.value,
+                          max: max.value,
+                          onChangeEnd: ((value) {
+                            min.value = roundDouble(value.start, 4);
+                            max.value = roundDouble(value.end, 4);
+                          }),
                           initialValues: initSliderValue,
                           labelPlacement: LabelPlacement.onTicks,
                           interval: 5,
@@ -280,8 +287,8 @@ class _PoolState extends State<Pool> {
                             child: chart.SfCartesianChart(
                               margin: const EdgeInsets.all(0),
                               primaryXAxis: chart.NumericAxis(
-                                minimum: min,
-                                maximum: max,
+                                minimum: min.value,
+                                maximum: max.value,
                                 isVisible: false,
                               ),
                               primaryYAxis: chart.NumericAxis(
@@ -302,6 +309,23 @@ class _PoolState extends State<Pool> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child:
+                                  PriceCard('Min Price', token1, token2, min),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child:
+                                  PriceCard('Max Price', token1, token2, max),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   )
                 ],

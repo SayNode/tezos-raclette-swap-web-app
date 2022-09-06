@@ -16,29 +16,11 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  requestTransaction(int amount, String caller, String contract,) {
+  requestSigning(String rawTx) {
     _request({
-      "type": "OPERATION_REQUEST",
-      "sourcePkh": caller,
-      "opParams": [
-        {
-          "kind": "transaction",
-          "to": contract,
-          "amount": amount * 1000000,
-          "mutez": true,
-          "parameter": {
-            "entrypoint": "tezToTokenPayment",
-            "value": {
-              "prim": "Pair",
-              "args": [
-                //TODO: calc slippage
-                {"int": "100"},
-                {"string": caller}
-              ]
-            }
-          }
-        }
-      ]
+      "type": "SIGN_REQUEST",
+      "sourcePkh": "tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf",
+      "payload": rawTx
     });
   }
 
@@ -52,6 +34,7 @@ class WalletProvider extends ChangeNotifier {
       if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_RESPONSE') {
+        print(evt.data);
         address.value = evt.data['payload']['pkh'];
         notifyListeners();
       } else if (evt.source == html.window &&

@@ -4,6 +4,7 @@ import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
 
@@ -140,10 +141,8 @@ class _SwapState extends State<Swap> {
               ),
               ElevatedButton(
                   onPressed: () {
-                    walletProvider.requestTransaction(
-                        0,
-                        'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf',
-                        'KT1LanjD6jr5EMYqRNRbQ6oDVAB9AD3xAKvR');
+                    forgeOperation();
+                    //walletProvider.requestSigning("ce69c5713dac3537254e7be59759cf59c15abd530d10501ccf9028a5786314cf6c00248e9c5a6ca4ce67bdbe34818738a325735176a28c0bfbe34de852f00300019c3bf4d5eadcb7cfdee64a5ff19483968b60b37d00ffff06746f6b656e730000003c0508020000003507070100000024747a314e794b726f315169326357643636723931427742795435677879426f5753724666070700000098fcd6b907");
                   },
                   child: const Text('call contract'))
             ],
