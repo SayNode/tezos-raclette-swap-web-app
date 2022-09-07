@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nanoid/nanoid.dart';
+import 'package:tezos_swap_frontend/utils/globals.dart' as global;
 
 class WalletProvider extends ChangeNotifier {
   RxString address = ''.obs;
@@ -10,7 +11,7 @@ class WalletProvider extends ChangeNotifier {
   requestPermission() {
     _request({
       "type": "PERMISSION_REQUEST",
-      "network": "jakartanet",
+      "network": global.network,
       "appMeta": {"name": "TezosSwap"},
       "force": true
     });

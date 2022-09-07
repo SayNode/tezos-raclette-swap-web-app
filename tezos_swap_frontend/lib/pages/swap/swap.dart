@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
@@ -7,6 +8,7 @@ import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
+import '../../utils/value_listenable2.dart';
 
 class Swap extends StatefulWidget {
   final WalletProvider provider;
@@ -57,95 +59,47 @@ class _SwapState extends State<Swap> {
                       ))
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.all(24.0),
-                height: 100,
-                decoration: BoxDecoration(
-                    color: ThemeRaclette.gray500,
-                    borderRadius: BorderRadius.circular(12)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 300,
-                      height: 30,
-                      child: TextFormField(
-                        enabled: tokenPairSelected,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          lowerController.text =
-                              (int.parse(value) * tokenRatio).toString();
-                        },
+              const SizedBox(
+                height: 30,
+              ),
+              ValueListenableBuilder2(
+                  first: tokenProvider1,
+                  second: tokenProvider2,
+                  builder: ((context, a, b, child) => SwapEntry(
                         controller: upperController,
-                        decoration: const InputDecoration.collapsed(
-                            hintText: '0.0',
-                            hintStyle: TextStyle(color: ThemeRaclette.white)),
-                        style: const TextStyle(
-                            fontSize: 30, color: ThemeRaclette.white),
-                      ),
-                    ),
-                    TokenSelectButton(tokenProvider1),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Container(
-                padding: const EdgeInsets.all(24.0),
-                height: 100,
-                decoration: BoxDecoration(
-                    color: ThemeRaclette.gray500,
-                    borderRadius: BorderRadius.circular(12)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: 300,
-                      height: 30,
-                      child: TextFormField(
-                        enabled: tokenPairSelected,
-                        onChanged: (value) {
-                          upperController.text =
-                              (int.parse(value) / tokenRatio).toString();
+                        function: (value) {
+                          lowerController.text =
+                              (value * tokenRatio).toString();
                         },
-                        controller: lowerController,
-                        decoration: const InputDecoration.collapsed(
-                            hintText: '0.0',
-                            hintStyle: TextStyle(color: ThemeRaclette.white)),
-                        style: const TextStyle(
-                            fontSize: 30, color: ThemeRaclette.white),
-                      ),
-                    ),
-                    TokenSelectButton(tokenProvider2),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 30,
-              ),
-              /*
-              SwapEntry(controller: upperController),
+                        enabled: (tokenProvider1.token != null &&
+                            tokenProvider2.token != null),
+                        tokenProvider: tokenProvider1,
+                      ))),
               const SizedBox(
                 height: 15,
               ),
-              SwapEntry(controller: lowerController),
+              ValueListenableBuilder2(
+                  first: tokenProvider1,
+                  second: tokenProvider2,
+                  builder: ((context, a, b, child) => SwapEntry(
+                      controller: lowerController,
+                      function: (value) {
+                        upperController.text = (value / tokenRatio).toString();
+                      },
+                      enabled: (tokenProvider1.token != null &&
+                          tokenProvider2.token != null),
+                      tokenProvider: tokenProvider2))),
               const SizedBox(
                 height: 30,
               ),
-              */
               SizedBox(
-                width: double.infinity,
-                height: 60,
-                child: Obx(() => _connectWallet(walletProvider.address.string)),
-              ),
-              ElevatedButton(
-                  onPressed: () async{
-                    var a = await forgeOperation();
-                    print(a);
-                    walletProvider.requestSigning(a);
-                  },
-                  child: const Text('call contract'))
+                  width: double.infinity,
+                  height: 60,
+                  child: ValueListenableBuilder2(
+                      first: tokenProvider1,
+                      second: tokenProvider2,
+                      builder: ((context, a, b, child) => Obx(() =>
+                          _connectWallet(walletProvider.address.string))))),
             ],
           ),
         ),
@@ -155,13 +109,32 @@ class _SwapState extends State<Swap> {
 
   _connectWallet(String address) {
     if (address.isNotEmpty) {
+      if (tokenProvider1.token != null && tokenProvider2.token != null) {
+        if (upperController.text.isNotEmpty &&
+            double.parse(upperController.text) != 0) {
+          return ElevatedButton(
+              style: ThemeRaclette.invertedButtonStyle,
+              onPressed: () async {
+                await widget.provider.requestPermission();
+              },
+              child: Text(
+                'Swap',
+                style: ThemeRaclette.invertedButtonTextStyle,
+              ));
+        }
+        return ElevatedButton(
+            style: ThemeRaclette.invertedButtonStyle,
+            onPressed: null,
+            child: Text(
+              'Enter Amount',
+              style: ThemeRaclette.invertedButtonTextStyle,
+            ));
+      }
       return ElevatedButton(
           style: ThemeRaclette.invertedButtonStyle,
-          onPressed: () async {
-            await widget.provider.requestPermission();
-          },
+          onPressed: null,
           child: Text(
-            'Swap',
+            'Invalid Pair',
             style: ThemeRaclette.invertedButtonTextStyle,
           ));
     }
@@ -181,9 +154,14 @@ class SwapEntry extends StatefulWidget {
   const SwapEntry({
     Key? key,
     required this.controller,
+    required this.function,
+    required this.enabled,
+    required this.tokenProvider,
   }) : super(key: key);
-
+  final Function function;
   final TextEditingController controller;
+  final bool enabled;
+  final TokenProvider tokenProvider;
 
   @override
   State<SwapEntry> createState() => _SwapEntryState();
@@ -207,7 +185,18 @@ class _SwapEntryState extends State<SwapEntry> {
             width: 300,
             height: 30,
             child: TextFormField(
-              onChanged: (value) {},
+              enabled: widget.enabled,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                FilteringTextInputFormatter.singleLineFormatter
+              ],
+              onChanged: (value) {
+                if (value.isNotEmpty) {
+                  widget.function(double.tryParse(value));
+                } else {
+                  widget.function(0);
+                }
+              },
               controller: widget.controller,
               decoration: const InputDecoration.collapsed(
                   hintText: '0.0',
@@ -215,7 +204,7 @@ class _SwapEntryState extends State<SwapEntry> {
               style: const TextStyle(fontSize: 30, color: ThemeRaclette.white),
             ),
           ),
-          TokenSelectButton(TokenProvider()),
+          TokenSelectButton(widget.tokenProvider),
         ],
       ),
     );

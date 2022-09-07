@@ -5,13 +5,17 @@ import 'package:tezos_swap_frontend/pages/pool/widgets/price_card.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
+import '../../services/wallet_connection.dart';
 import '../../theme/ThemeRaclette.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' as chart;
+import 'package:syncfusion_flutter_core/core.dart';
 
 class Pool extends StatefulWidget {
+  final WalletProvider provider;
   const Pool({
     Key? key,
+    required this.provider,
   }) : super(key: key);
 
   @override
@@ -22,10 +26,9 @@ class _PoolState extends State<Pool> {
   TextEditingController upperController = TextEditingController();
   TokenProvider token1 = TokenProvider();
   TokenProvider token2 = TokenProvider();
-  SfRangeValues initSliderValue = const SfRangeValues(5, 15);
   RxDouble min = 0.0.obs;
   RxDouble max = 20.0.obs;
-
+  RangeController rangeController = RangeController(start: 5, end: 11);
 //mock ratio
   double tokenRatio = 2.4;
   //example ChartDatapoint
@@ -271,45 +274,49 @@ class _PoolState extends State<Pool> {
                       SizedBox(
                         width: 300,
                         child: Obx(
-                          (() => SfRangeSelector(
-                                min: min.value,
-                                max: max.value,
-                                onChangeEnd: ((value) {
-                                  min.value = roundDouble(value.start, 4);
-                                  max.value = roundDouble(value.end, 4);
-                                }),
-                                initialValues: initSliderValue,
-                                labelPlacement: LabelPlacement.onTicks,
-                                interval: 5,
-                                showTicks: true,
-                                showLabels: true,
-                                child: SizedBox(
-                                  height: 200,
-                                  child: chart.SfCartesianChart(
-                                    margin: const EdgeInsets.all(0),
-                                    primaryXAxis: chart.NumericAxis(
-                                      minimum: min.value,
-                                      maximum: max.value,
-                                      isVisible: false,
-                                    ),
-                                    primaryYAxis: chart.NumericAxis(
-                                        isVisible: false, maximum: 4),
-                                    series: <
-                                        chart.SplineAreaSeries<ChartDatapoint,
-                                            double>>[
-                                      chart.SplineAreaSeries<ChartDatapoint,
-                                              double>(
-                                          dataSource: _chartChartDatapoint,
-                                          xValueMapper: (ChartDatapoint sales,
-                                                  int index) =>
-                                              sales.x,
-                                          yValueMapper: (ChartDatapoint sales,
-                                                  int index) =>
-                                              sales.y)
-                                    ],
+                          (() {
+                            rangeController.start = min.value;
+                            rangeController.end = max.value;
+                            return SfRangeSelector(
+                              controller: rangeController,
+                              min: 0,
+                              max: 25,
+                              onChangeEnd: ((value) {
+                                min.value = roundDouble(value.start, 4);
+                                max.value = roundDouble(value.end, 4);
+                              }),
+                              labelPlacement: LabelPlacement.onTicks,
+                              interval: 5,
+                              showTicks: true,
+                              showLabels: true,
+                              child: SizedBox(
+                                height: 200,
+                                child: chart.SfCartesianChart(
+                                  margin: const EdgeInsets.all(0),
+                                  primaryXAxis: chart.NumericAxis(
+                                    minimum: 0,
+                                    maximum: 25,
+                                    isVisible: false,
                                   ),
+                                  primaryYAxis: chart.NumericAxis(
+                                      isVisible: false, maximum: 4),
+                                  series: <
+                                      chart.SplineAreaSeries<ChartDatapoint,
+                                          double>>[
+                                    chart.SplineAreaSeries<ChartDatapoint,
+                                            double>(
+                                        dataSource: _chartChartDatapoint,
+                                        xValueMapper:
+                                            (ChartDatapoint sales, int index) =>
+                                                sales.x,
+                                        yValueMapper:
+                                            (ChartDatapoint sales, int index) =>
+                                                sales.y)
+                                  ],
                                 ),
-                              )),
+                              ),
+                            );
+                          }),
                         ),
                       ),
                       Padding(
@@ -328,7 +335,15 @@ class _PoolState extends State<Pool> {
                             ),
                           ],
                         ),
-                      )
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            width: 400,
+                            height: 60,
+                            child:
+                                _submitButton(widget.provider.address.string),
+                          )),
                     ],
                   )
                 ],
@@ -338,5 +353,28 @@ class _PoolState extends State<Pool> {
         ),
       ),
     );
+  }
+
+  _submitButton(String address) {
+    if (address.isNotEmpty) {
+      return ElevatedButton(
+          style: ThemeRaclette.invertedButtonStyle,
+          onPressed: () async {
+            await widget.provider.requestPermission();
+          },
+          child: Text(
+            'Submit',
+            style: ThemeRaclette.invertedButtonTextStyle,
+          ));
+    }
+    return ElevatedButton(
+        style: ThemeRaclette.invertedButtonStyle,
+        onPressed: () async {
+          await widget.provider.requestPermission();
+        },
+        child: Text(
+          'Connect Wallet',
+          style: ThemeRaclette.invertedButtonTextStyle,
+        ));
   }
 }

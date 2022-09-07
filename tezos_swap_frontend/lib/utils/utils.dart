@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 
+import 'globals.dart' as global;
+
 double roundDouble(double value, int places) {
   double mod = pow(10.0, places) as double;
   return ((value * mod).round().toDouble() / mod);
@@ -54,7 +56,7 @@ Future<String> forgeOperation() async {
   }));
 
   var url = Uri.parse(
-      'https://jakartanet.smartpy.io/chains/main/blocks/head/helpers/forge/operations');
+      '${global.networkUri}/chains/main/blocks/head/helpers/forge/operations');
   var res = await http.post(url, headers: headers, body: data);
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');

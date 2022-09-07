@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(fontSize: 24))),
                     ),
                   ),
-                                    Container(
+                  Container(
                     decoration: BoxDecoration(
                         color: (index == 2) ? Colors.green : null,
                         borderRadius:
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
           index: index,
           children: [
             Swap(provider: walletProvider),
-            const Pool(),
+            Pool(provider: walletProvider),
             const VotePage()
           ],
         ),
@@ -161,7 +161,8 @@ class _HomePageState extends State<HomePage> {
                 height: 50,
               ),
               FutureBuilder<String>(
-                  future: BalanceProvider.getBalanceTezos(address, 'https://mainnet.api.tez.ie/'),
+                  future: BalanceProvider.getBalanceTezos(
+                      address, 'https://mainnet.api.tez.ie/'),
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (!snapshot.hasData) {
