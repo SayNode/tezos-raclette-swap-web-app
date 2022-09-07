@@ -7,12 +7,14 @@ double roundDouble(double value, int places) {
   return ((value * mod).round().toDouble() / mod);
 }
 
-forgeOperation() async {
+Future<String> forgeOperation() async {
   var headers = {
-    'accept': 'application/json',
+    "Accept": "application/json",
     'Content-type': 'application/json',
   };
-  String data= json.encode({
+
+  
+  var data= utf8.encode(json.encode({
     "branch": "BMHBtAaUv59LipV1czwZ5iQkxEktPJDE7A9sYXPkPeRzbBasNY8",
     "contents": [
       {
@@ -49,7 +51,7 @@ forgeOperation() async {
         "gas_limit": "10600"
       }
     ]
-  });
+  }));
 
   var url = Uri.parse(
       'https://jakartanet.smartpy.io/chains/main/blocks/head/helpers/forge/operations');
@@ -57,5 +59,6 @@ forgeOperation() async {
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   }
-  print(res.body);
+  return res.body.replaceAll('"', '').replaceAll('\n', '');
 }
+

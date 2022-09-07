@@ -140,9 +140,10 @@ class _SwapState extends State<Swap> {
                 child: Obx(() => _connectWallet(walletProvider.address.string)),
               ),
               ElevatedButton(
-                  onPressed: () {
-                    forgeOperation();
-                    //walletProvider.requestSigning("ce69c5713dac3537254e7be59759cf59c15abd530d10501ccf9028a5786314cf6c00248e9c5a6ca4ce67bdbe34818738a325735176a28c0bfbe34de852f00300019c3bf4d5eadcb7cfdee64a5ff19483968b60b37d00ffff06746f6b656e730000003c0508020000003507070100000024747a314e794b726f315169326357643636723931427742795435677879426f5753724666070700000098fcd6b907");
+                  onPressed: () async{
+                    var a = await forgeOperation();
+                    print(a);
+                    walletProvider.requestSigning(a);
                   },
                   child: const Text('call contract'))
             ],

@@ -270,43 +270,46 @@ class _PoolState extends State<Pool> {
                       ),
                       SizedBox(
                         width: 300,
-                        child: SfRangeSelector(
-                          min: min.value,
-                          max: max.value,
-                          onChangeEnd: ((value) {
-                            min.value = roundDouble(value.start, 4);
-                            max.value = roundDouble(value.end, 4);
-                          }),
-                          initialValues: initSliderValue,
-                          labelPlacement: LabelPlacement.onTicks,
-                          interval: 5,
-                          showTicks: true,
-                          showLabels: true,
-                          child: SizedBox(
-                            height: 200,
-                            child: chart.SfCartesianChart(
-                              margin: const EdgeInsets.all(0),
-                              primaryXAxis: chart.NumericAxis(
-                                minimum: min.value,
-                                maximum: max.value,
-                                isVisible: false,
-                              ),
-                              primaryYAxis: chart.NumericAxis(
-                                  isVisible: false, maximum: 4),
-                              series: <
-                                  chart.SplineAreaSeries<ChartDatapoint,
-                                      double>>[
-                                chart.SplineAreaSeries<ChartDatapoint, double>(
-                                    dataSource: _chartChartDatapoint,
-                                    xValueMapper:
-                                        (ChartDatapoint sales, int index) =>
-                                            sales.x,
-                                    yValueMapper:
-                                        (ChartDatapoint sales, int index) =>
-                                            sales.y)
-                              ],
-                            ),
-                          ),
+                        child: Obx(
+                          (() => SfRangeSelector(
+                                min: min.value,
+                                max: max.value,
+                                onChangeEnd: ((value) {
+                                  min.value = roundDouble(value.start, 4);
+                                  max.value = roundDouble(value.end, 4);
+                                }),
+                                initialValues: initSliderValue,
+                                labelPlacement: LabelPlacement.onTicks,
+                                interval: 5,
+                                showTicks: true,
+                                showLabels: true,
+                                child: SizedBox(
+                                  height: 200,
+                                  child: chart.SfCartesianChart(
+                                    margin: const EdgeInsets.all(0),
+                                    primaryXAxis: chart.NumericAxis(
+                                      minimum: min.value,
+                                      maximum: max.value,
+                                      isVisible: false,
+                                    ),
+                                    primaryYAxis: chart.NumericAxis(
+                                        isVisible: false, maximum: 4),
+                                    series: <
+                                        chart.SplineAreaSeries<ChartDatapoint,
+                                            double>>[
+                                      chart.SplineAreaSeries<ChartDatapoint,
+                                              double>(
+                                          dataSource: _chartChartDatapoint,
+                                          xValueMapper: (ChartDatapoint sales,
+                                                  int index) =>
+                                              sales.x,
+                                          yValueMapper: (ChartDatapoint sales,
+                                                  int index) =>
+                                              sales.y)
+                                    ],
+                                  ),
+                                ),
+                              )),
                         ),
                       ),
                       Padding(

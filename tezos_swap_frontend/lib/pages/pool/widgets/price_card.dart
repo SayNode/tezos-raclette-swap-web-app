@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../models/token.dart';
 import '../../../services/token_provider.dart';
 import '../../../theme/ThemeRaclette.dart';
 
@@ -17,6 +16,7 @@ class PriceCard extends StatefulWidget {
 }
 
 class _PriceCardState extends State<PriceCard> {
+  final controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +42,17 @@ class _PriceCardState extends State<PriceCard> {
                       icon: const Icon(Icons.remove),
                       color: Colors.white),
                 ),
-                Obx(() => Text("${widget.price.value}")),
+                SizedBox(
+                    width: 100,
+                    child: Obx(() {
+                        controller.text = widget.price.value.toString();
+                      return TextField(
+                      controller: controller,
+                      onEditingComplete: () {
+                        widget.price.value = double.parse(controller.text);
+                      },
+                    );
+                    })),
                 Expanded(
                   child: IconButton(
                       onPressed: () {},
