@@ -35,7 +35,6 @@ class WalletProvider extends ChangeNotifier {
       if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_RESPONSE') {
-        print(evt.data);
         address.value = evt.data['payload']['pkh'];
         notifyListeners();
       } else if (evt.source == html.window &&

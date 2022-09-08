@@ -45,13 +45,13 @@ class _PriceCardState extends State<PriceCard> {
                 SizedBox(
                     width: 100,
                     child: Obx(() {
-                        controller.text = widget.price.value.toString();
+                      controller.text = widget.price.value.toString();
                       return TextField(
-                      controller: controller,
-                      onEditingComplete: () {
-                        widget.price.value = double.parse(controller.text);
-                      },
-                    );
+                        controller: controller,
+                        onEditingComplete: () {
+                          widget.price.value = double.parse(controller.text);
+                        },
+                      );
                     })),
                 Expanded(
                   child: IconButton(

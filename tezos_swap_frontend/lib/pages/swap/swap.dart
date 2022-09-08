@@ -5,7 +5,6 @@ import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
-import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
 import '../../utils/value_listenable2.dart';
