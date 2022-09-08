@@ -422,13 +422,35 @@ class _PoolState extends State<Pool> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: PriceCard(
-                                      'Min Price', token1, token2, min),
+                                  child: ValueListenableBuilder2(
+                                    first: token1,
+                                    second: token2,
+                                    builder: (context, a, b, child) {
+                                      bool enable = false;
+                                      if (token1.token != null &&
+                                          token2.token != null) {
+                                        enable = true;
+                                      }
+                                      return PriceCard('Min Price', token1,
+                                          token2, min, enable);
+                                    },
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: PriceCard(
-                                      'Max Price', token1, token2, max),
+                                  child: ValueListenableBuilder2(
+                                    first: token1,
+                                    second: token2,
+                                    builder: (context, a, b, child) {
+                                      bool enable = false;
+                                      if (token1.token != null &&
+                                          token2.token != null) {
+                                        enable = true;
+                                      }
+                                      return PriceCard('Max Price', token1,
+                                          token2, max, enable);
+                                    },
+                                  ),
                                 ),
                               ],
                             ),

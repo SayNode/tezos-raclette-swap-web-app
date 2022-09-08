@@ -9,7 +9,8 @@ class PriceCard extends StatefulWidget {
   TokenProvider token2;
   RxDouble price;
   String text;
-  PriceCard(this.text, this.token1, this.token2, this.price, {super.key});
+  bool enabled;
+  PriceCard(this.text, this.token1, this.token2, this.price, this.enabled, {super.key});
 
   @override
   State<PriceCard> createState() => _PriceCardState();
@@ -47,6 +48,7 @@ class _PriceCardState extends State<PriceCard> {
                     child: Obx(() {
                       controller.text = widget.price.value.toString();
                       return TextField(
+                        enabled: widget.enabled,
                         controller: controller,
                         onEditingComplete: () {
                           widget.price.value = double.parse(controller.text);
