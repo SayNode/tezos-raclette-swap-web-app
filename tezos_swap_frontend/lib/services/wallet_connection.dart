@@ -6,6 +6,8 @@ import 'package:nanoid/nanoid.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
 import 'package:tezos_swap_frontend/utils/utils.dart';
 
+import '../models/contract_model.dart';
+
 class WalletProvider extends ChangeNotifier {
   RxString address = ''.obs;
 
@@ -18,18 +20,17 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  requestSigning(String rawTx) {
+  swap(Contract contract, String recipient, int tokenX, int tokenY) {
     _request({
       "type": "OPERATION_REQUEST",
-      "sourcePkh": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z",
-      "payload": [
+      "sourcePkh": recipient,
+      "opParams": [
         {
           "kind": "transaction",
-          "counter": "1352785",
-          "source": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z",
-          "amount": "0",
-          "destination": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
-          "parameters": {
+          "to": contract.address,
+          "amount": 0,
+          "mutez": true,
+          "parameter": {
             "entrypoint": "x_to_y",
             "value": {
               "prim": "Pair",
@@ -37,15 +38,15 @@ class WalletProvider extends ChangeNotifier {
                 {
                   "prim": "Pair",
                   "args": [
-                    {"string": "2022-09-20T10:19:24Z"},
-                    {"int": "5"}
+                    {"string": "2022-09-20T10:19:24Z"}, //TODO: set date
+                    {"int": "$tokenX"}
                   ]
                 },
                 {
                   "prim": "Pair",
                   "args": [
-                    {"int": "3"},
-                    {"string": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z"}
+                    {"int": "$tokenY"},
+                    {"string": recipient}
                   ]
                 }
               ]
@@ -53,50 +54,7 @@ class WalletProvider extends ChangeNotifier {
           }
         }
       ]
-    }
-        /*
-      
-      {
-      "kind": "transaction",
-      "counter": "1352785",
-      "source": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z",
-      "amount": "0",
-      "destination": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
-      "parameters": {
-        "entrypoint": "x_to_y",
-        "value": {
-          "prim": "Pair",
-          "args": [
-            {
-              "prim": "Pair",
-              "args": [
-                {"string": "2022-09-20T10:19:24Z"},
-                {"int": "10"}
-              ]
-            },
-            {
-              "prim": "Pair",
-              "args": [
-                {"int": "8"},
-                {"string": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z"}
-              ]
-            }
-          ]
-        }
-      },
-      "fee": "1420",
-      "storage_limit": "496",
-      "gas_limit": "10600"
-    }
-    */
-        );
-  }
-
-  swap(String addressX, String addressY) async {
-    var raw = await forgeSwap(addressX, addressY);
-    print(raw);
-    await requestSigning(raw);
-    print('done');
+    });
   }
 
   _request(Map payload) {

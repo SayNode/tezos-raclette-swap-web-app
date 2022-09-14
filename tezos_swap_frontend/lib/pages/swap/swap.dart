@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
+import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
-import 'package:tezos_swap_frontend/utils/utils.dart';
+import '../../models/contract_model.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
 import '../../utils/value_listenable2.dart';
@@ -28,7 +29,7 @@ class _SwapState extends State<Swap> {
   final tokenProvider1 = TokenProvider();
   final tokenProvider2 = TokenProvider();
   //mock ratio
-  double tokenRatio = 13.45;
+  double tokenRatio = 0.5;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -95,18 +96,15 @@ class _SwapState extends State<Swap> {
               SizedBox(
                   width: double.infinity,
                   height: 60,
-                  child: ValueListenableBuilder2(
-                      first: tokenProvider1,
-                      second: tokenProvider2,
-                      builder: ((context, a, b, child) => Obx(() =>
-                          _connectWallet(walletProvider.address.string))))),
-              ElevatedButton(
-                  onPressed: () async {
-                    //var a = await forgeOperation();
-                    //print(a);
-                    walletProvider.requestSigning('');
-                  },
-                  child: const Text('call contract')),
+                  child: ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: upperController,
+                      builder: (context, value, child) =>
+                          ValueListenableBuilder2(
+                              first: tokenProvider1,
+                              second: tokenProvider2,
+                              builder: ((context, a, b, child) => Obx(() =>
+                                  _connectWallet(
+                                      walletProvider.address.string)))))),
             ],
           ),
         ),
@@ -116,14 +114,25 @@ class _SwapState extends State<Swap> {
 
   _connectWallet(String address) {
     if (address.isNotEmpty) {
-      if (tokenProvider1.token != null && tokenProvider2.token != null) {
+      if (tokenProvider1.token != null &&
+          tokenProvider2.token != null &&
+          contracts!.any((element) =>
+              element.tokenX == tokenProvider1.token!.tokenAddress &&
+              element.tokenY == tokenProvider2.token!.tokenAddress)) {
         if (upperController.text.isNotEmpty &&
             double.parse(upperController.text) != 0) {
           return ElevatedButton(
               style: ThemeRaclette.invertedButtonStyle,
               onPressed: () async {
-                await widget.provider.swap(tokenProvider1.token!.tokenAddress,
-                    tokenProvider2.token!.tokenAddress);
+                var contracts = await ContractRepository().loadContracts();
+                Contract contract = contracts.firstWhere((element) =>
+                    element.tokenX == tokenProvider1.token!.tokenAddress &&
+                    element.tokenY == tokenProvider2.token!.tokenAddress);
+                await widget.provider.swap(
+                    contract,
+                    'tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z',
+                    double.parse(upperController.text).toInt(),
+                    double.parse(lowerController.text).toInt());
               },
               child: Text(
                 'Swap',
@@ -132,10 +141,7 @@ class _SwapState extends State<Swap> {
         }
         return ElevatedButton(
             style: ThemeRaclette.invertedButtonStyle,
-            onPressed: (() async {
-              await widget.provider.swap(tokenProvider1.token!.tokenAddress,
-                  tokenProvider2.token!.tokenAddress);
-            }),
+            onPressed: null,
             child: Text(
               'Enter Amount',
               style: ThemeRaclette.invertedButtonTextStyle,
