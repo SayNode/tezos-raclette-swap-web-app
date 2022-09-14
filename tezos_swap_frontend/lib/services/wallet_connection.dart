@@ -20,7 +20,12 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  swap(Contract contract, String recipient, int tokenX, int tokenY) {
+  swap(Contract contract, String recipient, int tokenX, int tokenY,
+      {bool yToX = false}) {
+    String entrypoint = "x_to_y";
+    if (yToX) {
+      entrypoint = "y_to_x";
+    }
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": recipient,
@@ -31,7 +36,7 @@ class WalletProvider extends ChangeNotifier {
           "amount": 0,
           "mutez": true,
           "parameter": {
-            "entrypoint": "x_to_y",
+            "entrypoint": entrypoint,
             "value": {
               "prim": "Pair",
               "args": [

@@ -118,21 +118,31 @@ class _SwapState extends State<Swap> {
           tokenProvider2.token != null &&
           contracts!.any((element) =>
               element.tokenX == tokenProvider1.token!.tokenAddress &&
-              element.tokenY == tokenProvider2.token!.tokenAddress)) {
+                  element.tokenY == tokenProvider2.token!.tokenAddress ||
+              element.tokenX == tokenProvider2.token!.tokenAddress &&
+                  element.tokenY == tokenProvider1.token!.tokenAddress)) {
         if (upperController.text.isNotEmpty &&
             double.parse(upperController.text) != 0) {
+          bool yToX = false;
+          if (contracts!.any((element) =>
+              element.tokenX == tokenProvider2.token!.tokenAddress &&
+              element.tokenY == tokenProvider1.token!.tokenAddress)) {
+            yToX = true;
+          }
           return ElevatedButton(
               style: ThemeRaclette.invertedButtonStyle,
               onPressed: () async {
-                var contracts = await ContractRepository().loadContracts();
-                Contract contract = contracts.firstWhere((element) =>
+                Contract contract = contracts!.firstWhere((element) =>
                     element.tokenX == tokenProvider1.token!.tokenAddress &&
-                    element.tokenY == tokenProvider2.token!.tokenAddress);
+                        element.tokenY == tokenProvider2.token!.tokenAddress ||
+                    element.tokenX == tokenProvider2.token!.tokenAddress &&
+                        element.tokenY == tokenProvider1.token!.tokenAddress);
                 await widget.provider.swap(
                     contract,
                     'tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z',
                     double.parse(upperController.text).toInt(),
-                    double.parse(lowerController.text).toInt());
+                    double.parse(lowerController.text).toInt(),
+                    yToX: yToX);
               },
               child: Text(
                 'Swap',
