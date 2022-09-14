@@ -5,6 +5,7 @@ import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
 import '../../utils/value_listenable2.dart';
@@ -99,6 +100,13 @@ class _SwapState extends State<Swap> {
                       second: tokenProvider2,
                       builder: ((context, a, b, child) => Obx(() =>
                           _connectWallet(walletProvider.address.string))))),
+              ElevatedButton(
+                  onPressed: () async {
+                    //var a = await forgeOperation();
+                    //print(a);
+                    walletProvider.requestSigning('');
+                  },
+                  child: const Text('call contract')),
             ],
           ),
         ),
@@ -114,7 +122,8 @@ class _SwapState extends State<Swap> {
           return ElevatedButton(
               style: ThemeRaclette.invertedButtonStyle,
               onPressed: () async {
-                await widget.provider.requestPermission();
+                await widget.provider.swap(tokenProvider1.token!.tokenAddress,
+                    tokenProvider2.token!.tokenAddress);
               },
               child: Text(
                 'Swap',
@@ -123,7 +132,10 @@ class _SwapState extends State<Swap> {
         }
         return ElevatedButton(
             style: ThemeRaclette.invertedButtonStyle,
-            onPressed: null,
+            onPressed: (() async {
+              await widget.provider.swap(tokenProvider1.token!.tokenAddress,
+                  tokenProvider2.token!.tokenAddress);
+            }),
             child: Text(
               'Enter Amount',
               style: ThemeRaclette.invertedButtonTextStyle,

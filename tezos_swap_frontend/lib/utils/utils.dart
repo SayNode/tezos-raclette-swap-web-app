@@ -9,14 +9,66 @@ double roundDouble(double value, int places) {
   return ((value * mod).round().toDouble() / mod);
 }
 
+Future<String> forgeSwap(String adressX, String addressY) async {
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+
+  var data = utf8.encode(json.encode({
+    "branch": "BMHBtAaUv59LipV1czwZ5iQkxEktPJDE7A9sYXPkPeRzbBasNY8",
+    "contents": [
+      {
+        "kind": "transaction",
+        "counter": "1274363",
+        "source": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z",
+        "amount": "0",
+        "destination": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
+        "parameters": {
+          "entrypoint": "x_to_y",
+          "value": {
+            "prim": "Pair",
+            "args": [
+              {
+                "prim": "Pair",
+                "args": [
+                  {"int": "1663062513"},
+                  {"int": "10"}
+                ]
+              },
+              {
+                "prim": "Pair",
+                "args": [
+                  {"int": "8"},
+                  {"string": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z"}
+                ]
+              }
+            ]
+          }
+        },
+        "fee": "1420",
+        "storage_limit": "496",
+        "gas_limit": "10600"
+      }
+    ]
+  }));
+
+  var url = Uri.parse(
+      '${global.networkUri}/chains/main/blocks/head/helpers/forge/operations');
+  var res = await http.post(url, headers: headers, body: data);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+  return res.body.replaceAll('"', '').replaceAll('\n', '');
+}
+
 Future<String> forgeOperation() async {
   var headers = {
     "Accept": "application/json",
     'Content-type': 'application/json',
   };
 
-  
-  var data= utf8.encode(json.encode({
+  var data = utf8.encode(json.encode({
     "branch": "BMHBtAaUv59LipV1czwZ5iQkxEktPJDE7A9sYXPkPeRzbBasNY8",
     "contents": [
       {
@@ -63,4 +115,3 @@ Future<String> forgeOperation() async {
   }
   return res.body.replaceAll('"', '').replaceAll('\n', '');
 }
-
