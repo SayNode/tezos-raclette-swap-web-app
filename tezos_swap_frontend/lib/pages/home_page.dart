@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/pool/pool.dart';
@@ -15,6 +17,26 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<String> photos = [
+    "assets/image/BG1.jpg",
+    "assets/image/BG2.jpg",
+    "assets/image/BG3.jpg",
+    "assets/image/BG4.jpg",
+    "assets/image/BG5.jpg",
+  ];
+  int _pos = 0;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+      setState(() {
+        _pos = (_pos + 1) % photos.length;
+      });
+    });
+    super.initState();
+  }
+
   String? adr;
   int index = 0;
   @override
@@ -22,13 +44,25 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        toolbarHeight: 100,
+        backgroundColor: Colors.black,
         shadowColor: Colors.transparent,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Expanded(child: SizedBox()),
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  height: 100,
+                  child: Image(image: AssetImage("assets/image/logo_1.png")),
+                ),
+              ),
+            ),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              margin: EdgeInsets.all(20),
+              padding: EdgeInsets.all(10),
               decoration: const BoxDecoration(
                   color: ThemeRaclette.primaryStatic,
                   borderRadius: BorderRadius.all(Radius.circular(18))),
@@ -39,7 +73,9 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: (index == 0) ? Colors.green : null,
+                        border: (index == 0)
+                            ? Border.all(color: Colors.white, width: 2)
+                            : null,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(18))),
                     child: Padding(
@@ -60,13 +96,19 @@ class _HomePageState extends State<HomePage> {
                               return Colors.black;
                             }),
                           ),
-                          child: const Text('Swap',
-                              style: TextStyle(fontSize: 24))),
+                          child: Text('Swap',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: (index == 0)
+                                      ? Colors.white
+                                      : Colors.black))),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: (index == 1) ? Colors.green : null,
+                        border: (index == 1)
+                            ? Border.all(color: Colors.white, width: 2)
+                            : null,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(18))),
                     child: Padding(
@@ -87,13 +129,19 @@ class _HomePageState extends State<HomePage> {
                               return Colors.black;
                             }),
                           ),
-                          child: const Text('Pool',
-                              style: TextStyle(fontSize: 24))),
+                          child: Text('Pool',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: (index == 1)
+                                      ? Colors.white
+                                      : Colors.black))),
                     ),
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        color: (index == 2) ? Colors.green : null,
+                        border: (index == 2)
+                            ? Border.all(color: Colors.white, width: 2)
+                            : null,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(18))),
                     child: Padding(
@@ -114,8 +162,12 @@ class _HomePageState extends State<HomePage> {
                               return Colors.black;
                             }),
                           ),
-                          child: const Text('Vote',
-                              style: TextStyle(fontSize: 24))),
+                          child: Text('Vote',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  color: (index == 2)
+                                      ? Colors.white
+                                      : Colors.black))),
                     ),
                   ),
                 ],
@@ -131,8 +183,13 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-            color: ThemeRaclette.white, gradient: ThemeRaclette.mainGradient),
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: Image.asset(
+                  photos[_pos],
+                  gaplessPlayback: true,
+                ).image,
+                fit: BoxFit.cover)),
         child: IndexedStack(
           index: index,
           children: [
@@ -195,9 +252,12 @@ class _HomePageState extends State<HomePage> {
           onPressed: () async {
             await walletProvider.requestPermission();
           },
-          child: Text(
-            'Connect Wallet',
-            style: ThemeRaclette.invertedButtonTextStyle,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Connect Wallet',
+              style: ThemeRaclette.invertedButtonTextStyle,
+            ),
           ));
     }
   }

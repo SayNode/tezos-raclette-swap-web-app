@@ -29,7 +29,7 @@ class ThemeRaclette {
 
   // constant colors
   static const Color white = Color.fromARGB(255, 254, 254, 254);
-  static const Color black = Color.fromARGB(255, 5, 5, 5);
+  static const Color black = Color.fromARGB(200, 5, 5, 5);
   static const Color gray900 = Color.fromARGB(255, 40, 40, 40);
   static const Color gray500 = Color.fromARGB(255, 77, 77, 77);
   static const Color gray250 = Color.fromARGB(255, 120, 120, 120);
@@ -38,6 +38,8 @@ class ThemeRaclette {
   static const Color grayCardRight = Color.fromRGBO(60, 56, 56, .6);
   static const Color whiteCardBorder = Color.fromRGBO(255, 255, 255, .3);
   static const Color primaryStatic = Color.fromRGBO(245, 168, 14, 1);
+  static const Color darkerPrimaryStatic = Color.fromARGB(255, 255, 123, 0);
+
   static const Color evenNumberColor = Color.fromARGB(255, 55, 55, 55);
   static const Color invertedButtonBackground = Color.fromARGB(255, 96, 78, 44);
   static const Color gradientBase = Color.fromARGB(255, 124, 116, 99);

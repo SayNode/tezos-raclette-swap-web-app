@@ -56,7 +56,7 @@ class _PoolState extends State<Pool> {
       child: Column(
         children: [
           const SizedBox(
-            height: 100,
+            height: 200,
           ),
           Container(
             padding: const EdgeInsets.all(24),
