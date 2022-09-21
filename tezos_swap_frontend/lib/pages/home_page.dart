@@ -17,26 +17,19 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<String> photos = [
-    "assets/image/BG1.jpg",
-    "assets/image/BG2.jpg",
-    "assets/image/BG3.jpg",
-    "assets/image/BG4.jpg",
-    "assets/image/BG5.jpg",
-  ];
   int _pos = 0;
   late Timer _timer;
 
-  @override
   void initState() {
-    _timer = Timer.periodic(Duration(seconds: 5), (Timer t) {
+    _timer = Timer.periodic(Duration(seconds: 30), (Timer t) {
       setState(() {
-        _pos = (_pos + 1) % photos.length;
+        _pos = (_pos + 1) % 5;
       });
     });
     super.initState();
   }
 
+  @override
   String? adr;
   int index = 0;
   @override
@@ -45,7 +38,7 @@ class _HomePageState extends State<HomePage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         toolbarHeight: 100,
-        backgroundColor: Colors.black,
+        backgroundColor: ThemeRaclette.black,
         shadowColor: Colors.transparent,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -56,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                 child: Container(
                   padding: EdgeInsets.all(10),
                   height: 100,
-                  child: Image(image: AssetImage("assets/image/logo_1.png")),
+                  child: Image(image: AssetImage("assets/image/Logo.png")),
                 ),
               ),
             ),
@@ -181,16 +174,22 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                image: Image.asset(
-                  photos[_pos],
-                  gaplessPlayback: true,
-                ).image,
-                fit: BoxFit.cover)),
-        child: IndexedStack(
+      body: Stack(children: [
+        Container(
+          color: Colors.black,
+          width: double.infinity,
+          child: AnimatedSwitcher(
+            duration: Duration(seconds: 2),
+            child: SizedBox.expand(
+              child: Image.asset(
+                "assets/image/BG ($_pos).jpg",
+                fit: BoxFit.cover,
+              ),
+              key: UniqueKey(),
+            ),
+          ),
+        ),
+        IndexedStack(
           index: index,
           children: [
             Swap(provider: walletProvider),
@@ -198,7 +197,7 @@ class _HomePageState extends State<HomePage> {
             const VotePage()
           ],
         ),
-      ),
+      ]),
     );
   }
 
