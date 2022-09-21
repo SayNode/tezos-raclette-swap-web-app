@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
 import '../../models/token.dart';
 
 class VotePage extends StatefulWidget {
@@ -16,8 +17,20 @@ class _VotePageState extends State<VotePage> {
   Token? token2;
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('coming soon...', style: TextStyle(fontSize: 24),),
+    return Center(
+      child: Container(
+          width: 600,
+          height: 500,
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+              color: ThemeRaclette.black,
+              borderRadius: BorderRadius.circular(12)),
+          child: Center(
+            child: Text(
+              'coming soon...',
+              style: TextStyle(fontSize: 24),
+            ),
+          )),
     );
   }
 }

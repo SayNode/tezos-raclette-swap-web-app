@@ -21,15 +21,21 @@ class _SelectTokenCardState extends State<SelectTokenCard> {
         padding: const EdgeInsets.all(8.0),
         child: SizedBox(
           width: 400,
-          height: 800,
+          height: 500,
           child: Card(
-            color: Colors.red,
+            color: ThemeRaclette.primaryStatic,
             shape: RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.green, width: 1.0),
-                borderRadius: BorderRadius.circular(5.0)),
+                side: const BorderSide(color: Colors.white, width: 3.0),
+                borderRadius: BorderRadius.circular(20.0)),
             child: Column(
               children: [
-                const Text('Select a Token'),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: const Text(
+                    'Select a Token',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
                 const Divider(
                   color: Colors.white,
                 ),
@@ -50,18 +56,25 @@ class _SelectTokenCardState extends State<SelectTokenCard> {
                             right: 20, left: 20, bottom: 20),
                         itemCount: snapshot.data!.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            onTap: () {
-                              Navigator.pop(context, snapshot.data![index]);
-                            },
-                            leading: Image.asset(
-                              snapshot.data![index].icon,
-                              width: 25,
-                            ),
-                            title: Text(
-                              snapshot.data![index].symbol,
-                              style:
-                                  const TextStyle(color: ThemeRaclette.black),
+                          return Container(
+                            margin: EdgeInsets.symmetric(vertical: 2),
+                            child: ListTile(
+                              shape: RoundedRectangleBorder(
+                                  side: const BorderSide(
+                                      color: Colors.white, width: 3.0),
+                                  borderRadius: BorderRadius.circular(20.0)),
+                              onTap: () {
+                                Navigator.pop(context, snapshot.data![index]);
+                              },
+                              leading: Image.asset(
+                                snapshot.data![index].icon,
+                                width: 25,
+                              ),
+                              title: Text(
+                                snapshot.data![index].symbol,
+                                style:
+                                    const TextStyle(color: ThemeRaclette.black),
+                              ),
                             ),
                           );
                         },
