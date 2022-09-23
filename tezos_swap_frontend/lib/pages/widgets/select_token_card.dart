@@ -25,7 +25,7 @@ class _SelectTokenCardState extends State<SelectTokenCard> {
           child: Card(
             color: ThemeRaclette.primaryStatic,
             shape: RoundedRectangleBorder(
-                side: const BorderSide(color: Colors.white, width: 3.0),
+                side: const BorderSide(color: Colors.white, width: 2.0),
                 borderRadius: BorderRadius.circular(20.0)),
             child: Column(
               children: [
@@ -38,6 +38,10 @@ class _SelectTokenCardState extends State<SelectTokenCard> {
                 ),
                 const Divider(
                   color: Colors.white,
+                  thickness: 2,
+                ),
+                SizedBox(
+                  height: 20,
                 ),
                 FutureBuilder<List<Token>>(
                     future: tokenRepository.loadTokens(),
@@ -59,9 +63,10 @@ class _SelectTokenCardState extends State<SelectTokenCard> {
                           return Container(
                             margin: EdgeInsets.symmetric(vertical: 2),
                             child: ListTile(
+                              hoverColor: ThemeRaclette.white,
                               shape: RoundedRectangleBorder(
                                   side: const BorderSide(
-                                      color: Colors.white, width: 3.0),
+                                      color: Colors.white, width: 2.0),
                                   borderRadius: BorderRadius.circular(20.0)),
                               onTap: () {
                                 Navigator.pop(context, snapshot.data![index]);
@@ -69,6 +74,7 @@ class _SelectTokenCardState extends State<SelectTokenCard> {
                               leading: Image.asset(
                                 snapshot.data![index].icon,
                                 width: 25,
+                                color: ThemeRaclette.black,
                               ),
                               title: Text(
                                 snapshot.data![index].symbol,

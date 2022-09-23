@@ -13,7 +13,7 @@ class TokenSelectButton extends StatefulWidget {
   @override
   State<TokenSelectButton> createState() => _TokenSelectButtonState();
 }
- 
+
 class _TokenSelectButtonState extends State<TokenSelectButton> {
   @override
   Widget build(BuildContext context) {
@@ -34,15 +34,15 @@ class _TokenSelectButtonState extends State<TokenSelectButton> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              (widget.provider.token  != null)
+              (widget.provider.token != null)
                   ? Image.asset(
-                      widget.provider.token !.icon,
+                      widget.provider.token!.icon,
                       width: 25,
                     )
                   : const SizedBox(),
-              (widget.provider.token  != null)
+              (widget.provider.token != null)
                   ? Text(
-                      widget.provider.token !.symbol,
+                      widget.provider.token!.symbol,
                       style: const TextStyle(color: ThemeRaclette.black),
                     )
                   : const Text(

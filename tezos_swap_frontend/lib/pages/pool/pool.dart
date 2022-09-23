@@ -53,433 +53,451 @@ class _PoolState extends State<Pool> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 100.0),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 200,
-              ),
-              Container(
-                padding: const EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                    color: ThemeRaclette.black,
-                    borderRadius: BorderRadius.circular(12)),
-                child: SizedBox(
-                  width: 1000,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'Add Liquidity',
-                            style: TextStyle(fontSize: 24),
-                          ),
-                          IconButton(
-                              onPressed: () {
-                                debugPrint('pressing settings');
-                              },
-                              icon: const Icon(
-                                Icons.settings,
-                                color: ThemeRaclette.white,
-                              ))
-                        ],
-                      ),
-                      const Divider(
-                        color: Colors.white,
-                      ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: Text(
-                                  'Select Pair',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: SizedBox(
-                                  width: 400,
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: TokenSelectButton(token1),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(.0),
-                                          child: TokenSelectButton(token2),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Container(
-                                  width: 400,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.white),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(18))),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Obx((() => Text(
-                                            '${feeTier[selected.value]}% fee tier'))),
-                                      ),
-                                      const Expanded(child: SizedBox()),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: ElevatedButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                edit = !edit;
-                                              });
-                                            },
-                                            child: edit
-                                                ? const Text('Hide')
-                                                : const Text('Edit')),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Obx((() =>
-                                    _feeSelection(edit, selected.value))),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: Text('Deposit Amounts'),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Container(
-                                  padding: const EdgeInsets.all(24.0),
-                                  width: 400,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                      color: ThemeRaclette.gray500,
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        width: 200,
-                                        height: 30,
-                                        child: ValueListenableBuilder2(
-                                          first: token1,
-                                          second: token2,
-                                          builder: (context, a, b, child) {
-                                            bool enabled = false;
-                                            if (token1.token != null &&
-                                                token2.token != null) {
-                                              enabled = true;
-                                            }
-                                            return TextFormField(
-                                              enabled: enabled,
-                                              onChanged: (value) {
-                                                double price = 0;
-                                                try {
-                                                  price = double.parse(
-                                                      upperController.text);
-                                                } catch (e) {}
-                                                lowerController.text =
-                                                    (price / tokenFactor)
-                                                        .toString();
-                                              },
-                                              controller: upperController,
-                                              decoration: const InputDecoration
-                                                      .collapsed(
-                                                  hintText: '0.0',
-                                                  hintStyle: TextStyle(
-                                                      color:
-                                                          ThemeRaclette.white)),
-                                              style: const TextStyle(
-                                                  fontSize: 30,
-                                                  color: ThemeRaclette.white),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      ValueListenableBuilder(
-                                        valueListenable: token1,
-                                        builder: (context, value, child) => Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            (token1.token != null)
-                                                ? Image.asset(
-                                                    token1.token!.icon,
-                                                    width: 25,
-                                                  )
-                                                : const SizedBox(),
-                                            (token1.token != null)
-                                                ? Text(
-                                                    token1.token!.symbol,
-                                                    style: const TextStyle(
-                                                        color: ThemeRaclette
-                                                            .black),
-                                                  )
-                                                : const Text(
-                                                    "Select Token",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Container(
-                                  padding: const EdgeInsets.all(24.0),
-                                  width: 400,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                      color: ThemeRaclette.gray500,
-                                      borderRadius: BorderRadius.circular(12)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SizedBox(
-                                        width: 200,
-                                        height: 30,
-                                        child: ValueListenableBuilder2(
-                                          first: token1,
-                                          second: token2,
-                                          builder: (context, a, b, child) {
-                                            bool enabled = false;
-                                            if (token1.token != null &&
-                                                token2.token != null) {
-                                              enabled = true;
-                                            }
-                                            return TextFormField(
-                                              enabled: enabled,
-                                              controller: lowerController,
-                                              onChanged: (value) {
-                                                double price = 0;
-                                                try {
-                                                  price = double.parse(
-                                                      lowerController.text);
-                                                } catch (e) {}
-                                                upperController.text =
-                                                    (price / tokenFactor)
-                                                        .toString();
-                                              },
-                                              decoration: const InputDecoration
-                                                      .collapsed(
-                                                  hintText: '0.0',
-                                                  hintStyle: TextStyle(
-                                                      color:
-                                                          ThemeRaclette.white)),
-                                              style: const TextStyle(
-                                                  fontSize: 30,
-                                                  color: ThemeRaclette.white),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      ValueListenableBuilder(
-                                        valueListenable: token2,
-                                        builder: (context, value, child) => Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            (token2.token != null)
-                                                ? Image.asset(
-                                                    token2.token!.icon,
-                                                    width: 25,
-                                                  )
-                                                : const SizedBox(),
-                                            (token2.token != null)
-                                                ? Text(
-                                                    token2.token!.symbol,
-                                                    style: const TextStyle(
-                                                        color: ThemeRaclette
-                                                            .black),
-                                                  )
-                                                : const Text(
-                                                    "Select Token",
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Select Price Range',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              const Text(
-                                'Current Price:',
-                              ),
-                              ValueListenableBuilder2(
-                                first: token1,
-                                second: token2,
-                                builder: (context, a, b, child) {
-                                  if (token1.token != null &&
-                                      token2.token != null) {
-                                    return SizedBox(
-                                      width: 300,
-                                      child: Obx(
-                                        (() {
-                                          rangeController.start = min.value;
-                                          rangeController.end = max.value;
-                                          return SfRangeSelector(
-                                            controller: rangeController,
-                                            min: 0,
-                                            max: 25,
-                                            onChangeEnd: ((value) {
-                                              min.value =
-                                                  roundDouble(value.start, 4);
-                                              max.value =
-                                                  roundDouble(value.end, 4);
-                                            }),
-                                            labelPlacement:
-                                                LabelPlacement.onTicks,
-                                            interval: 5,
-                                            showTicks: true,
-                                            showLabels: true,
-                                            child: SizedBox(
-                                              height: 200,
-                                              child: chart.SfCartesianChart(
-                                                margin: const EdgeInsets.all(0),
-                                                primaryXAxis: chart.NumericAxis(
-                                                  minimum: 0,
-                                                  maximum: 25,
-                                                  isVisible: false,
-                                                ),
-                                                primaryYAxis: chart.NumericAxis(
-                                                    isVisible: false,
-                                                    maximum: 4),
-                                                series: <
-                                                    chart.SplineAreaSeries<
-                                                        ChartDatapoint,
-                                                        double>>[
-                                                  chart.SplineAreaSeries<
-                                                          ChartDatapoint,
-                                                          double>(
-                                                      dataSource:
-                                                          _chartChartDatapoint,
-                                                      xValueMapper:
-                                                          (ChartDatapoint sales,
-                                                                  int index) =>
-                                                              sales.x,
-                                                      yValueMapper:
-                                                          (ChartDatapoint sales,
-                                                                  int index) =>
-                                                              sales.y)
-                                                ],
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                      ),
-                                    );
-                                  } else {
-                                    return const SizedBox(
-                                        width: 300,
-                                        height: 300,
-                                        child: Center(
-                                          child: Text(
-                                              'Your position will appear here.'),
-                                        ));
-                                  }
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 100.0),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 200,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                      color: ThemeRaclette.black,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: SizedBox(
+                    width: 1000,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Add Liquidity',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  debugPrint('pressing settings');
                                 },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ValueListenableBuilder2(
-                                        first: token1,
-                                        second: token2,
-                                        builder: (context, a, b, child) {
-                                          bool enable = false;
-                                          if (token1.token != null &&
-                                              token2.token != null) {
-                                            enable = true;
-                                          }
-                                          return PriceCard('Min Price', token1,
-                                              token2, min, enable);
-                                        },
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ValueListenableBuilder2(
-                                        first: token1,
-                                        second: token2,
-                                        builder: (context, a, b, child) {
-                                          bool enable = false;
-                                          if (token1.token != null &&
-                                              token2.token != null) {
-                                            enable = true;
-                                          }
-                                          return PriceCard('Max Price', token1,
-                                              token2, max, enable);
-                                        },
-                                      ),
-                                    ),
-                                  ],
+                                icon: const Icon(
+                                  Icons.settings,
+                                  color: ThemeRaclette.white,
+                                ))
+                          ],
+                        ),
+                        const Divider(
+                          color: Colors.white,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Text(
+                                    'Select Pair',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
                                   child: SizedBox(
                                     width: 400,
-                                    height: 60,
-                                    child: _submitButton(
-                                        widget.provider.address.string),
-                                  )),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TokenSelectButton(token1),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(.0),
+                                            child: TokenSelectButton(token2),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Container(
+                                    width: 400,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(18))),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Obx((() => Text(
+                                              '${feeTier[selected.value]}% fee tier'))),
+                                        ),
+                                        const Expanded(child: SizedBox()),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  edit = !edit;
+                                                });
+                                              },
+                                              child: edit
+                                                  ? const Text('Hide')
+                                                  : const Text('Edit')),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Obx((() =>
+                                      _feeSelection(edit, selected.value))),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Text('Deposit Amounts'),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24.0),
+                                    width: 400,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        color: ThemeRaclette.gray500,
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          height: 30,
+                                          child: ValueListenableBuilder2(
+                                            first: token1,
+                                            second: token2,
+                                            builder: (context, a, b, child) {
+                                              bool enabled = false;
+                                              if (token1.token != null &&
+                                                  token2.token != null) {
+                                                enabled = true;
+                                              }
+                                              return TextFormField(
+                                                enabled: enabled,
+                                                onChanged: (value) {
+                                                  double price = 0;
+                                                  try {
+                                                    price = double.parse(
+                                                        upperController.text);
+                                                  } catch (e) {}
+                                                  lowerController.text =
+                                                      (price / tokenFactor)
+                                                          .toString();
+                                                },
+                                                controller: upperController,
+                                                decoration:
+                                                    const InputDecoration
+                                                            .collapsed(
+                                                        hintText: '0.0',
+                                                        hintStyle: TextStyle(
+                                                            color: ThemeRaclette
+                                                                .white)),
+                                                style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: ThemeRaclette.white),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        ValueListenableBuilder(
+                                          valueListenable: token1,
+                                          builder: (context, value, child) =>
+                                              Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              (token1.token != null)
+                                                  ? Image.asset(
+                                                      token1.token!.icon,
+                                                      width: 25,
+                                                    )
+                                                  : const SizedBox(),
+                                              (token1.token != null)
+                                                  ? Text(
+                                                      token1.token!.symbol,
+                                                      style: const TextStyle(
+                                                          color: ThemeRaclette
+                                                              .black),
+                                                    )
+                                                  : const Text(
+                                                      "Select Token",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24.0),
+                                    width: 400,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        color: ThemeRaclette.gray500,
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          height: 30,
+                                          child: ValueListenableBuilder2(
+                                            first: token1,
+                                            second: token2,
+                                            builder: (context, a, b, child) {
+                                              bool enabled = false;
+                                              if (token1.token != null &&
+                                                  token2.token != null) {
+                                                enabled = true;
+                                              }
+                                              return TextFormField(
+                                                enabled: enabled,
+                                                controller: lowerController,
+                                                onChanged: (value) {
+                                                  double price = 0;
+                                                  try {
+                                                    price = double.parse(
+                                                        lowerController.text);
+                                                  } catch (e) {}
+                                                  upperController.text =
+                                                      (price / tokenFactor)
+                                                          .toString();
+                                                },
+                                                decoration:
+                                                    const InputDecoration
+                                                            .collapsed(
+                                                        hintText: '0.0',
+                                                        hintStyle: TextStyle(
+                                                            color: ThemeRaclette
+                                                                .white)),
+                                                style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: ThemeRaclette.white),
+                                              );
+                                            },
+                                          ),
+                                        ),
+                                        ValueListenableBuilder(
+                                          valueListenable: token2,
+                                          builder: (context, value, child) =>
+                                              Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              (token2.token != null)
+                                                  ? Image.asset(
+                                                      token2.token!.icon,
+                                                      width: 25,
+                                                    )
+                                                  : const SizedBox(),
+                                              (token2.token != null)
+                                                  ? Text(
+                                                      token2.token!.symbol,
+                                                      style: const TextStyle(
+                                                          color: ThemeRaclette
+                                                              .black),
+                                                    )
+                                                  : const Text(
+                                                      "Select Token",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Select Price Range',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                const Text(
+                                  'Current Price:',
+                                ),
+                                ValueListenableBuilder2(
+                                  first: token1,
+                                  second: token2,
+                                  builder: (context, a, b, child) {
+                                    if (token1.token != null &&
+                                        token2.token != null) {
+                                      return SizedBox(
+                                        width: 300,
+                                        child: Obx(
+                                          (() {
+                                            rangeController.start = min.value;
+                                            rangeController.end = max.value;
+                                            return SfRangeSelector(
+                                              controller: rangeController,
+                                              min: 0,
+                                              max: 25,
+                                              onChangeEnd: ((value) {
+                                                min.value =
+                                                    roundDouble(value.start, 4);
+                                                max.value =
+                                                    roundDouble(value.end, 4);
+                                              }),
+                                              labelPlacement:
+                                                  LabelPlacement.onTicks,
+                                              interval: 5,
+                                              showTicks: true,
+                                              showLabels: true,
+                                              child: SizedBox(
+                                                height: 200,
+                                                child: chart.SfCartesianChart(
+                                                  margin:
+                                                      const EdgeInsets.all(0),
+                                                  primaryXAxis:
+                                                      chart.NumericAxis(
+                                                    minimum: 0,
+                                                    maximum: 25,
+                                                    isVisible: false,
+                                                  ),
+                                                  primaryYAxis:
+                                                      chart.NumericAxis(
+                                                          isVisible: false,
+                                                          maximum: 4),
+                                                  series: <
+                                                      chart.SplineAreaSeries<
+                                                          ChartDatapoint,
+                                                          double>>[
+                                                    chart.SplineAreaSeries<
+                                                            ChartDatapoint,
+                                                            double>(
+                                                        dataSource:
+                                                            _chartChartDatapoint,
+                                                        xValueMapper:
+                                                            (ChartDatapoint
+                                                                        sales,
+                                                                    int
+                                                                        index) =>
+                                                                sales.x,
+                                                        yValueMapper:
+                                                            (ChartDatapoint
+                                                                        sales,
+                                                                    int index) =>
+                                                                sales.y)
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                        ),
+                                      );
+                                    } else {
+                                      return const SizedBox(
+                                          width: 300,
+                                          height: 300,
+                                          child: Center(
+                                            child: Text(
+                                                'Your position will appear here.'),
+                                          ));
+                                    }
+                                  },
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ValueListenableBuilder2(
+                                          first: token1,
+                                          second: token2,
+                                          builder: (context, a, b, child) {
+                                            bool enable = false;
+                                            if (token1.token != null &&
+                                                token2.token != null) {
+                                              enable = true;
+                                            }
+                                            return PriceCard('Min Price',
+                                                token1, token2, min, enable);
+                                          },
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ValueListenableBuilder2(
+                                          first: token1,
+                                          second: token2,
+                                          builder: (context, a, b, child) {
+                                            bool enable = false;
+                                            if (token1.token != null &&
+                                                token2.token != null) {
+                                              enable = true;
+                                            }
+                                            return PriceCard('Max Price',
+                                                token1, token2, max, enable);
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 400,
+                                      height: 60,
+                                      child: _submitButton(
+                                          widget.provider.address.string),
+                                    )),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
