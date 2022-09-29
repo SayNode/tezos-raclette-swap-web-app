@@ -20,7 +20,7 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  swap(Contract contract, String recipient, int tokenX, int tokenY,
+  swap(String contract, String recipient, int tokenX, int tokenY,
       {bool yToX = false}) {
     String entrypoint = "x_to_y";
     if (yToX) {
@@ -32,7 +32,7 @@ class WalletProvider extends ChangeNotifier {
       "opParams": [
         {
           "kind": "transaction",
-          "to": contract.address,
+          "to": contract,
           "amount": 0,
           "mutez": true,
           "parameter": {
@@ -43,7 +43,7 @@ class WalletProvider extends ChangeNotifier {
                 {
                   "prim": "Pair",
                   "args": [
-                    {"string": "2022-09-20T10:19:24Z"}, //TODO: set date
+                    {"string": "2023-09-20T10:19:24Z"}, //TODO: set date
                     {"int": "$tokenX"}
                   ]
                 },
@@ -52,6 +52,82 @@ class WalletProvider extends ChangeNotifier {
                   "args": [
                     {"int": "$tokenY"},
                     {"string": recipient}
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    });
+  }
+
+  setPosition(
+    String contract,
+    String signer,
+    int x,
+    int y,
+    int lowerTick,
+    int upperTick,
+  ) async {
+     var ticks = await getTicks();
+     var lowerWitness = ticks.where((e) => e <= lowerTick).toList()
+       ..sort()
+       ..last;
+     var upperWitness = ticks.where((e) => e <= upperTick).toList()
+       ..sort()
+       ..last;
+
+    _request({
+      "type": "OPERATION_REQUEST",
+      "sourcePkh": signer,
+      "opParams": [
+        {
+          "kind": "transaction",
+          "to": contract,
+          "amount": 0,
+          "mutez": true,
+          "parameter": { 
+            "entrypoint": "set_position",
+            "value": {
+              "prim": "Pair",
+              "args": [
+                {
+                  "prim": "Pair",
+                  "args": [
+                    {
+                      "prim": "Pair",
+                      "args": [
+                        {"int": "1665581460"},
+                        {"int": "3"}
+                      ]
+                    },
+                    {
+                      "prim": "Pair",
+                      "args": [
+                        {"int": "4"},
+                        {"int": "-1048575"}
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "prim": "Pair",
+                  "args": [
+                    {
+                      "prim": "Pair",
+                      "args": [
+                        {
+                          "prim": "Pair",
+                          "args": [
+                            {"int": "1"},
+                            {"int": "2"}
+                          ]
+                        },
+                        {"int": "5"}
+                      ]
+                    },
+                    {"int": "-1048575"}
                   ]
                 }
               ]

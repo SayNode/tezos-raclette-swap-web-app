@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:bs58check/bs58check.dart' as bs58check;
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-
 import 'globals.dart' as global;
 
 double roundDouble(double value, int places) {
@@ -114,4 +115,34 @@ Future<String> forgeOperation() async {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   }
   return res.body.replaceAll('"', '').replaceAll('\n', '');
+}
+
+Future<List<int>> getTicks() async {
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+  var url = Uri.parse(
+      'https://api.jakartanet.tzkt.io/v1/contracts/KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9/bigmaps/ticks/keys');
+  var res = await http.get(url, headers: headers);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+  List<int> list = [];
+  for (var element in json.decode(res.body)) {
+    list.add(int.parse(element['key']));
+  }
+  return list;
+}
+
+decodeMsg(String message) {
+  var a = bs58check.decode(message);
+  var msg = utf8.decode(a);
+  print(msg);
+}
+
+encodeMsg(String message) {
+  var encoded1 = utf8.encode(message);
+  var a = bs58check.encode(Uint8List.fromList(encoded1));
+  print(a);
 }

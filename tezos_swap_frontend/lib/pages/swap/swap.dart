@@ -138,7 +138,7 @@ class _SwapState extends State<Swap> {
                     element.tokenX == tokenProvider2.token!.tokenAddress &&
                         element.tokenY == tokenProvider1.token!.tokenAddress);
                 await widget.provider.swap(
-                    contract,
+                    '',
                     'tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z',
                     double.parse(upperController.text).toInt(),
                     double.parse(lowerController.text).toInt(),
