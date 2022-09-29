@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
                 alignment: Alignment.centerLeft,
                 child: Container(
                   padding: EdgeInsets.all(10),
-                  height: 100,
+                  height: 80,
                   child: Image(image: AssetImage("assets/image/Logo.png")),
                 ),
               ),

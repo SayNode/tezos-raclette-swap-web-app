@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
 
 // ignore: must_be_immutable
 class FeeTierCard extends StatefulWidget {
@@ -26,7 +27,10 @@ class _FeeTierCardState extends State<FeeTierCard> {
           height: 100,
           decoration: BoxDecoration(
               border: Border.all(
-                  color: widget.selected ? Colors.green : Colors.white),
+                  width: 2,
+                  color: widget.selected
+                      ? ThemeRaclette.primaryStatic
+                      : Colors.white),
               borderRadius: BorderRadius.circular(12)),
           child: Padding(
               padding: const EdgeInsets.all(8.0),

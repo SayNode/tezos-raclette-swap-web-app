@@ -33,79 +33,86 @@ class _SwapState extends State<Swap> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: 600,
-        height: 500,
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-            color: ThemeRaclette.black,
-            borderRadius: BorderRadius.circular(12)),
-        child: Form(
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: SingleChildScrollView(
+          child: Container(
+            width: 600,
+            height: 500,
+            margin: EdgeInsets.symmetric(vertical: 200),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+                color: ThemeRaclette.black,
+                borderRadius: BorderRadius.circular(12)),
+            child: Form(
+              child: Column(
                 children: [
-                  const Text(
-                    'Swap',
-                    style: TextStyle(fontSize: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Swap',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            debugPrint('pressing settings');
+                          },
+                          icon: const Icon(
+                            Icons.settings,
+                            color: ThemeRaclette.white,
+                          ))
+                    ],
                   ),
-                  IconButton(
-                      onPressed: () {
-                        debugPrint('pressing settings');
-                      },
-                      icon: const Icon(
-                        Icons.settings,
-                        color: ThemeRaclette.white,
-                      ))
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  ValueListenableBuilder2(
+                      first: tokenProvider1,
+                      second: tokenProvider2,
+                      builder: ((context, a, b, child) => SwapEntry(
+                            controller: upperController,
+                            function: (value) {
+                              lowerController.text =
+                                  (value * tokenRatio).toString();
+                            },
+                            enabled: (tokenProvider1.token != null &&
+                                tokenProvider2.token != null),
+                            tokenProvider: tokenProvider1,
+                          ))),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  ValueListenableBuilder2(
+                      first: tokenProvider1,
+                      second: tokenProvider2,
+                      builder: ((context, a, b, child) => SwapEntry(
+                          controller: lowerController,
+                          function: (value) {
+                            upperController.text =
+                                (value / tokenRatio).toString();
+                          },
+                          enabled: (tokenProvider1.token != null &&
+                              tokenProvider2.token != null),
+                          tokenProvider: tokenProvider2))),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  SizedBox(
+                      width: double.infinity,
+                      height: 60,
+                      child: ValueListenableBuilder<TextEditingValue>(
+                          valueListenable: upperController,
+                          builder: (context, value, child) =>
+                              ValueListenableBuilder2(
+                                  first: tokenProvider1,
+                                  second: tokenProvider2,
+                                  builder: ((context, a, b, child) => Obx(() =>
+                                      _connectWallet(
+                                          walletProvider.address.string)))))),
                 ],
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              ValueListenableBuilder2(
-                  first: tokenProvider1,
-                  second: tokenProvider2,
-                  builder: ((context, a, b, child) => SwapEntry(
-                        controller: upperController,
-                        function: (value) {
-                          lowerController.text =
-                              (value * tokenRatio).toString();
-                        },
-                        enabled: (tokenProvider1.token != null &&
-                            tokenProvider2.token != null),
-                        tokenProvider: tokenProvider1,
-                      ))),
-              const SizedBox(
-                height: 15,
-              ),
-              ValueListenableBuilder2(
-                  first: tokenProvider1,
-                  second: tokenProvider2,
-                  builder: ((context, a, b, child) => SwapEntry(
-                      controller: lowerController,
-                      function: (value) {
-                        upperController.text = (value / tokenRatio).toString();
-                      },
-                      enabled: (tokenProvider1.token != null &&
-                          tokenProvider2.token != null),
-                      tokenProvider: tokenProvider2))),
-              const SizedBox(
-                height: 30,
-              ),
-              SizedBox(
-                  width: double.infinity,
-                  height: 60,
-                  child: ValueListenableBuilder<TextEditingValue>(
-                      valueListenable: upperController,
-                      builder: (context, value, child) =>
-                          ValueListenableBuilder2(
-                              first: tokenProvider1,
-                              second: tokenProvider2,
-                              builder: ((context, a, b, child) => Obx(() =>
-                                  _connectWallet(
-                                      walletProvider.address.string)))))),
-            ],
+            ),
           ),
         ),
       ),
