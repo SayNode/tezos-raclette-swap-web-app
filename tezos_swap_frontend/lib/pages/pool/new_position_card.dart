@@ -13,42 +13,44 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' as chart;
 import 'package:syncfusion_flutter_core/core.dart';
 
-class Pool extends StatefulWidget {
+import '../../utils/globals.dart';
+
+class NewPositionCard extends StatefulWidget {
   final WalletProvider provider;
-  const Pool({
+  const NewPositionCard({
     Key? key,
     required this.provider,
   }) : super(key: key);
 
   @override
-  State<Pool> createState() => _PoolState();
+  State<NewPositionCard> createState() => _NewPositionCardState();
 }
 
-class _PoolState extends State<Pool> {
+class _NewPositionCardState extends State<NewPositionCard> {
   final List<double> feeTier = [0.01, 0.05, 0.3, 1];
-  double tokenFactor = 4.2;
+  double tokenFactor = 1;
   bool edit = false;
   RxInt selected = 2.obs;
   final upperController = TextEditingController();
   final lowerController = TextEditingController();
   TokenProvider token1 = TokenProvider();
   TokenProvider token2 = TokenProvider();
-  RxDouble min = 0.0.obs;
-  RxDouble max = 20.0.obs;
+  RxInt min = 0.obs;
+  RxInt max = 20.obs;
   RangeController rangeController = RangeController(start: 5, end: 11);
 //mock ratio
   double tokenRatio = 2.4;
   //example ChartDatapoint
-  final List<ChartDatapoint> _chartChartDatapoint = <ChartDatapoint>[
-    ChartDatapoint(x: 11, y: 3.4),
-    ChartDatapoint(x: 12, y: 2.8),
-    ChartDatapoint(x: 13, y: 1.6),
-    ChartDatapoint(x: 14, y: 2.3),
-    ChartDatapoint(x: 15, y: 2.5),
-    ChartDatapoint(x: 16, y: 2.9),
-    ChartDatapoint(x: 17, y: 3.8),
-    ChartDatapoint(x: 18, y: 2.0),
-  ];
+  // final List<ChartDatapoint> _chartChartDatapoint = <ChartDatapoint>[
+  //   ChartDatapoint(x: 11, y: 3.4),
+  //   ChartDatapoint(x: 12, y: 2.8),
+  //   ChartDatapoint(x: 13, y: 1.6),
+  //   ChartDatapoint(x: 14, y: 2.3),
+  //   ChartDatapoint(x: 15, y: 2.5),
+  //   ChartDatapoint(x: 16, y: 2.9),
+  //   ChartDatapoint(x: 17, y: 3.8),
+  //   ChartDatapoint(x: 18, y: 2.0),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -361,83 +363,114 @@ class _PoolState extends State<Pool> {
                                 const Text(
                                   'Current Price:',
                                 ),
-                                ValueListenableBuilder2(
-                                  first: token1,
-                                  second: token2,
-                                  builder: (context, a, b, child) {
-                                    if (token1.token != null &&
-                                        token2.token != null) {
-                                      return SizedBox(
-                                        width: 300,
-                                        child: Obx(
-                                          (() {
-                                            rangeController.start = min.value;
-                                            rangeController.end = max.value;
-                                            return SfRangeSelector(
-                                              controller: rangeController,
-                                              min: 0,
-                                              max: 25,
-                                              onChangeEnd: ((value) {
-                                                min.value =
-                                                    roundDouble(value.start, 4);
-                                                max.value =
-                                                    roundDouble(value.end, 4);
-                                              }),
-                                              labelPlacement:
-                                                  LabelPlacement.onTicks,
-                                              interval: 5,
-                                              showTicks: true,
-                                              showLabels: true,
-                                              child: SizedBox(
-                                                height: 200,
-                                                child: chart.SfCartesianChart(
-                                                  margin:
-                                                      const EdgeInsets.all(0),
-                                                  primaryXAxis:
-                                                      chart.NumericAxis(
-                                                    minimum: 0,
-                                                    maximum: 25,
-                                                    isVisible: false,
-                                                  ),
-                                                  primaryYAxis:
-                                                      chart.NumericAxis(
-                                                          isVisible: false,
-                                                          maximum: 4),
-                                                  series: <
-                                                      chart.SplineAreaSeries<
-                                                          ChartDatapoint,
-                                                          double>>[
-                                                    chart.SplineAreaSeries<
-                                                            ChartDatapoint,
-                                                            double>(
-                                                        dataSource:
-                                                            _chartChartDatapoint,
-                                                        xValueMapper:
-                                                            (ChartDatapoint
-                                                                        sales,
-                                                                    int
-                                                                        index) =>
-                                                                sales.x,
-                                                        yValueMapper:
-                                                            (ChartDatapoint
-                                                                        sales,
-                                                                    int index) =>
-                                                                sales.y)
-                                                  ],
+                                FutureBuilder<List<ChartDatapoint>>(
+                                  future: buildChartPoints(),
+                                  builder: (
+                                    BuildContext context,
+                                    AsyncSnapshot<List<ChartDatapoint>>
+                                        snapshot,
+                                  ) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    } else if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (snapshot.hasError) {
+                                        return const Text('Error');
+                                      } else if (snapshot.hasData) {
+                                        return ValueListenableBuilder2(
+                                          first: token1,
+                                          second: token2,
+                                          builder: (context, a, b, child) {
+                                            if (token1.token != null &&
+                                                token2.token != null) {
+                                              return SizedBox(
+                                                width: 300,
+                                                child: Obx(
+                                                  (() {
+                                                    rangeController.start =
+                                                        min.value;
+                                                    rangeController.end =
+                                                        max.value;
+                                                    return SfRangeSelector(
+                                                      controller:
+                                                          rangeController,
+                                                      min: 0,
+                                                      max: 50,
+                                                      onChangeEnd: ((value) {
+                                                        min.value =
+                                                            value.start.round();
+                                                        max.value =
+                                                            value.end.round();
+                                                      }),
+                                                      labelPlacement:
+                                                          LabelPlacement
+                                                              .onTicks,
+                                                      interval: 5,
+                                                      showTicks: true,
+                                                      showLabels: true,
+                                                      child: SizedBox(
+                                                          height: 200,
+                                                          child: chart
+                                                              .SfCartesianChart(
+                                                            margin:
+                                                                const EdgeInsets
+                                                                    .all(0),
+                                                            primaryXAxis: chart
+                                                                .NumericAxis(
+                                                              minimum: 0,
+                                                              maximum: 50,
+                                                              isVisible: false,
+                                                            ),
+                                                            primaryYAxis: chart
+                                                                .NumericAxis(
+                                                                    isVisible:
+                                                                        false,
+                                                                    maximum:
+                                                                        20000),
+                                                            series: <
+                                                                chart.SplineAreaSeries<
+                                                                    ChartDatapoint,
+                                                                    double>>[
+                                                              chart.SplineAreaSeries<
+                                                                      ChartDatapoint,
+                                                                      double>(
+                                                                  dataSource:
+                                                                      snapshot
+                                                                          .data!,
+                                                                  xValueMapper:
+                                                                      (ChartDatapoint sales,
+                                                                              int
+                                                                                  index) =>
+                                                                          sales
+                                                                              .x,
+                                                                  yValueMapper:
+                                                                      (ChartDatapoint sales,
+                                                                              int index) =>
+                                                                          sales.y)
+                                                            ],
+                                                          )),
+                                                    );
+                                                  }),
                                                 ),
-                                              ),
-                                            );
-                                          }),
-                                        ),
-                                      );
+                                              );
+                                            } else {
+                                              return const SizedBox(
+                                                  width: 300,
+                                                  height: 300,
+                                                  child: Center(
+                                                    child: Text(
+                                                        'Your position will appear here.'),
+                                                  ));
+                                            }
+                                          },
+                                        );
+                                      } else {
+                                        return const Text('Empty data');
+                                      }
                                     } else {
-                                      return const SizedBox(
-                                          width: 300,
-                                          height: 300,
-                                          child: Center(
-                                            child: Text(
-                                                'Your position will appear here.'),
-                                          ));
+                                      return Text(
+                                          'State: ${snapshot.connectionState}');
                                     }
                                   },
                                 ),
@@ -543,6 +576,14 @@ class _PoolState extends State<Pool> {
             print(max.value);
             print(upperController.text);
             print(lowerController.text);
+            //TODO: proper contract selection
+            walletProvider.setPosition(
+                'KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7',
+                walletProvider.address.string,
+                int.parse(upperController.text),
+                int.parse(lowerController.text),
+                min.value,
+                max.value);
           },
           child: Text(
             'Submit',

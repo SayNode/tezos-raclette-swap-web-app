@@ -7,7 +7,7 @@ import '../../../theme/ThemeRaclette.dart';
 class PriceCard extends StatefulWidget {
   TokenProvider token1;
   TokenProvider token2;
-  RxDouble price;
+  RxInt price;
   String text;
   bool enabled;
   PriceCard(this.text, this.token1, this.token2, this.price, this.enabled, {super.key});
@@ -51,7 +51,7 @@ class _PriceCardState extends State<PriceCard> {
                         enabled: widget.enabled,
                         controller: controller,
                         onEditingComplete: () {
-                          widget.price.value = double.parse(controller.text);
+                          widget.price.value = int.parse(controller.text);
                         },
                       );
                     })),

@@ -3,7 +3,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tezos_swap_frontend/pages/pool/pool.dart';
+import 'package:tezos_swap_frontend/pages/pool/new_position_card.dart';
+import 'package:tezos_swap_frontend/pages/pool/pools_card.dart';
 import 'package:tezos_swap_frontend/pages/swap/swap.dart';
 import 'package:tezos_swap_frontend/pages/vote/vote_page.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
@@ -194,7 +195,7 @@ class _HomePageState extends State<HomePage> {
           index: index,
           children: [
             Swap(provider: walletProvider),
-            Pool(provider: walletProvider),
+            PoolCard(provider: walletProvider),
             const VotePage()
           ],
         ),

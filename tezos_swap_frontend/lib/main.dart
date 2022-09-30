@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
 import 'package:tezos_swap_frontend/repositories/token_repo.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Raclette Swap',
       theme: ThemeData(

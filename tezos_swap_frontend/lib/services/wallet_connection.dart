@@ -1,5 +1,6 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nanoid/nanoid.dart';
@@ -70,13 +71,13 @@ class WalletProvider extends ChangeNotifier {
     int lowerTick,
     int upperTick,
   ) async {
-     var ticks = await getTicks();
-     var lowerWitness = ticks.where((e) => e <= lowerTick).toList()
-       ..sort()
-       ..last;
-     var upperWitness = ticks.where((e) => e <= upperTick).toList()
-       ..sort()
-       ..last;
+    var ticks = await getTicks();
+    var lowerWitness = ticks.where((e) => e <= lowerTick).toList()
+      ..sort()
+      ..last;
+    var upperWitness = ticks.where((e) => e <= upperTick).toList()
+      ..sort()
+      ..last;
 
     _request({
       "type": "OPERATION_REQUEST",
@@ -87,7 +88,7 @@ class WalletProvider extends ChangeNotifier {
           "to": contract,
           "amount": 0,
           "mutez": true,
-          "parameter": { 
+          "parameter": {
             "entrypoint": "set_position",
             "value": {
               "prim": "Pair",
@@ -98,15 +99,15 @@ class WalletProvider extends ChangeNotifier {
                     {
                       "prim": "Pair",
                       "args": [
-                        {"int": "1665581460"},
-                        {"int": "3"}
+                        {"int": "1665581460"},//TODO: set deadline
+                        {"int": "${sqrt(x * y)}"}
                       ]
                     },
                     {
                       "prim": "Pair",
                       "args": [
-                        {"int": "4"},
-                        {"int": "-1048575"}
+                        {"int": "$lowerTick"},
+                        {"int": "${lowerWitness[0]}"}
                       ]
                     }
                   ]
@@ -120,14 +121,14 @@ class WalletProvider extends ChangeNotifier {
                         {
                           "prim": "Pair",
                           "args": [
-                            {"int": "1"},
-                            {"int": "2"}
+                            {"int": "$x"},
+                            {"int": "$y"}
                           ]
                         },
-                        {"int": "5"}
+                        {"int": "$upperTick"}
                       ]
                     },
-                    {"int": "-1048575"}
+                    {"int": "${upperWitness[0]}"}
                   ]
                 }
               ]
