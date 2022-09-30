@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/pool/new_position_card.dart';
-import 'package:tezos_swap_frontend/pages/pool/pools_card.dart';
 import 'package:tezos_swap_frontend/pages/swap/swap.dart';
 import 'package:tezos_swap_frontend/pages/vote/vote_page.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
@@ -19,14 +18,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _pos = Random().nextInt(13);
+  RxInt _pos = Random().nextInt(13).obs;
   late Timer _timer;
 
   void initState() {
     _timer = Timer.periodic(Duration(seconds: 30), (Timer t) {
-      setState(() {
-        _pos = (_pos + 1) % 5;
-      });
+      _pos.value = (_pos.value + 1) % 5;
     });
     super.initState();
   }
@@ -177,25 +174,25 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       body: Stack(children: [
-        Container(
-          color: Colors.black,
-          width: double.infinity,
-          child: AnimatedSwitcher(
-            duration: Duration(seconds: 2),
-            child: SizedBox.expand(
-              child: Image.asset(
-                "assets/image/BG ($_pos).jpg",
-                fit: BoxFit.cover,
+        Obx((() => Container(
+              color: Colors.black,
+              width: double.infinity,
+              child: AnimatedSwitcher(
+                duration: Duration(seconds: 2),
+                child: SizedBox.expand(
+                  child: Image.asset(
+                    "assets/image/BG (${_pos.value}).jpg",
+                    fit: BoxFit.cover,
+                  ),
+                  key: UniqueKey(),
+                ),
               ),
-              key: UniqueKey(),
-            ),
-          ),
-        ),
+            ))),
         IndexedStack(
           index: index,
           children: [
             Swap(provider: walletProvider),
-            PoolCard(provider: walletProvider),
+            NewPositionCard(provider: walletProvider),
             const VotePage()
           ],
         ),

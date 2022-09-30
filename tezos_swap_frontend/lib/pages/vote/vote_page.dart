@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+import 'package:tezos_swap_frontend/utils/globals.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../models/token.dart';
+
 class VotePage extends StatefulWidget {
   const VotePage({
     Key? key,
@@ -28,7 +30,9 @@ class _VotePageState extends State<VotePage> {
           child: Center(
             child: ElevatedButton(
                 onPressed: () async {
-                  var a = await buildChartPoints();
+                  var a =
+                      await positionsOfAddress('tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf');
+                  print(a[0]);
                 },
                 child: const Text(
                   'coming soon...',

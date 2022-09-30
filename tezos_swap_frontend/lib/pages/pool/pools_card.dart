@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tezos_swap_frontend/pages/pool/new_position_card.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+import 'package:tezos_swap_frontend/utils/globals.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 
 class PoolCard extends StatefulWidget {
   final WalletProvider provider;
@@ -50,6 +52,54 @@ class _PoolCardState extends State<PoolCard> {
                                 },
                                 child: const Text('New Position'))
                           ],
+                        ),
+                        FutureBuilder<List<Map>>(
+                          future:
+                              //positionsOfAddress(walletProvider.address.string),
+                              positionsOfAddress(
+                                  'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf'),
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<List<Map>> snapshot,
+                          ) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasError) {
+                                return const Text('Error');
+                              } else if (snapshot.hasData) {
+                                return Container(
+                                  color: Colors.red,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: List.generate(
+                                        snapshot.data!.length,
+                                        (index) => Container(
+                                              color: Colors.green,
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
+                                                      'Min: ${snapshot.data![index]['value']['lower_tick_index']}, '),
+                                                  Text(
+                                                      'Max: ${snapshot.data![index]['value']['upper_tick_index']}, '),
+                                                  Text(
+                                                      'Liquidity: ${snapshot.data![index]['value']['liquidity']}'),
+                                                ],
+                                              ),
+                                            )),
+                                  ),
+                                );
+                              } else {
+                                return const Text('Empty data');
+                              }
+                            } else {
+                              return Text('State: ${snapshot.connectionState}');
+                            }
+                          },
                         ),
                       ],
                     ),

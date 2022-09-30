@@ -578,7 +578,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
             print(lowerController.text);
             //TODO: proper contract selection
             walletProvider.setPosition(
-                'KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7',
+                contract,
                 walletProvider.address.string,
                 int.parse(upperController.text),
                 int.parse(lowerController.text),

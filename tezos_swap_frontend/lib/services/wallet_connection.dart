@@ -71,7 +71,7 @@ class WalletProvider extends ChangeNotifier {
     int lowerTick,
     int upperTick,
   ) async {
-    var ticks = await getTicks();
+    var ticks = await getTicks(contract);
     var lowerWitness = ticks.where((e) => e <= lowerTick).toList()
       ..sort()
       ..last;
