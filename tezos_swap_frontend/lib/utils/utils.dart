@@ -15,112 +15,7 @@ double roundDouble(double value, int places) {
   return ((value * mod).round().toDouble() / mod);
 }
 
-// Future<String> forgeSwap(String adressX, String addressY) async {
-//   var headers = {
-//     "Accept": "application/json",
-//     'Content-type': 'application/json',
-//   };
 
-//   var data = utf8.encode(json.encode({
-//     "branch": "BMHBtAaUv59LipV1czwZ5iQkxEktPJDE7A9sYXPkPeRzbBasNY8",
-//     "contents": [
-//       {
-//         "kind": "transaction",
-//         "counter": "1274363",
-//         "source": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z",
-//         "amount": "0",
-//         "destination": "KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9",
-//         "parameters": {
-//           "entrypoint": "x_to_y",
-//           "value": {
-//             "prim": "Pair",
-//             "args": [
-//               {
-//                 "prim": "Pair",
-//                 "args": [
-//                   {"int": "1663062513"},
-//                   {"int": "10"}
-//                 ]
-//               },
-//               {
-//                 "prim": "Pair",
-//                 "args": [
-//                   {"int": "8"},
-//                   {"string": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z"}
-//                 ]
-//               }
-//             ]
-//           }
-//         },
-//         "fee": "1420",
-//         "storage_limit": "496",
-//         "gas_limit": "10600"
-//       }
-//     ]
-//   }));
-
-//   var url = Uri.parse(
-//       '${global.networkUri}/chains/main/blocks/head/helpers/forge/operations');
-//   var res = await http.post(url, headers: headers, body: data);
-//   if (res.statusCode != 200) {
-//     throw Exception('http.post error: statusCode= ${res.statusCode}');
-//   }
-//   return res.body.replaceAll('"', '').replaceAll('\n', '');
-// }
-
-Future<String> forgeOperation() async {
-  var headers = {
-    "Accept": "application/json",
-    'Content-type': 'application/json',
-  };
-
-  var data = utf8.encode(json.encode({
-    "branch": "BMHBtAaUv59LipV1czwZ5iQkxEktPJDE7A9sYXPkPeRzbBasNY8",
-    "contents": [
-      {
-        "kind": "transaction",
-        "counter": "1274363",
-        "source": "tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf",
-        "amount": "0",
-        "destination": "KT1NproXvHrDfc7NHyzGJhHVLf4ZMGz8pkae",
-        "parameters": {
-          "entrypoint": "tokens",
-          "value": {
-            "prim": "Right",
-            "args": [
-              [
-                {
-                  "prim": "Pair",
-                  "args": [
-                    {"string": "tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf"},
-                    {
-                      "prim": "Pair",
-                      "args": [
-                        {"int": "0"},
-                        {"int": "1000005400"}
-                      ]
-                    }
-                  ]
-                }
-              ]
-            ]
-          }
-        },
-        "fee": "1420",
-        "storage_limit": "496",
-        "gas_limit": "10600"
-      }
-    ]
-  }));
-
-  var url = Uri.parse(
-      '${global.networkUri}/chains/main/blocks/head/helpers/forge/operations');
-  var res = await http.post(url, headers: headers, body: data);
-  if (res.statusCode != 200) {
-    throw Exception('http.post error: statusCode= ${res.statusCode}');
-  }
-  return res.body.replaceAll('"', '').replaceAll('\n', '');
-}
 
 Future<List<int>> getTicks(String contract) async {
   var headers = {
@@ -133,7 +28,6 @@ Future<List<int>> getTicks(String contract) async {
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   }
-  print(res.body);
   List<int> list = [];
   for (var element in json.decode(res.body)) {
     list.add(int.parse(element['key']));
@@ -141,7 +35,7 @@ Future<List<int>> getTicks(String contract) async {
   return list;
 }
 
-Future<bool> getOperators(String tokenContract, String userAddress, String swapContract) async {
+Future<bool> isAuthorized(String tokenContract, String userAddress, String swapContract) async {
   var headers = {
     "Accept": "application/json",
     'Content-type': 'application/json',

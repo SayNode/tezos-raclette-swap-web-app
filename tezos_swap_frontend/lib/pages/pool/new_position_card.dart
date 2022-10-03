@@ -15,6 +15,7 @@ import 'package:syncfusion_flutter_charts/charts.dart' as chart;
 import 'package:syncfusion_flutter_core/core.dart';
 
 import '../../utils/globals.dart';
+import '../widgets/authorize_token.dart';
 
 class NewPositionCard extends StatefulWidget {
   final WalletProvider provider;
@@ -70,10 +71,12 @@ class _NewPositionCardState extends State<NewPositionCard> {
                           //mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                                onPressed: () => Get.put(NewPositionService())
-                                    .newPosition
-                                    .value = false,
-                                icon: const Icon(Icons.arrow_back), color: Colors.white,),
+                              onPressed: () => Get.put(NewPositionService())
+                                  .newPosition
+                                  .value = false,
+                              icon: const Icon(Icons.arrow_back),
+                              color: Colors.white,
+                            ),
                             const Text(
                               'Add Liquidity',
                               style: TextStyle(fontSize: 24),
@@ -359,7 +362,8 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                   'Current Price:',
                                 ),
                                 FutureBuilder<List<ChartDatapoint>>(
-                                  future: buildChartPoints('KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9'),
+                                  future: buildChartPoints(
+                                      'KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9'),
                                   builder: (
                                     BuildContext context,
                                     AsyncSnapshot<List<ChartDatapoint>>
@@ -565,13 +569,31 @@ class _NewPositionCardState extends State<NewPositionCard> {
           style: ThemeRaclette.invertedButtonStyle,
           onPressed: () async {
             //TODO: proper contract selection
-            walletProvider.setPosition(
-                contract,
-                walletProvider.address.string,
-                int.parse(upperController.text),
-                int.parse(lowerController.text),
-                min.value,
-                max.value);
+
+            var authorized1 = await isAuthorized(token1.token!.tokenAddress,
+                walletProvider.address.string, contract);
+            var authorized2 = await isAuthorized(token2.token!.tokenAddress,
+                walletProvider.address.string, contract);
+            if (authorized1 && authorized2) {
+            } else {
+              if (authorized1) {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AuthorizeTokenCard(
+                    contractAddress: contract,
+                    tokenAddress: token1.token!.tokenAddress,
+                  ),
+                );
+              } else {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) => AuthorizeTokenCard(
+                    contractAddress: contract,
+                    tokenAddress: token2.token!.tokenAddress,
+                  ),
+                );
+              }
+            }
           },
           child: Text(
             'Submit',

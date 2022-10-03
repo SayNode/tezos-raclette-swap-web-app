@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:tezos_swap_frontend/pages/widgets/authorize_token.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../models/contract_model.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
@@ -144,12 +146,53 @@ class _SwapState extends State<Swap> {
                         element.tokenY == tokenProvider2.token!.tokenAddress ||
                     element.tokenX == tokenProvider2.token!.tokenAddress &&
                         element.tokenY == tokenProvider1.token!.tokenAddress);
-                await widget.provider.swap(
-                    '',
-                    'tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z',
-                    double.parse(upperController.text).toInt(),
-                    double.parse(lowerController.text).toInt(),
-                    yToX: yToX);
+                var authorized1 = await isAuthorized(
+                    tokenProvider1.token!.tokenAddress,
+                    walletProvider.address.string,
+                    contract.address);
+                var authorized2 = await isAuthorized(
+                    tokenProvider2.token!.tokenAddress,
+                    walletProvider.address.string,
+                    contract.address);
+                if (authorized1 && authorized2) {
+                  await widget.provider.swap(
+                      contract.address,
+                      walletProvider.address.string,
+                      double.parse(upperController.text).toInt(),
+                      double.parse(lowerController.text).toInt(),
+                      yToX: yToX);
+                } else {
+                  if (authorized1) {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('Authorization Required'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                "At least one of you Contract need authorization."),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          ElevatedButton(
+                            onPressed: () {},
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => AuthorizeTokenCard(
+                        contractAddress: contract.address,
+                        tokenAddress: tokenProvider2.token!.tokenAddress,
+                      ),
+                    );
+                  }
+                }
               },
               child: Text(
                 'Swap',
