@@ -111,6 +111,11 @@ Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
   return dataPoints;
 }
 
+String addressToDisplayAddress(String address) {
+  //tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf
+  return '${address.substring(0, 7)}....${address.substring(32)}';
+}
+
 List<Token>  getContractTokens(String contractAddress)  {
   var contracts = Get.put(ContractRepository()).contracts;
   var contract =
