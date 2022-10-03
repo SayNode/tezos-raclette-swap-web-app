@@ -30,9 +30,7 @@ class _VotePageState extends State<VotePage> {
           child: Center(
             child: ElevatedButton(
                 onPressed: () async {
-                  var a =
-                      await positionsOfAddress('tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf');
-                  print(a[0]);
+                  walletProvider.authorizeContract('KT18suWgCHADCLkywTKD3pXg6ARHiw1YxWBq', 'KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7');
                 },
                 child: const Text(
                   'coming soon...',

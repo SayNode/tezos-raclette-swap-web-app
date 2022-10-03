@@ -1,8 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/services.dart' as root_bundle;
+import 'package:get/get.dart';
 import '../models/contract_model.dart';
 
-class ContractRepository {
+class ContractRepository extends GetxService{
   late List<Contract> _contracts;
 
   List<Contract> get contracts => _contracts;

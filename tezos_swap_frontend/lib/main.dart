@@ -32,6 +32,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+        var tokenRepo = Get.put(TokenRepository());
+    var contractRepo = Get.put(ContractRepository());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Raclette Swap',
@@ -46,7 +48,32 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: const HomePage(),
+      home: FutureBuilder<List<dynamic>>(
+        future: Future.wait(
+            [tokenRepo.init(), contractRepo.init()]),
+        builder: (ctx, snapshot) {
+
+          if (snapshot.connectionState == ConnectionState.done) {
+            // If we got an error
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  '${snapshot.error} occurred',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              );
+
+              // if we got our data
+            } else if (snapshot.hasData) {
+                return const HomePage();
+              
+            }
+          }
+          return const Center(
+            child: Text('Fatal Error, this should never happen.'),
+          );
+        },
+      ),
     );
   }
 }

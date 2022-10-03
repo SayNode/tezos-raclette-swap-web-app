@@ -10,7 +10,7 @@ import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../models/contract_model.dart';
 
 class WalletProvider extends ChangeNotifier {
-  RxString address = ''.obs;
+  RxString address = 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf'.obs;
 
   requestPermission() {
     _request({
@@ -99,7 +99,7 @@ class WalletProvider extends ChangeNotifier {
                     {
                       "prim": "Pair",
                       "args": [
-                        {"int": "1665581460"},//TODO: set deadline
+                        {"int": "1665581460"}, //TODO: set deadline
                         {"int": "${sqrt(x * y)}"}
                       ]
                     },
@@ -129,6 +129,102 @@ class WalletProvider extends ChangeNotifier {
                       ]
                     },
                     {"int": "${upperWitness[0]}"}
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    });
+  }
+
+  
+
+  authorizeContract(String tokenContract, String swapContract) async {
+    _request({
+      "type": "OPERATION_REQUEST",
+      "sourcePkh": address.value,
+      "opParams": [
+        {
+          "kind": "transaction",
+          "to": tokenContract,
+          "amount": 0,
+          "mutez": true,
+          "parameter": {
+            "entrypoint": "update_operators",
+            "value": [
+              {
+                "prim": "Left",
+                "args": [
+                  {
+                    "prim": "Pair",
+                    "args": [
+                      {"string": address.value},
+                      {
+                        "prim": "Pair",
+                        "args": [
+                          {"string": swapContract},
+                          {"int": "0"}
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    });
+  }
+
+  removePosition(String contract, String position) async {
+    _request({
+      "type": "OPERATION_REQUEST",
+      "sourcePkh": address.value,
+      "opParams": [
+        {
+          "kind": "transaction",
+          "to": contract,
+          "amount": 0,
+          "mutez": true,
+          "parameter": {
+            "entrypoint": "update_position",
+            "value": {
+              "prim": "Pair",
+              "args": [
+                {
+                  "prim": "Pair",
+                  "args": [
+                    {
+                      "prim": "Pair",
+                      "args": [
+                        //TODO: do proper deadline
+                        {"int": "1668508020"},
+                        {"int": "0"}
+                      ]
+                    },
+                    {
+                      "prim": "Pair",
+                      "args": [
+                        {
+                          "prim": "Pair",
+                          "args": [
+                            {"int": "0"},
+                            {"int": "0"}
+                          ]
+                        },
+                        {"int": position}
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "prim": "Pair",
+                  "args": [
+                    {"string": address.string},
+                    {"string": address.string}
                   ]
                 }
               ]

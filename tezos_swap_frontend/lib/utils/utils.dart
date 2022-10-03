@@ -2,8 +2,12 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:bs58check/bs58check.dart' as bs58check;
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../models/chart_datapoint.dart';
+import '../models/token.dart';
+import '../repositories/contract_repo.dart';
+import '../repositories/token_repo.dart';
 import 'globals.dart' as global;
 
 double roundDouble(double value, int places) {
@@ -25,7 +29,7 @@ double roundDouble(double value, int places) {
 //         "counter": "1274363",
 //         "source": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z",
 //         "amount": "0",
-//         "destination": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
+//         "destination": "KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9",
 //         "parameters": {
 //           "entrypoint": "x_to_y",
 //           "value": {
@@ -137,13 +141,30 @@ Future<List<int>> getTicks(String contract) async {
   return list;
 }
 
-getPositions() async {
+Future<bool> getOperators(String tokenContract, String userAddress, String swapContract) async {
   var headers = {
     "Accept": "application/json",
     'Content-type': 'application/json',
   };
   var url = Uri.parse(
-      'https://api.jakartanet.tzkt.io/v1/contracts/KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7/bigmaps/positions/keys');
+      'https://api.jakartanet.tzkt.io/v1/contracts/$tokenContract/bigmaps/operators/keys');
+  var res = await http.get(url, headers: headers);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+  List list =json.decode(res.body);
+  var allreadyOperator = list.any((element) => element['key']['address_0']==userAddress&&element['key']['address_1']==swapContract);
+  return allreadyOperator;
+  
+}
+
+getPositions(String contractAddress) async {
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+  var url = Uri.parse(
+      'https://api.jakartanet.tzkt.io/v1/contracts/$contractAddress/bigmaps/positions/keys');
   var res = await http.get(url, headers: headers);
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -152,21 +173,22 @@ getPositions() async {
   return res.body;
 }
 
-Future<List<Map>> positionsOfAddress(String address) async {
-  var positions = await getPositions();
+Future<List<Map>> positionsOfAddress(
+    String address, String contractAddress) async {
+  var positions = await getPositions(contractAddress);
   List<Map> myPositions = [];
 
   for (Map position in json.decode(positions)) {
-    if (position['value']['owner']== address) {
+    if (position['value']['owner'] == address) {
       myPositions.add(position);
     }
   }
   return myPositions;
 }
 
-Future<List<ChartDatapoint>> buildChartPoints() async {
+Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
   ChartDatapoint(x: 11, y: 3.4);
-  List positionsMaps = json.decode(await getPositions());
+  List positionsMaps = json.decode(await getPositions(contractAddress));
   List<int> keys = [];
   List<ChartDatapoint> dataPoints = [];
   Map range = {};
@@ -193,4 +215,16 @@ Future<List<ChartDatapoint>> buildChartPoints() async {
   }
   dataPoints.sort((a, b) => a.x.compareTo(b.x));
   return dataPoints;
+}
+
+List<Token>  getContractTokens(String contractAddress)  {
+  var contracts = Get.put(ContractRepository()).contracts;
+  var contract =
+      contracts.firstWhere((element) => element.address == contractAddress);
+  List<Token> tokens = [];
+  var tokenRepo = Get.put(TokenRepository()).tokens;
+  tokens.addAll(tokenRepo.where((element) =>
+      element.tokenAddress == contract.tokenX ||
+      element.tokenAddress == contract.tokenY));
+  return tokens;
 }

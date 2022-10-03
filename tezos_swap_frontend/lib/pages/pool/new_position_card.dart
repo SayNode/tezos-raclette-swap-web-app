@@ -4,6 +4,7 @@ import 'package:tezos_swap_frontend/models/chart_datapoint.dart';
 import 'package:tezos_swap_frontend/pages/pool/widgets/fee_tier_card.dart';
 import 'package:tezos_swap_frontend/pages/pool/widgets/price_card.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
+import 'package:tezos_swap_frontend/services/new_position_service.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
 import 'package:tezos_swap_frontend/utils/value_listenable2.dart';
@@ -39,18 +40,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
   RxInt max = 20.obs;
   RangeController rangeController = RangeController(start: 5, end: 11);
 //mock ratio
-  double tokenRatio = 2.4;
-  //example ChartDatapoint
-  // final List<ChartDatapoint> _chartChartDatapoint = <ChartDatapoint>[
-  //   ChartDatapoint(x: 11, y: 3.4),
-  //   ChartDatapoint(x: 12, y: 2.8),
-  //   ChartDatapoint(x: 13, y: 1.6),
-  //   ChartDatapoint(x: 14, y: 2.3),
-  //   ChartDatapoint(x: 15, y: 2.5),
-  //   ChartDatapoint(x: 16, y: 2.9),
-  //   ChartDatapoint(x: 17, y: 3.8),
-  //   ChartDatapoint(x: 18, y: 2.0),
-  // ];
+  double tokenRatio = 2;
 
   @override
   Widget build(BuildContext context) {
@@ -79,6 +69,11 @@ class _NewPositionCardState extends State<NewPositionCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           //mainAxisSize: MainAxisSize.min,
                           children: [
+                            IconButton(
+                                onPressed: () => Get.put(NewPositionService())
+                                    .newPosition
+                                    .value = false,
+                                icon: const Icon(Icons.arrow_back), color: Colors.white,),
                             const Text(
                               'Add Liquidity',
                               style: TextStyle(fontSize: 24),
@@ -364,7 +359,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                   'Current Price:',
                                 ),
                                 FutureBuilder<List<ChartDatapoint>>(
-                                  future: buildChartPoints(),
+                                  future: buildChartPoints('KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9'),
                                   builder: (
                                     BuildContext context,
                                     AsyncSnapshot<List<ChartDatapoint>>
@@ -569,13 +564,6 @@ class _NewPositionCardState extends State<NewPositionCard> {
       return ElevatedButton(
           style: ThemeRaclette.invertedButtonStyle,
           onPressed: () async {
-            print(feeTier[selected.value]);
-            print(token1.token!.name);
-            print(token2.token!.name);
-            print(min.value);
-            print(max.value);
-            print(upperController.text);
-            print(lowerController.text);
             //TODO: proper contract selection
             walletProvider.setPosition(
                 contract,
