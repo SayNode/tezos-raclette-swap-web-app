@@ -163,24 +163,11 @@ class _SwapState extends State<Swap> {
                       yToX: yToX);
                 } else {
                   if (authorized1) {
-                    showDialog(
+                                        showDialog(
                       context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('Authorization Required'),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                                "At least one of you Contract need authorization."),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            onPressed: () {},
-                            child: const Text('Close'),
-                          ),
-                        ],
+                      builder: (BuildContext context) => AuthorizeTokenCard(
+                        contractAddress: contract.address,
+                        tokenAddress: tokenProvider1.token!.tokenAddress,
                       ),
                     );
                   } else {
