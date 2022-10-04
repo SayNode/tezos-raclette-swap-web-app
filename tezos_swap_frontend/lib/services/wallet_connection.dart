@@ -10,7 +10,7 @@ import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../models/contract_model.dart';
 
 class WalletProvider extends ChangeNotifier {
-  RxString address = ''.obs;
+  RxString address = 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf'.obs;
 
   requestPermission() {
     _request({

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tezos_swap_frontend/services/balance_provider.dart';
+import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
@@ -27,10 +29,16 @@ class _VotePageState extends State<VotePage> {
           decoration: BoxDecoration(
               color: ThemeRaclette.black,
               borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-            child: Text(
-              'coming soon...',
-              style: TextStyle(fontSize: 24),
+          child:  Center(
+            child: ElevatedButton(
+              onPressed: () async{
+                var a = await BalanceProvider.getBalanceTezos('tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf', 'https://api.jakartanet.tzkt.io');
+                print(a);
+              },
+              child: Text(
+                'coming soon...',
+                style: TextStyle(fontSize: 24),
+              ),
             ),
           )),
     );

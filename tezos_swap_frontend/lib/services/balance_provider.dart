@@ -1,12 +1,18 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:http/http.dart' as http;
 import '../models/token.dart';
 
 class BalanceProvider {
   static Future<String> getBalanceTezos(String address, String rpc) async {
+        var headers = {
+      'accept': 'application/json',
+    };
+    print('here');
     var response = await http.get(
-        Uri.parse('$rpc/chains/main/blocks/head/context/contracts/$address'));
-    return json.decode(response.body)['balance'];
+        Uri.parse('$rpc/v1/accounts/$address/balance'), headers: headers);
+       double result =  int.parse(response.body)/pow(10, 6);
+    return result.toStringAsFixed(2);
   }
 
   static Future<List<Map>> getBalanceTokens(
