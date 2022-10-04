@@ -29,7 +29,7 @@ double roundDouble(double value, int places) {
 //         "counter": "1274363",
 //         "source": "tz1LPSEaUzD1V6Qu3TAi6iCiktRGF1t2up4Z",
 //         "amount": "0",
-//         "destination": "KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9",
+//         "destination": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
 //         "parameters": {
 //           "entrypoint": "x_to_y",
 //           "value": {
@@ -227,4 +227,9 @@ List<Token>  getContractTokens(String contractAddress)  {
       element.tokenAddress == contract.tokenX ||
       element.tokenAddress == contract.tokenY));
   return tokens;
+}
+
+
+String addressToDisplayAddress(String address) {
+  return '${address.substring(0, 7)}....${address.substring(32)}';
 }

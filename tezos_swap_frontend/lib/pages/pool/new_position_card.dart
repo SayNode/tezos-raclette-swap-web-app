@@ -359,7 +359,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                   'Current Price:',
                                 ),
                                 FutureBuilder<List<ChartDatapoint>>(
-                                  future: buildChartPoints('KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9'),
+                                  future: buildChartPoints('KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7'),
                                   builder: (
                                     BuildContext context,
                                     AsyncSnapshot<List<ChartDatapoint>>

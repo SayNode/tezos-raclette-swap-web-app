@@ -8,6 +8,7 @@ import 'package:tezos_swap_frontend/pages/pool/pools_card.dart';
 import 'package:tezos_swap_frontend/pages/swap/swap.dart';
 import 'package:tezos_swap_frontend/pages/vote/vote_page.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../services/balance_provider.dart';
 import '../utils/globals.dart';
 
@@ -218,7 +219,7 @@ class _HomePageState extends State<HomePage> {
               ),
               FutureBuilder<String>(
                   future: BalanceProvider.getBalanceTezos(
-                      address, 'https://mainnet.api.tez.ie/'),
+                      address, 'https://api.jakartanet.tzkt.io'),
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (!snapshot.hasData) {
@@ -231,15 +232,9 @@ class _HomePageState extends State<HomePage> {
                     }
                     return Text('${snapshot.data} XTZ');
                   }),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: const BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.all(Radius.circular(18))),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(address),
-                ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(addressToDisplayAddress(address)),
               )
             ],
           ),

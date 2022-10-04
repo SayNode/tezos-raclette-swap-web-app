@@ -83,7 +83,7 @@ class PositionsCard extends StatelessWidget {
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                      '${getContractTokens('KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9')[0].symbol}/${getContractTokens('KT1X8CWYPQhg8bB18n5YAMGTHUHoR6uKZmQ9')[1].symbol}'),
+                                                      '${getContractTokens('KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7')[0].symbol}/${getContractTokens('KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7')[1].symbol}'),
                                                   Text(
                                                       'Liquidity proivided: ${snapshot.data![index]['value']['liquidity']}'),
                                                   ElevatedButton(

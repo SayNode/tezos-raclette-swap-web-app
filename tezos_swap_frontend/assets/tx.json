@@ -1,77 +1,68 @@
 {
-    "branch": "BL7gzJqaQvww4hCseFccYqdBj91CDKutYgq49zARSDtDNuRASRd",
-    "contents": [
+    "error": [
         {
-            "kind": "transaction",
-            "source": "tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf",
-            "fee": "1665",
-            "counter": "1274372",
-            "gas_limit": "13206",
-            "storage_limit": "225",
-            "amount": "0",
-            "destination": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
-            "parameters": {
-                "entrypoint": "set_position",
-                "value": {
-                    "prim": "Pair",
-                    "args": [
-                        {
-                            "prim": "Pair",
-                            "args": [
-                                {
-                                    "prim": "Pair",
-                                    "args": [
-                                        {
-                                            "int": "1665581460"
-                                        },
-                                        {
-                                            "int": "3"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "prim": "Pair",
-                                    "args": [
-                                        {
-                                            "int": "4"
-                                        },
-                                        {
-                                            "int": "-1048575"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "prim": "Pair",
-                            "args": [
-                                {
-                                    "prim": "Pair",
-                                    "args": [
-                                        {
-                                            "prim": "Pair",
-                                            "args": [
-                                                {
-                                                    "int": "1"
-                                                },
-                                                {
-                                                    "int": "2"
-                                                }
-                                            ]
-                                        },
-                                        {
-                                            "int": "5"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "int": "-1048575"
-                                }
-                            ]
-                        }
-                    ]
+            "errors": [
+                {
+                    "kind": "temporary",
+                    "id": "proto.013-PtJakart.michelson_v1.runtime_error",
+                    "contract_handle": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
+                    "contract_code": "Deprecated"
+                },
+                {
+                    "kind": "temporary",
+                    "id": "proto.013-PtJakart.michelson_v1.script_rejected",
+                    "location": 6541,
+                    "with": {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "string": "FA2_TOKEN_UNDEFINED"
+                            },
+                            {
+                                "prim": "Unit"
+                            }
+                        ]
+                    }
                 }
-            }
+            ],
+            "errorDetails": "Error occurred during estimation",
+            "name": "TezosOperationError",
+            "id": "proto.013-PtJakart.michelson_v1.script_rejected",
+            "kind": "temporary",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"string\":\"FA2_TOKEN_UNDEFINED\"},{\"prim\":\"Unit\"}]}",
+            "isError": true
+        },
+        {
+            "errors": [
+                {
+                    "kind": "temporary",
+                    "id": "proto.013-PtJakart.michelson_v1.runtime_error",
+                    "contract_handle": "KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7",
+                    "contract_code": "Deprecated"
+                },
+                {
+                    "kind": "temporary",
+                    "id": "proto.013-PtJakart.michelson_v1.script_rejected",
+                    "location": 6541,
+                    "with": {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "string": "FA2_TOKEN_UNDEFINED"
+                            },
+                            {
+                                "prim": "Unit"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "errorDetails": "Error occurred during estimation",
+            "name": "TezosOperationError",
+            "id": "proto.013-PtJakart.michelson_v1.script_rejected",
+            "kind": "temporary",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"string\":\"FA2_TOKEN_UNDEFINED\"},{\"prim\":\"Unit\"}]}",
+            "isError": true
         }
     ]
 }
