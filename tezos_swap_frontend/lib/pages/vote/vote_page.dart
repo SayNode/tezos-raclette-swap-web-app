@@ -27,15 +27,11 @@ class _VotePageState extends State<VotePage> {
           decoration: BoxDecoration(
               color: ThemeRaclette.black,
               borderRadius: BorderRadius.circular(12)),
-          child: Center(
-            child: ElevatedButton(
-                onPressed: () async {
-                  walletProvider.removePosition(contract, '10');
-                },
-                child: const Text(
-                  'coming soon...',
-                  style: TextStyle(fontSize: 24),
-                )),
+          child: const Center(
+            child:  Text(
+              'coming soon...',
+              style: TextStyle(fontSize: 24),
+            ),
           )),
     );
   }

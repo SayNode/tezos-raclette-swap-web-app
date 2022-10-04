@@ -11,17 +11,9 @@
                 {
                     "kind": "temporary",
                     "id": "proto.013-PtJakart.michelson_v1.script_rejected",
-                    "location": 6541,
+                    "location": 732,
                     "with": {
-                        "prim": "Pair",
-                        "args": [
-                            {
-                                "string": "FA2_TOKEN_UNDEFINED"
-                            },
-                            {
-                                "prim": "Unit"
-                            }
-                        ]
+                        "int": "101"
                     }
                 }
             ],
@@ -29,7 +21,7 @@
             "name": "TezosOperationError",
             "id": "proto.013-PtJakart.michelson_v1.script_rejected",
             "kind": "temporary",
-            "message": "{\"prim\":\"Pair\",\"args\":[{\"string\":\"FA2_TOKEN_UNDEFINED\"},{\"prim\":\"Unit\"}]}",
+            "message": "101",
             "isError": true
         },
         {
@@ -43,17 +35,9 @@
                 {
                     "kind": "temporary",
                     "id": "proto.013-PtJakart.michelson_v1.script_rejected",
-                    "location": 6541,
+                    "location": 732,
                     "with": {
-                        "prim": "Pair",
-                        "args": [
-                            {
-                                "string": "FA2_TOKEN_UNDEFINED"
-                            },
-                            {
-                                "prim": "Unit"
-                            }
-                        ]
+                        "int": "101"
                     }
                 }
             ],
@@ -61,7 +45,7 @@
             "name": "TezosOperationError",
             "id": "proto.013-PtJakart.michelson_v1.script_rejected",
             "kind": "temporary",
-            "message": "{\"prim\":\"Pair\",\"args\":[{\"string\":\"FA2_TOKEN_UNDEFINED\"},{\"prim\":\"Unit\"}]}",
+            "message": "101",
             "isError": true
         }
     ]
