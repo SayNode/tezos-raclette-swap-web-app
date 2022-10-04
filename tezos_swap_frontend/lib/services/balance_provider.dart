@@ -8,7 +8,6 @@ class BalanceProvider {
         var headers = {
       'accept': 'application/json',
     };
-    print('here');
     var response = await http.get(
         Uri.parse('$rpc/v1/accounts/$address/balance'), headers: headers);
        double result =  int.parse(response.body)/pow(10, 6);

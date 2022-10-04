@@ -29,16 +29,10 @@ class _VotePageState extends State<VotePage> {
           decoration: BoxDecoration(
               color: ThemeRaclette.black,
               borderRadius: BorderRadius.circular(12)),
-          child:  Center(
-            child: ElevatedButton(
-              onPressed: () async{
-                var a = await BalanceProvider.getBalanceTezos('tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf', 'https://api.jakartanet.tzkt.io');
-                print(a);
-              },
-              child: Text(
-                'coming soon...',
-                style: TextStyle(fontSize: 24),
-              ),
+          child:  const Center(
+            child: Text(
+              'coming soon...',
+              style: TextStyle(fontSize: 24),
             ),
           )),
     );

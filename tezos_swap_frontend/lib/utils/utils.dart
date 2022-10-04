@@ -112,7 +112,6 @@ Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
 }
 
 String addressToDisplayAddress(String address) {
-  //tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf
   return '${address.substring(0, 7)}....${address.substring(32)}';
 }
 
