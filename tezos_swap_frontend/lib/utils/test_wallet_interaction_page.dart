@@ -75,7 +75,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
                     provider.address.string, 1, 10,
                     yToX: true);
               },
-              child: Text('swpa y->x')),
+              child: Text('swap y->x')),
         ],
       )),
     );
