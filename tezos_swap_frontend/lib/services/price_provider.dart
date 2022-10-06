@@ -6,8 +6,6 @@ var headers = {
   'accept': 'application/json',
 };
 
-//TODO: get api key for project
-String coingeckoAPIKey = 'CG-cNvdmjaCPddJxEfJF8c7Qvgq';
 
 class PriceProvider {
   static Future<Map> getPriceForMultiple(List<Token> tokenList) async {
@@ -16,8 +14,7 @@ class PriceProvider {
 
     Map params = {
       'contract_addresses': tokenAddressList.join(','),
-      'vs_currencies': 'usd',
-      'x_cg_pro_api_key': coingeckoAPIKey
+      'vs_currencies': 'usd'
     };
 
     String query = params.entries.map((p) => '${p.key}=${p.value}').join('&');
@@ -42,8 +39,7 @@ class PriceProvider {
     }
     Map params = {
       'contract_addresses': token.tokenAddress,
-      'vs_currencies': 'usd',
-      'x_cg_pro_api_key': coingeckoAPIKey
+      'vs_currencies': 'usd'
     };
 
     String query = params.entries.map((p) => '${p.key}=${p.value}').join('&');

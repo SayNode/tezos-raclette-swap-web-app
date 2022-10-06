@@ -57,7 +57,7 @@ class PositionsCard extends StatelessWidget {
                           future:
                               positionsOfAddress(
                                   walletProvider.address.string,
-                                  'KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7'),
+                                  testContract),
                           builder: (
                             BuildContext context,
                             AsyncSnapshot<List<Map>> snapshot,
@@ -83,12 +83,12 @@ class PositionsCard extends StatelessWidget {
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                      '${getContractTokens('KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7')[0].symbol}/${getContractTokens('KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7')[1].symbol}'),
+                                                      '${getContractTokens(testContract)[0].symbol}/${getContractTokens(testContract)[1].symbol}'),
                                                   Text(
                                                       'Liquidity proivided: ${snapshot.data![index]['value']['liquidity']}'),
                                                   ElevatedButton(
                                                       onPressed: ()async {
-                                                        await walletProvider.removePosition(contract, snapshot.data![index]['key']);
+                                                        await walletProvider.removePosition(testContract, snapshot.data![index]['key']);
                                                       },
                                                       child: const Text(
                                                           'Remove Position'))

@@ -66,8 +66,8 @@ class WalletProvider extends ChangeNotifier {
   setPosition(
     String contract,
     String signer,
-    int x,
-    int y,
+    BigInt x,
+    BigInt y,
     int lowerTick,
     int upperTick,
   ) async {
@@ -78,6 +78,9 @@ class WalletProvider extends ChangeNotifier {
     var upperWitness = ticks.where((e) => e <= upperTick).toList()
       ..sort()
       ..last;
+
+      print(lowerWitness);
+      print(upperWitness);
 
     _request({
       "type": "OPERATION_REQUEST",
@@ -100,14 +103,14 @@ class WalletProvider extends ChangeNotifier {
                       "prim": "Pair",
                       "args": [
                         {"int": "1665581460"}, //TODO: set deadline
-                        {"int": "${sqrt(x * y)}"}
+                        {"int": "${sqrtBigInt(x * x)}"}
                       ]
                     },
                     {
                       "prim": "Pair",
                       "args": [
                         {"int": "$lowerTick"},
-                        {"int": "${lowerWitness[0]}"}
+                        {"int": "${lowerWitness.last}"}
                       ]
                     }
                   ]
@@ -128,7 +131,7 @@ class WalletProvider extends ChangeNotifier {
                         {"int": "$upperTick"}
                       ]
                     },
-                    {"int": "${upperWitness[0]}"}
+                    {"int": "${upperWitness.last}"}
                   ]
                 }
               ]

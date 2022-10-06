@@ -359,7 +359,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                   'Current Price:',
                                 ),
                                 FutureBuilder<List<ChartDatapoint>>(
-                                  future: buildChartPoints('KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7'),
+                                  future: buildChartPoints(testContract),
                                   builder: (
                                     BuildContext context,
                                     AsyncSnapshot<List<ChartDatapoint>>
@@ -565,11 +565,14 @@ class _NewPositionCardState extends State<NewPositionCard> {
           style: ThemeRaclette.invertedButtonStyle,
           onPressed: () async {
             //TODO: proper contract selection
+            print(upperController.text);
+            print(lowerController.text);
+
             walletProvider.setPosition(
-                contract,
+                testContract,
                 walletProvider.address.string,
-                int.parse(upperController.text),
-                int.parse(lowerController.text),
+                BigInt.parse(upperController.text),
+                BigInt.parse(lowerController.text),
                 min.value,
                 max.value);
           },

@@ -141,7 +141,8 @@ Future<List<int>> getTicks(String contract) async {
   return list;
 }
 
-Future<bool> getOperators(String tokenContract, String userAddress, String swapContract) async {
+Future<bool> getOperators(
+    String tokenContract, String userAddress, String swapContract) async {
   var headers = {
     "Accept": "application/json",
     'Content-type': 'application/json',
@@ -152,10 +153,11 @@ Future<bool> getOperators(String tokenContract, String userAddress, String swapC
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   }
-  List list =json.decode(res.body);
-  var allreadyOperator = list.any((element) => element['key']['address_0']==userAddress&&element['key']['address_1']==swapContract);
+  List list = json.decode(res.body);
+  var allreadyOperator = list.any((element) =>
+      element['key']['address_0'] == userAddress &&
+      element['key']['address_1'] == swapContract);
   return allreadyOperator;
-  
 }
 
 getPositions(String contractAddress) async {
@@ -217,7 +219,7 @@ Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
   return dataPoints;
 }
 
-List<Token>  getContractTokens(String contractAddress)  {
+List<Token> getContractTokens(String contractAddress) {
   var contracts = Get.put(ContractRepository()).contracts;
   var contract =
       contracts.firstWhere((element) => element.address == contractAddress);
@@ -229,7 +231,27 @@ List<Token>  getContractTokens(String contractAddress)  {
   return tokens;
 }
 
-
 String addressToDisplayAddress(String address) {
   return '${address.substring(0, 7)}....${address.substring(32)}';
+}
+
+BigInt sqrtBigInt(BigInt x) {
+  if (x == BigInt.zero || x == BigInt.one) {
+    return x;
+  }
+
+  BigInt start = BigInt.one;
+  BigInt end = x;
+
+  while (start + BigInt.one < end) {
+    BigInt mid = start + (end - start) ~/ BigInt.two;
+    if (mid == x ~/ mid) {
+      return mid;
+    } else if (mid > x ~/ mid) {
+      end = mid;
+    } else {
+      start = mid;
+    }
+  }
+  return start;
 }

@@ -29,7 +29,6 @@ class _SwapState extends State<Swap> {
   final tokenProvider1 = TokenProvider();
   final tokenProvider2 = TokenProvider();
   //mock ratio
-  double tokenRatio = 0.5;
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -73,8 +72,8 @@ class _SwapState extends State<Swap> {
                       builder: ((context, a, b, child) => SwapEntry(
                             controller: upperController,
                             function: (value) {
-                              lowerController.text =
-                                  (value * tokenRatio).toString();
+                              // lowerController.text =
+                              //     (value * tokenRatio).toString();
                             },
                             enabled: (tokenProvider1.token != null &&
                                 tokenProvider2.token != null),
@@ -89,8 +88,8 @@ class _SwapState extends State<Swap> {
                       builder: ((context, a, b, child) => SwapEntry(
                           controller: lowerController,
                           function: (value) {
-                            upperController.text =
-                                (value / tokenRatio).toString();
+                            // upperController.text =
+                            //     (value / tokenRatio).toString();
                           },
                           enabled: (tokenProvider1.token != null &&
                               tokenProvider2.token != null),
@@ -139,13 +138,13 @@ class _SwapState extends State<Swap> {
           return ElevatedButton(
               style: ThemeRaclette.invertedButtonStyle,
               onPressed: () async {
-                Contract contract = contracts!.firstWhere((element) =>
-                    element.tokenX == tokenProvider1.token!.tokenAddress &&
-                        element.tokenY == tokenProvider2.token!.tokenAddress ||
-                    element.tokenX == tokenProvider2.token!.tokenAddress &&
-                        element.tokenY == tokenProvider1.token!.tokenAddress);
+                // Contract contract = contracts!.firstWhere((element) =>
+                //     element.tokenX == tokenProvider1.token!.tokenAddress &&
+                //         element.tokenY == tokenProvider2.token!.tokenAddress ||
+                //     element.tokenX == tokenProvider2.token!.tokenAddress &&
+                //         element.tokenY == tokenProvider1.token!.tokenAddress);
                 await widget.provider.swap(
-                    'KT1G49NuztmWBP6sMFZM259RCkg6eeFpbYp7',
+                    testContract,
                     walletProvider.address.string,
                     double.parse(upperController.text).toInt(),
                     double.parse(lowerController.text).toInt(),

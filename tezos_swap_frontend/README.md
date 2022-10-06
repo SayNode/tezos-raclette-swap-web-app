@@ -1,16 +1,35 @@
 # tezos_swap_frontend
 
-A new Flutter project.
+A tezos Swap
 
-## Getting Started
+## Guide to testing
 
-This project is a starting point for a Flutter application.
+Tests have to be done manually as there is no practical way to test interactions with the Blockchain, since we do all signing of transactions with the Temnple wallet extension.
 
-A few resources to get you started if this is your first Flutter project:
+### Guide to testing
+Flutter and a way to run flutter in chrome.
+Temple Wallet extension.
+Import this Private key into the wallet: edskS1TVJqsCXgYSEEiNrv8GDwpresD4FL49ipZErZ1mH9itZNSXfEnykvzLWyQVpVLsU69KvgtBTteCXfc9ZUpuAJg61zoUTW
+This wallet has some tezos for fees as well as 2 test tokens, Token X and Token Y, which are used by the contract.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Make sure in the main file that home leads to TestWalletInteraction().
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+After runing the application in the chrome emulator you will have to copy the url in a real chrome browser, as the emulator does not have the extensions
+
+
+### Test page
+
+On the test page youz are presented with 4 Buttons.
+
+First is Connect wallet, you have to be connected for any other button to work.
+
+Second is set_position. This sets a position with range 1-20 with 100 x and 100 y.
+
+Third and forth is swap x to y and swap y to x respectively
+
+
+
+
+
+
+

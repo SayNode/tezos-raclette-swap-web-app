@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
 import 'package:tezos_swap_frontend/repositories/token_repo.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
+import 'package:tezos_swap_frontend/utils/test_wallet_interaction_page.dart';
 import 'pages/home_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get_it/get_it.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-        var tokenRepo = Get.put(TokenRepository());
+    var tokenRepo = Get.put(TokenRepository());
     var contractRepo = Get.put(ContractRepository());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
@@ -48,32 +49,32 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: FutureBuilder<List<dynamic>>(
-        future: Future.wait(
-            [tokenRepo.init(), contractRepo.init()]),
-        builder: (ctx, snapshot) {
 
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If we got an error
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              );
+ home: TestWalletInteraction(),
 
-              // if we got our data
-            } else if (snapshot.hasData) {
-                return const HomePage();
-              
-            }
-          }
-          return const Center(
-            child: Text('Fatal Error, this should never happen.'),
-          );
-        },
-      ),
+//       home: FutureBuilder<List<dynamic>>(
+//         future: Future.wait([tokenRepo.init(), contractRepo.init()]),
+//         builder: (ctx, snapshot) {
+//           if (snapshot.connectionState == ConnectionState.done) {
+//             // If we got an error
+//             if (snapshot.hasError) {
+//               return Center(
+//                 child: Text(
+//                   '${snapshot.error} occurred',
+//                   style: const TextStyle(fontSize: 18),
+//                 ),
+//               );
+
+//               // if we got our data
+//             } else if (snapshot.hasData) {
+//               return const HomePage();
+//             }
+//           }
+//           return const Center(
+//             child: Text('Fatal Error, this should never happen.'),
+//           );
+//         },
+//       ),
     );
   }
 }
