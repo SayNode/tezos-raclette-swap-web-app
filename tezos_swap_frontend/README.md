@@ -6,7 +6,7 @@ A tezos Swap
 
 Tests have to be done manually as there is no practical way to test interactions with the Blockchain, since we do all signing of transactions with the Temnple wallet extension.
 
-### Guide to testing
+### Requirements
 Flutter and a way to run flutter in chrome.
 Temple Wallet extension.
 Import this Private key into the wallet: edskS1TVJqsCXgYSEEiNrv8GDwpresD4FL49ipZErZ1mH9itZNSXfEnykvzLWyQVpVLsU69KvgtBTteCXfc9ZUpuAJg61zoUTW
