@@ -47,7 +47,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           ElevatedButton(
               onPressed: () async {
                 await provider.setPosition(
-                    'KT1LWRzrgyHcB8LtMHUoEvy2D39NzndF3TmG',
+                    'KT1HVFJZhSny2GbikHpZuWkfgrZd3vRbFeaP',
                     provider.address.string,
                     BigInt.parse('100000000000000000000'),
                     BigInt.parse('100000000000000000000'),
@@ -61,7 +61,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           Text('swap 10x for min 1y'),
           ElevatedButton(
               onPressed: () async {
-                await provider.swap('KT1LWRzrgyHcB8LtMHUoEvy2D39NzndF3TmG',
+                await provider.swap('KT1HVFJZhSny2GbikHpZuWkfgrZd3vRbFeaP',
                     provider.address.string, 10, 1);
               },
               child: Text('swap x->y')),
@@ -71,7 +71,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           Text('swap 10y for min 1x'),
           ElevatedButton(
               onPressed: () async {
-                await provider.swap('KT1LWRzrgyHcB8LtMHUoEvy2D39NzndF3TmG',
+                await provider.swap('KT1HVFJZhSny2GbikHpZuWkfgrZd3vRbFeaP',
                     provider.address.string, 1, 10,
                     yToX: true);
               },
