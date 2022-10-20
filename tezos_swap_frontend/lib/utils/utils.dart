@@ -128,7 +128,7 @@ Future<List<int>> getTicks(String contract) async {
     'Content-type': 'application/json',
   };
   var url = Uri.parse(
-      'https://api.jakartanet.tzkt.io/v1/contracts/$contract/bigmaps/ticks/keys');
+      'https://api.ghostnet.tzkt.io/v1/contracts/$contract/bigmaps/ticks/keys');
   var res = await http.get(url, headers: headers);
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -148,7 +148,7 @@ Future<bool> getOperators(
     'Content-type': 'application/json',
   };
   var url = Uri.parse(
-      'https://api.jakartanet.tzkt.io/v1/contracts/$tokenContract/bigmaps/operators/keys');
+      'https://api.ghostnet.tzkt.io/v1/contracts/$tokenContract/bigmaps/operators/keys');
   var res = await http.get(url, headers: headers);
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
@@ -166,7 +166,7 @@ getPositions(String contractAddress) async {
     'Content-type': 'application/json',
   };
   var url = Uri.parse(
-      'https://api.jakartanet.tzkt.io/v1/contracts/$contractAddress/bigmaps/positions/keys');
+      'https://api.ghostnet.tzkt.io/v1/contracts/$contractAddress/bigmaps/positions/keys');
   var res = await http.get(url, headers: headers);
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');

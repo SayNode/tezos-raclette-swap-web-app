@@ -102,7 +102,7 @@ class WalletProvider extends ChangeNotifier {
                     {
                       "prim": "Pair",
                       "args": [
-                        {"int": "1665581460"}, //TODO: set deadline
+                        {"int": "2665581460"}, //TODO: set deadline
                         {"int": "${sqrtBigInt(x * x)}"}
                       ]
                     },
@@ -204,7 +204,7 @@ class WalletProvider extends ChangeNotifier {
                       "prim": "Pair",
                       "args": [
                         //TODO: do proper deadline
-                        {"int": "1668508020"},
+                        {"int": "2668508020"},
                         {"int": "0"}
                       ]
                     },
