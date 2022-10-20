@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
 
- home: TestWalletInteraction(),
+ home: HomePage(),
 
 //       home: FutureBuilder<List<dynamic>>(
 //         future: Future.wait([tokenRepo.init(), contractRepo.init()]),
