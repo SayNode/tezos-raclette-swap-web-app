@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:tezos_swap_frontend/pages/test_page.dart';
 import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
 import 'package:tezos_swap_frontend/repositories/token_repo.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
@@ -50,31 +51,31 @@ class MyApp extends StatelessWidget {
       supportedLocales: context.supportedLocales,
       locale: context.locale,
 
- home: 
+ home: TestPage()
 
-      FutureBuilder<List<dynamic>>(
-        future: Future.wait([tokenRepo.init(), contractRepo.init()]),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            // If we got an error
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              );
+      // FutureBuilder<List<dynamic>>(
+      //   future: Future.wait([tokenRepo.init(), contractRepo.init()]),
+      //   builder: (ctx, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.done) {
+      //       // If we got an error
+      //       if (snapshot.hasError) {
+      //         return Center(
+      //           child: Text(
+      //             '${snapshot.error} occurred',
+      //             style: const TextStyle(fontSize: 18),
+      //           ),
+      //         );
 
-              // if we got our data
-            } else if (snapshot.hasData) {
-              return const HomePage();
-            }
-          }
-          return const Center(
-            child: Text('Fatal Error, this should never happen.'),
-          );
-        },
-      ),
+      //         // if we got our data
+      //       } else if (snapshot.hasData) {
+      //         return const HomePage();
+      //       }
+      //     }
+      //     return const Center(
+      //       child: Text('Fatal Error, this should never happen.'),
+      //     );
+      //   },
+      // ),
     );
   }
 }
