@@ -1,0 +1,93 @@
+[
+ {
+  "shortname": "Welcome",
+  "longname": "Welcome",
+  "scenario": [
+   {
+    "action": "newContract",
+    "accept_unknown_types": false,
+    "export": "(template_id ((\"contract/demo.py\" 26) static_id 0) \nstorage ((\"contract/demo.py\" 8) record (myParameter1 ((\"contract/demo.py\" 8) literal (intOrNat 12))) (myParameter2 ((\"contract/demo.py\" 8) literal (intOrNat 123))))\nstorage_type (())\nentry_points ((myEntryPoint True None None None True None (\"contract/demo.py\" 14) (((\"contract/demo.py\" 15) verify ((\"contract/demo.py\" 15) le ((\"contract/demo.py\" 15) attr ((\"contract/demo.py\" 26) data) \"myParameter1\") ((\"contract/demo.py\" 15) literal (intOrNat 123)))) ((\"contract/demo.py\" 16) set ((\"contract/demo.py\" 15) attr ((\"contract/demo.py\" 26) data) \"myParameter1\") ((\"contract/demo.py\" 16) add ((\"contract/demo.py\" 15) attr ((\"contract/demo.py\" 26) data) \"myParameter1\") ((\"contract/demo.py\" 14) params))))))\nflags ()\nprivates ()\nviews ()\nentry_points_layout ()\ninitial_metadata ()\nbalance ())",
+    "id": "((\"contract/demo.py\" 26) static_id 0)",
+    "line_no": "(\"contract/demo.py\" 26)",
+    "show": true
+   },
+   {
+    "action": "message",
+    "id": "((\"contract/demo.py\" 26) static_id 0)",
+    "line_no": "(\"contract/demo.py\" 29)",
+    "message": "myEntryPoint",
+    "params": "((\"contract/demo.py\" 29) literal (intOrNat 12))"
+   },
+   {
+    "action": "message",
+    "id": "((\"contract/demo.py\" 26) static_id 0)",
+    "line_no": "(\"contract/demo.py\" 30)",
+    "message": "myEntryPoint",
+    "params": "((\"contract/demo.py\" 30) literal (intOrNat 13))"
+   },
+   {
+    "action": "message",
+    "id": "((\"contract/demo.py\" 26) static_id 0)",
+    "line_no": "(\"contract/demo.py\" 31)",
+    "message": "myEntryPoint",
+    "params": "((\"contract/demo.py\" 31) literal (intOrNat 14))"
+   },
+   {
+    "action": "message",
+    "id": "((\"contract/demo.py\" 26) static_id 0)",
+    "line_no": "(\"contract/demo.py\" 32)",
+    "message": "myEntryPoint",
+    "params": "((\"contract/demo.py\" 32) literal (intOrNat 50))"
+   },
+   {
+    "action": "message",
+    "id": "((\"contract/demo.py\" 26) static_id 0)",
+    "line_no": "(\"contract/demo.py\" 33)",
+    "message": "myEntryPoint",
+    "params": "((\"contract/demo.py\" 33) literal (intOrNat 50))"
+   },
+   {
+    "action": "message",
+    "id": "((\"contract/demo.py\" 26) static_id 0)",
+    "line_no": "(\"contract/demo.py\" 34)",
+    "message": "myEntryPoint",
+    "params": "((\"contract/demo.py\" 34) literal (intOrNat 50))",
+    "valid": "((\"contract/demo.py\" 34) literal (bool False))"
+   },
+   {
+    "action": "verify",
+    "condition": "((\"contract/demo.py\" 37) eq ((\"contract/demo.py\" 37) attr ((\"contract/demo.py\" 34) contract_data ((\"contract/demo.py\" 26) static_id 0)) \"myParameter1\") ((\"contract/demo.py\" 37) literal (intOrNat 151)))",
+    "line_no": "(\"contract/demo.py\" 37)"
+   },
+   {
+    "action": "newContract",
+    "accept_unknown_types": false,
+    "export": "(template_id ((\"contract/demo.py\" 41) static_id 1) \nstorage ((\"contract/demo.py\" 8) record (myParameter1 ((\"contract/demo.py\" 8) literal (intOrNat 1))) (myParameter2 ((\"contract/demo.py\" 37) attr ((\"contract/demo.py\" 34) contract_data ((\"contract/demo.py\" 26) static_id 0)) \"myParameter1\")))\nstorage_type (())\nentry_points ((myEntryPoint True None None None True None (\"contract/demo.py\" 14) (((\"contract/demo.py\" 15) verify ((\"contract/demo.py\" 15) le ((\"contract/demo.py\" 15) attr ((\"contract/demo.py\" 41) data) \"myParameter1\") ((\"contract/demo.py\" 15) literal (intOrNat 123)))) ((\"contract/demo.py\" 16) set ((\"contract/demo.py\" 15) attr ((\"contract/demo.py\" 41) data) \"myParameter1\") ((\"contract/demo.py\" 16) add ((\"contract/demo.py\" 15) attr ((\"contract/demo.py\" 41) data) \"myParameter1\") ((\"contract/demo.py\" 14) params))))))\nflags ()\nprivates ()\nviews ()\nentry_points_layout ()\ninitial_metadata ()\nbalance ())",
+    "id": "((\"contract/demo.py\" 41) static_id 1)",
+    "line_no": "(\"contract/demo.py\" 41)",
+    "show": true
+   },
+   {
+    "action": "verify",
+    "condition": "((\"contract/demo.py\" 42) eq ((\"contract/demo.py\" 42) attr ((\"contract/demo.py\" 41) contract_data ((\"contract/demo.py\" 41) static_id 1)) \"myParameter2\") ((\"contract/demo.py\" 42) literal (intOrNat 151)))",
+    "line_no": "(\"contract/demo.py\" 42)"
+   }
+  ],
+  "kind": "test"
+ },
+ {
+  "shortname": "demo",
+  "longname": "demo",
+  "scenario": [
+   {
+    "action": "newContract",
+    "accept_unknown_types": false,
+    "export": "(template_id ((\"\" -1) static_id 0) \nstorage ((\"contract/demo.py\" 8) record (myParameter1 ((\"contract/demo.py\" 8) literal (intOrNat 12))) (myParameter2 ((\"contract/demo.py\" 8) literal (intOrNat 123))))\nstorage_type (())\nentry_points ((myEntryPoint True None None None True None (\"contract/demo.py\" 14) (((\"contract/demo.py\" 15) verify ((\"contract/demo.py\" 15) le ((\"contract/demo.py\" 15) attr ((\"\" -1) data) \"myParameter1\") ((\"contract/demo.py\" 15) literal (intOrNat 123)))) ((\"contract/demo.py\" 16) set ((\"contract/demo.py\" 15) attr ((\"\" -1) data) \"myParameter1\") ((\"contract/demo.py\" 16) add ((\"contract/demo.py\" 15) attr ((\"\" -1) data) \"myParameter1\") ((\"contract/demo.py\" 14) params))))))\nflags ()\nprivates ()\nviews ()\nentry_points_layout ()\ninitial_metadata ()\nbalance ())",
+    "id": "((\"\" -1) static_id 0)",
+    "line_no": "(\"\" -1)",
+    "show": true
+   }
+  ],
+  "kind": "compilation"
+ }
+]

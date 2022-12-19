@@ -1,0 +1,55 @@
+Creating contract KT1TezoooozzSmartPyzzSTATiCzzzwwBFA1
+ -> (Pair 12 123)
+ => testOut/Welcome/step_000_cont_0_storage.tz 1
+ => testOut/Welcome/step_000_cont_0_storage.json 1
+ => testOut/Welcome/step_000_cont_0_sizes.csv 2
+ => testOut/Welcome/step_000_cont_0_storage.py 1
+ => testOut/Welcome/step_000_cont_0_types.py 7
+ => testOut/Welcome/step_000_cont_0_contract.tz 28
+ => testOut/Welcome/step_000_cont_0_contract.json 29
+ => testOut/Welcome/step_000_cont_0_contract.py 14
+ => testOut/Welcome/step_001_cont_0_params.py 1
+ => testOut/Welcome/step_001_cont_0_params.tz 1
+ => testOut/Welcome/step_001_cont_0_params.json 1
+Executing myEntryPoint(12)...
+ -> (Pair 24 123)
+ => testOut/Welcome/step_002_cont_0_params.py 1
+ => testOut/Welcome/step_002_cont_0_params.tz 1
+ => testOut/Welcome/step_002_cont_0_params.json 1
+Executing myEntryPoint(13)...
+ -> (Pair 37 123)
+ => testOut/Welcome/step_003_cont_0_params.py 1
+ => testOut/Welcome/step_003_cont_0_params.tz 1
+ => testOut/Welcome/step_003_cont_0_params.json 1
+Executing myEntryPoint(14)...
+ -> (Pair 51 123)
+ => testOut/Welcome/step_004_cont_0_params.py 1
+ => testOut/Welcome/step_004_cont_0_params.tz 1
+ => testOut/Welcome/step_004_cont_0_params.json 1
+Executing myEntryPoint(50)...
+ -> (Pair 101 123)
+ => testOut/Welcome/step_005_cont_0_params.py 1
+ => testOut/Welcome/step_005_cont_0_params.tz 1
+ => testOut/Welcome/step_005_cont_0_params.json 1
+Executing myEntryPoint(50)...
+ -> (Pair 151 123)
+ => testOut/Welcome/step_006_cont_0_params.py 1
+ => testOut/Welcome/step_006_cont_0_params.tz 1
+ => testOut/Welcome/step_006_cont_0_params.json 1
+Executing myEntryPoint(50)...
+ -> --- Expected failure in transaction --- Wrong condition: (self.data.myParameter1 <= 123 : sp.TBool) (contract/demo.py, line 15)
+ (contract/demo.py, line 15)
+Verifying sp.contract_data(0).myParameter1 == 151...
+ OK
+Creating contract KT1Tezooo1zzSmartPyzzSTATiCzzzyfC8eF
+ -> (Pair 1 151)
+ => testOut/Welcome/step_008_cont_1_storage.tz 1
+ => testOut/Welcome/step_008_cont_1_storage.json 1
+ => testOut/Welcome/step_008_cont_1_sizes.csv 2
+ => testOut/Welcome/step_008_cont_1_storage.py 1
+ => testOut/Welcome/step_008_cont_1_types.py 7
+ => testOut/Welcome/step_008_cont_1_contract.tz 28
+ => testOut/Welcome/step_008_cont_1_contract.json 29
+ => testOut/Welcome/step_008_cont_1_contract.py 14
+Verifying sp.contract_data(1).myParameter2 == 151...
+ OK
