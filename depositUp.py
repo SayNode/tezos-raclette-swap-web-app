@@ -27,13 +27,12 @@ def get_vals():
     ic = math.log(math.sqrt(pc),math.sqrt(1.0001))
     il = math.log(math.sqrt(pl),math.sqrt(1.0001))
     liq = dx/((1/math.sqrt(pl)) - (1/math.sqrt(pu)))
-    print('iu=',int(iu),'\nic=',int(ic),'\nil=',int(il),'\nliq=',liq)
+    print('Variables: \niu=',int(iu),'\nic=',int(ic),'\nil=',int(il),'\nliq=',liq)
     return int(iu), int(il), liq
 
 #Set Position
-def set_pos(cfmm_address):
+def set_pos(cfmm_address, iu, il, liq):
     cfmm = pytezos.contract(cfmm_address)
-    (iu, il, liq)=get_vals()
     set_pos = cfmm.set_position({
             "deadline": 1704398681,
             "liquidity": int(liq*decimals),
@@ -68,16 +67,27 @@ def token_balances(wallet_address, tokenx_address, tokeny_address):
     return balanceX, balanceY
 
 
+'''
+@Dev: Beggin test
 
+'''
+print('\n --------------- \n Set Position Above Price Range:\n --------------- \n' )
+
+#Get ticks and liquidity vals 
+(iu, il, liq)=get_vals()
+
+#Get token balances before the position setting
 (balanceX_before, balanceY_before) = token_balances(wallet_address, tokenx_address, tokeny_address)
-print('The balance of the wallet address', wallet_address, 'is', balanceX_before)
-print('The balance of the wallet address', wallet_address, 'is', balanceY_before)
+print('The balance of token x in the wallet address', wallet_address, 'is', balanceX_before)
+print('The balance of token y in the wallet address', wallet_address, 'is', balanceY_before)
 
-set_pos(cfmm_address)
+#Set position
+set_pos(cfmm_address, iu, il, liq)
 time.sleep(30)
 
+#Get token balances after the position setting
 (balanceX_after, balanceY_after) = token_balances(wallet_address, tokenx_address, tokeny_address)
-print('The balance of the wallet address', wallet_address, 'is', balanceX_after)
-print('The balance of the wallet address', wallet_address, 'is', balanceY_after)
+print('The balance of token x in  the wallet address', wallet_address, 'is', balanceX_after)
+print('The balance of token y in  the wallet address', wallet_address, 'is', balanceY_after)
 print('Change in X token balance:',(balanceX_before - balanceX_after)/(10**18))
 print('Change in Y token balance:',(balanceY_before - balanceY_after)/(10**18))
