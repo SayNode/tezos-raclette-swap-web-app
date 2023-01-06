@@ -2,6 +2,7 @@ from pytezos import pytezos
 from decouple import config
 import json
 import time
+import math
 
 priv_key = config('priv_key')
 
@@ -41,16 +42,29 @@ def update_ops(tokenx_address, tokeny_address, cfmm_address):
 
     add_opY.send()
 
+def get_vals():
+    dy = 5
+    pu = 5.1
+    pc = 5
+    pl = 4.9
+    iu = math.log(math.sqrt(pu),math.sqrt(1.0001))
+    ic = math.log(math.sqrt(pc),math.sqrt(1.0001))
+    il = math.log(math.sqrt(pl),math.sqrt(1.0001))
+    liq = dy/(math.sqrt(pc) - math.sqrt(pl))
+    print('iu=',int(iu),'\nic=',int(ic),'\nil=',int(il),'\nliq=',liq)
+    return int(iu), int(il), liq
+
 #Set Position
 def set_pos(cfmm_address):
     cfmm = pytezos.contract(cfmm_address)
+    (iu, il, liq)=get_vals()
     set_pos = cfmm.set_position({
             "deadline": 1704398681,
-            "liquidity": 152*decimals,
-            "lower_tick_index": 84222,
+            "liquidity": int(liq*decimals),
+            "lower_tick_index": il,
             "lower_tick_witness": -1048575,
-            "maximum_tokens_contributed": (int(0.11*decimals), int(550*decimals)),
-            "upper_tick_index": 86129,
+            "maximum_tokens_contributed": (int(1.1*decimals), int(5.5*decimals)),
+            "upper_tick_index": iu,
             "upper_tick_witness": -1048575}
     )
 
@@ -87,7 +101,7 @@ print('The balance of token x in the wallet address', wallet_address, 'is', bala
 print('The balance of token y in the wallet address', wallet_address, 'is', balanceY_before)
 
 set_pos(cfmm_address)
-time.sleep(100)
+time.sleep(30)
 
 (balanceX_after, balanceY_after) = token_balances(wallet_address, tokenx_address, tokeny_address)
 print('The balance of token x in  the wallet address', wallet_address, 'is', balanceX_after)
