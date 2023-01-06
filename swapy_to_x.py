@@ -22,8 +22,8 @@ def swap_ytox(cfmm_address, wallet_address):
     cfmm = pytezos.contract(cfmm_address)
     ytox = cfmm.y_to_x({
             "deadline": 1704398681,
-            "dy": 0.5*decimals,
-            "min_dx": 0.009*decimals,
+            "dy": int(0.005*decimals),
+            "min_dx": int(0.0009*decimals),
             "to_dx": wallet_address
  }
     )
@@ -57,13 +57,13 @@ def token_balances(wallet_address, tokenx_address, tokeny_address):
 '''
 Main
 '''
-
+print('\n --------------- \n Swap y to x:\n --------------- \n' )
 (balanceX_before, balanceY_before) = token_balances(wallet_address, tokenx_address, tokeny_address)
 print('The balance of the wallet address', wallet_address, 'is', balanceX_before)
 print('The balance of the wallet address', wallet_address, 'is', balanceY_before)
 
 swap_ytox(cfmm_address, wallet_address)
-time.sleep(100)
+time.sleep(30)
 
 (balanceX_after, balanceY_after) = token_balances(wallet_address, tokenx_address, tokeny_address)
 print('The balance of the wallet address', wallet_address, 'is', balanceX_after)
