@@ -29,7 +29,7 @@ def update_ops(tokenx_address, tokeny_address, cfmm_address):
     }])
 
     add_opX.send()
-    time.sleep(10)
+    time.sleep(20)
     #Add contract as operator in tokenY contract
     tokeny = pytezos.contract(tokeny_address)
     add_opY = tokeny.update_operators([{
