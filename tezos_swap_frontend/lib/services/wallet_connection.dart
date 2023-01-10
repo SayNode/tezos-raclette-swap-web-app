@@ -21,7 +21,7 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  swap(String contract, String recipient, int tokenX, int tokenY,
+  swap(String contract, String recipient, double tokenX, double tokenY,
       {bool yToX = false}) {
     String entrypoint = "x_to_y";
     if (yToX) {
