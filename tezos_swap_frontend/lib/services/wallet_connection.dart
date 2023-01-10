@@ -66,9 +66,9 @@ class WalletProvider extends ChangeNotifier {
   setPosition(
     String contract,
     String signer,
-    BigInt x,
-    BigInt y,
-    BigInt liquidity,
+    double x,
+    double y,
+    double liquidity,
     int lowerTick,
     int upperTick,
   ) async {

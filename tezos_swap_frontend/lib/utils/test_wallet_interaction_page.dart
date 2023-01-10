@@ -49,9 +49,9 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
                 await provider.setPosition(
                     'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
                     provider.address.string,
-                    BigInt.parse('100000000000000000000'),
-                    BigInt.parse('100000000000000000000'),
-                    BigInt.parse('100000000000000000000'),
+                    double.parse('100000000000000000000'),
+                    double.parse('100000000000000000000'),
+                    double.parse('100000000000000000000'),
                     1,
                     20);
               },

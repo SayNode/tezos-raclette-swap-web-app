@@ -592,9 +592,9 @@ class _NewPositionCardState extends State<NewPositionCard> {
             walletProvider.setPosition(
                 testContract,
                 walletProvider.address.string,
-                BigInt.parse(upperController.text),
-                BigInt.parse(lowerController.text),
-                BigInt.parse(liquidityController.text),
+                double.parse(upperController.text),
+                double.parse(lowerController.text),
+                double.parse(liquidityController.text),
                 min.value,
                 max.value);
           },
