@@ -146,8 +146,8 @@ class _SwapState extends State<Swap> {
                 await widget.provider.swap(
                     testContract,
                     walletProvider.address.string,
-                    double.parse(upperController.text).toInt(),
-                    double.parse(lowerController.text).toInt(),
+                    double.parse(upperController.text),
+                    double.parse(lowerController.text),
                     yToX: yToX);
               },
               child: Text(
