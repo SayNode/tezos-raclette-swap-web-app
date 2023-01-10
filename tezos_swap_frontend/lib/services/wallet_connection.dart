@@ -68,6 +68,7 @@ class WalletProvider extends ChangeNotifier {
     String signer,
     BigInt x,
     BigInt y,
+    BigInt liquidity,
     int lowerTick,
     int upperTick,
   ) async {
@@ -79,8 +80,8 @@ class WalletProvider extends ChangeNotifier {
       ..sort()
       ..last;
 
-      print(lowerWitness);
-      print(upperWitness);
+    print(lowerWitness);
+    print(upperWitness);
 
     _request({
       "type": "OPERATION_REQUEST",
@@ -103,7 +104,7 @@ class WalletProvider extends ChangeNotifier {
                       "prim": "Pair",
                       "args": [
                         {"int": "2665581460"}, //TODO: set deadline
-                        {"int": "${sqrtBigInt(x * x)}"}
+                        {"int": "$liquidity"}
                       ]
                     },
                     {
@@ -141,8 +142,6 @@ class WalletProvider extends ChangeNotifier {
       ]
     });
   }
-
-  
 
   authorizeContract(String tokenContract, String swapContract) async {
     _request({

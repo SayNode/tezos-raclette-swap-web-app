@@ -51,6 +51,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
                     provider.address.string,
                     BigInt.parse('100000000000000000000'),
                     BigInt.parse('100000000000000000000'),
+                    BigInt.parse('100000000000000000000'),
                     1,
                     20);
               },

@@ -34,6 +34,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
   RxInt selected = 2.obs;
   final upperController = TextEditingController();
   final lowerController = TextEditingController();
+  final liquidityController = TextEditingController();
   TokenProvider token1 = TokenProvider();
   TokenProvider token2 = TokenProvider();
   RxInt min = 0.obs;
@@ -70,10 +71,12 @@ class _NewPositionCardState extends State<NewPositionCard> {
                           //mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                                onPressed: () => Get.put(NewPositionService())
-                                    .newPosition
-                                    .value = false,
-                                icon: const Icon(Icons.arrow_back), color: Colors.white,),
+                              onPressed: () => Get.put(NewPositionService())
+                                  .newPosition
+                                  .value = false,
+                              icon: const Icon(Icons.arrow_back),
+                              color: Colors.white,
+                            ),
                             const Text(
                               'Add Liquidity',
                               style: TextStyle(fontSize: 24),
@@ -207,9 +210,9 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                                     price = double.parse(
                                                         upperController.text);
                                                   } catch (e) {}
-                                                  lowerController.text =
-                                                      (price / tokenFactor)
-                                                          .toString();
+                                                  // lowerController.text =
+                                                  //     (price / tokenFactor)
+                                                  //         .toString();
                                                 },
                                                 controller: upperController,
                                                 decoration:
@@ -293,9 +296,9 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                                     price = double.parse(
                                                         lowerController.text);
                                                   } catch (e) {}
-                                                  upperController.text =
-                                                      (price / tokenFactor)
-                                                          .toString();
+                                                  // upperController.text =
+                                                  //     (price / tokenFactor)
+                                                  //         .toString();
                                                 },
                                                 decoration:
                                                     const InputDecoration
@@ -341,6 +344,24 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                         ),
                                       ],
                                     ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(24.0),
+                                  width: 400,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                      color: ThemeRaclette.gray500,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: TextFormField(
+                                    controller: liquidityController,
+                                    decoration: const InputDecoration.collapsed(
+                                        hintText: 'enter liquidity',
+                                        hintStyle: TextStyle(
+                                            color: ThemeRaclette.white)),
+                                    style: const TextStyle(
+                                        fontSize: 30,
+                                        color: ThemeRaclette.white),
                                   ),
                                 )
                               ],
@@ -573,6 +594,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
                 walletProvider.address.string,
                 BigInt.parse(upperController.text),
                 BigInt.parse(lowerController.text),
+                BigInt.parse(liquidityController.text),
                 min.value,
                 max.value);
           },
