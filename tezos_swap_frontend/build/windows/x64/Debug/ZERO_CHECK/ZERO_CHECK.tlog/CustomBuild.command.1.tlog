@@ -1,0 +1,10 @@
+^C:\USERS\W\DOCUMENTS\GITHUB\TEZOS-SWAP\TEZOS_SWAP_FRONTEND\BUILD\WINDOWS\CMAKEFILES\58270BB7AC4F8A9261F5D9923E968E96\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/w/Documents/GitHub/tezos-swap/tezos_swap_frontend/windows -BC:/Users/w/Documents/GitHub/tezos-swap/tezos_swap_frontend/build/windows --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/w/Documents/GitHub/tezos-swap/tezos_swap_frontend/build/windows/tezos_swap_frontend.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
