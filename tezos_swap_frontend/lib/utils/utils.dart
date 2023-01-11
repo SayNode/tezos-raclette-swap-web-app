@@ -15,6 +15,20 @@ double roundDouble(double value, int places) {
   return ((value * mod).round().toDouble() / mod);
 }
 
+//TODO: find better way
+fractionToFullToken(double amount) {
+  String amountString = amount.toString();
+  print(amountString.replaceAll('.', ''));
+  int afterComma = amountString.substring(amountString.indexOf('.')).length;
+
+  String addedZeros = '';
+  for (var i = 0; i < 18 - afterComma; i++) {
+    addedZeros = addedZeros + '0';
+  }
+  print(addedZeros.length);
+  return BigInt.parse(amountString.replaceAll('.', '') + addedZeros);
+}
+
 // Future<String> forgeSwap(String adressX, String addressY) async {
 //   var headers = {
 //     "Accept": "application/json",

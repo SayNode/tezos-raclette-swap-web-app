@@ -21,7 +21,8 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  swap(String contract, String recipient, double tokenX, double tokenY,
+//FIXME: might be problems with tokenx and y amount calculation
+  swap(String contract, String recipient, BigInt tokenX, BigInt tokenY,
       {bool yToX = false}) {
     String entrypoint = "x_to_y";
     if (yToX) {
@@ -63,22 +64,29 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
+  double logBase(int x, double base) => log(x) / log(base);
+
   setPosition(
     String contract,
     String signer,
-    double x,
-    double y,
-    double liquidity,
-    int lowerTick,
-    int upperTick,
+    double xDouble,
+    double yDouble,
+    double liquidityDouble,
+    int lowerPrice,
+    int upperPrice,
   ) async {
     var ticks = await getTicks(contract);
+    var lowerTick = logBase(lowerPrice, 1.0001);
+    var upperTick = logBase(upperPrice, 1.0001);
     var lowerWitness = ticks.where((e) => e <= lowerTick).toList()
       ..sort()
       ..last;
     var upperWitness = ticks.where((e) => e <= upperTick).toList()
       ..sort()
       ..last;
+    BigInt liquidity = fractionToFullToken(liquidityDouble);
+    BigInt x = fractionToFullToken(xDouble);
+    BigInt y = fractionToFullToken(yDouble);
 
     print(lowerWitness);
     print(upperWitness);

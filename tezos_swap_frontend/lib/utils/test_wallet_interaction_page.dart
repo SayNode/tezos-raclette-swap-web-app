@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 
 class TestWalletInteraction extends StatefulWidget {
   TestWalletInteraction({super.key});
@@ -63,7 +64,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           ElevatedButton(
               onPressed: () async {
                 await provider.swap('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
-                    provider.address.string, 10, 1);
+                    provider.address.string, BigInt.from(10), BigInt.from(1));
               },
               child: Text('swap x->y')),
           SizedBox(
@@ -73,10 +74,13 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           ElevatedButton(
               onPressed: () async {
                 await provider.swap('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
-                    provider.address.string, 1, 10,
+                    provider.address.string, BigInt.from(1), BigInt.from(10),
                     yToX: true);
               },
               child: Text('swap y->x')),
+          // ElevatedButton(
+          //     onPressed: () => print(fractionToFullToken(0.001)),
+          //     child: Text('Test'))
         ],
       )),
     );
