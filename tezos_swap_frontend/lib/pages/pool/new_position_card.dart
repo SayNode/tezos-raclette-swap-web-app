@@ -36,7 +36,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
   final lowerController = TextEditingController();
   TokenProvider token1 = TokenProvider();
   TokenProvider token2 = TokenProvider();
-  RxInt min = 0.obs;
+  RxInt min = 1.obs;
   RxInt max = 20.obs;
   RangeController rangeController = RangeController(start: 5, end: 11);
 //mock ratio
@@ -415,7 +415,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                                     return SfRangeSelector(
                                                       controller:
                                                           rangeController,
-                                                      min: 0,
+                                                      min: 1,
                                                       max: 50,
                                                       onChangeEnd: ((value) {
                                                         min.value =
