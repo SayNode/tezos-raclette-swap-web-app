@@ -16,11 +16,23 @@ double roundDouble(double value, int places) {
 }
 
 //TODO: find better way
-fractionToFullToken(double amount, int decimals) {
+fractionToFullToken(num amount, int decimals) {
+  print('------------');
+  print(decimals);
+  print(amount);
+  print('------------');
+  amount = amount.toDouble();
+  print('to double');
   String amountString = amount.toString();
-  int afterComma = amountString.substring(amountString.indexOf('.')).length;
+
+  int afterComma = 0;
+  if (amountString.contains('.')) {
+    afterComma = amountString.substring(amountString.indexOf('.')).length;
+  }
+
   String addedZeros = '';
   amountString = amountString.replaceAll('.', '');
+
   if (decimals - afterComma < 0) {
     amountString = amountString.substring(
         0, amountString.length - (afterComma - decimals - 1));
@@ -175,10 +187,21 @@ getCurrentTick(String contract) async {
   return int.parse(map['cur_tick_index']);
 }
 
-getLiquidity(double y, int lowerTick, int currentTick, int decimals) {
-  return fractionToFullToken(
-      (y / (sqrt(pow(1.0001, currentTick)) - sqrt(pow(1.0001, lowerTick)))),
+getLiquidity(double y, double x, int lowerTick, int upperTick, int currentTick,
+    int decimals) {
+  var xLiquidity = fractionToFullToken(
+      (x *
+          ((sqrt(pow(1.0001, upperTick)) * sqrt(pow(1.0001, currentTick))) /
+              (sqrt(pow(1.0001, upperTick)) - sqrt(pow(1.0001, currentTick))))),
       decimals);
+  var yLiquidity = fractionToFullToken(
+      ((y) / (sqrt(pow(1.0001, currentTick)) - sqrt(pow(1.0001, lowerTick)))),
+      decimals);
+  if (xLiquidity < yLiquidity) {
+    return xLiquidity;
+  } else {
+    return yLiquidity;
+  }
 }
 
 Future<bool> getOperators(

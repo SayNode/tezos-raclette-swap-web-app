@@ -85,11 +85,15 @@ class WalletProvider extends ChangeNotifier {
       ..last;
 
     var currentTick = await getCurrentTick(contract);
-    BigInt liquidity =
-        await getLiquidity(yDouble, lowerTick.toInt(), currentTick, 18);
-    
+    print('here');
+    BigInt liquidity = await getLiquidity(yDouble, xDouble, lowerTick.toInt(),
+        upperTick.toInt(), currentTick, 18);
+    print('got liquidity');
+    print(xDouble);
+    print(yDouble);
     BigInt x = fractionToFullToken(xDouble, 18);
     BigInt y = fractionToFullToken(yDouble, 18);
+    print('got x and y');
 
     print('LowerWitness: ${lowerWitness.last}');
     print('UpperWitness: ${upperWitness.last}');
@@ -98,7 +102,6 @@ class WalletProvider extends ChangeNotifier {
     print('y: $y');
     print('LowerTick: ${lowerTick.toInt()}');
     print('UpperTick: ${upperTick.toInt()}');
-
 
     _request({
       "type": "OPERATION_REQUEST",
@@ -128,7 +131,7 @@ class WalletProvider extends ChangeNotifier {
                       "prim": "Pair",
                       "args": [
                         {"int": "${lowerTick.toInt()}"},
-                        {"int": "${lowerWitness.last}"}
+                        {"int": "-1048575"}
                       ]
                     }
                   ]
@@ -160,7 +163,8 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  authorizeContract(String tokenContract, String swapContract , String signer) async {
+  authorizeContract(
+      String tokenContract, String swapContract, String signer) async {
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": signer,
