@@ -84,9 +84,9 @@ class WalletProvider extends ChangeNotifier {
     var upperWitness = ticks.where((e) => e <= upperTick).toList()
       ..sort()
       ..last;
-    BigInt liquidity = fractionToFullToken(liquidityDouble);
-    BigInt x = fractionToFullToken(xDouble);
-    BigInt y = fractionToFullToken(yDouble);
+    BigInt liquidity = fractionToFullToken(liquidityDouble, 18);
+    BigInt x = fractionToFullToken(xDouble, 18);
+    BigInt y = fractionToFullToken(yDouble, 18);
 
     print(lowerWitness);
     print(upperWitness);
