@@ -219,7 +219,7 @@ class _HomePageState extends State<HomePage> {
               ),
               FutureBuilder<String>(
                   future: BalanceProvider.getBalanceTezos(
-                      address, 'https://ghostnet.tezos.marigold.dev'),
+                      address, 'https://api.ghostnet.tzkt.io'),
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
                     if (!snapshot.hasData) {
