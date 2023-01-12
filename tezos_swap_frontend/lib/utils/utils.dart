@@ -173,18 +173,33 @@ getCurrentTick(String contract) async {
 
 getLiquidity(double y, double x, int lowerTick, int upperTick, int currentTick,
     int decimals) {
-  var xLiquidity = fractionToFullToken(
-      (x *
-          ((sqrt(pow(1.0001, upperTick)) * sqrt(pow(1.0001, currentTick))) /
-              (sqrt(pow(1.0001, upperTick)) - sqrt(pow(1.0001, currentTick))))),
-      decimals);
-  var yLiquidity = fractionToFullToken(
-      ((y) / (sqrt(pow(1.0001, currentTick)) - sqrt(pow(1.0001, lowerTick)))),
-      decimals);
-  if (xLiquidity < yLiquidity) {
-    return xLiquidity;
+  if (pow(1.0001, currentTick) < pow(1.0001, lowerTick)) {
+    // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pu))   )
+    return fractionToFullToken(
+        x /
+            ((1 / sqrt(pow(1.0001, lowerTick))) -
+                (1 / sqrt(pow(1.0001, upperTick)))),
+        decimals);
+  } else if (pow(1.0001, upperTick) < pow(1.0001, currentTick)) {
+    //Liq= dy/( sqrt(Pu) - sqrt(Pl) )
+    return fractionToFullToken(
+        y / (sqrt(pow(1.0001, upperTick)) - sqrt(pow(1.0001, lowerTick))),
+        decimals);
   } else {
-    return yLiquidity;
+    var xLiquidity = fractionToFullToken(
+        (x *
+            ((sqrt(pow(1.0001, upperTick)) * sqrt(pow(1.0001, currentTick))) /
+                (sqrt(pow(1.0001, upperTick)) -
+                    sqrt(pow(1.0001, currentTick))))),
+        decimals);
+    var yLiquidity = fractionToFullToken(
+        ((y) / (sqrt(pow(1.0001, currentTick)) - sqrt(pow(1.0001, lowerTick)))),
+        decimals);
+    if (xLiquidity < yLiquidity) {
+      return xLiquidity;
+    } else {
+      return yLiquidity;
+    }
   }
 }
 
