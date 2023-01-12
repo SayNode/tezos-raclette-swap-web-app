@@ -64,7 +64,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           Text('swap 10x for min 1y'),
           ElevatedButton(
               onPressed: () async {
-                await provider.swap('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
+                await provider.swap('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7',
                     provider.address.string, BigInt.from(10), BigInt.from(1));
               },
               child: Text('swap x->y')),
@@ -81,14 +81,8 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
               child: Text('swap y->x')),
           ElevatedButton(
               onPressed: () async {
-                var lowerPrice = 4;
-                var lowerTick = logBase(lowerPrice, 1.0001);
-                print(lowerPrice);
-                var currentTick =
-                   await getCurrentTick('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
-                   var res = await getLiquidity(5, lowerTick.toInt(), currentTick, 18);
-                   print(fractionToFullToken(21.18, 18));
-                   print(res);
+                var a = await walletProvider.authorizeContract('KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB', 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf');
+                print('-------> $a');
               },
               child: Text('Test'))
         ],

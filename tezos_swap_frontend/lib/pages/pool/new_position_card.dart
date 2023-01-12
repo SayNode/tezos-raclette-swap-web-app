@@ -593,6 +593,8 @@ class _NewPositionCardState extends State<NewPositionCard> {
             print(upperController.text);
             print(lowerController.text);
 
+            // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
+
             walletProvider.setPosition(
                 testContract,
                 walletProvider.address.string,

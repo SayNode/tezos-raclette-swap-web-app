@@ -87,7 +87,7 @@ class WalletProvider extends ChangeNotifier {
     var currentTick = await getCurrentTick(contract);
     BigInt liquidity =
         await getLiquidity(yDouble, lowerTick.toInt(), currentTick, 18);
-        print(liquidity);
+    print(liquidity);
     BigInt x = fractionToFullToken(xDouble, 18);
     BigInt y = fractionToFullToken(yDouble, 18);
 
@@ -154,10 +154,48 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  authorizeContract(String tokenContract, String swapContract) async {
+  authorizeContract(String tokenContract, String swapContract , String signer) async {
     _request({
       "type": "OPERATION_REQUEST",
-      "sourcePkh": address.value,
+      "sourcePkh": signer,
+      "opParams": [
+        {
+          "kind": "transaction",
+          "to": tokenContract,
+          "amount": 0,
+          "mutez": true,
+          "parameter": {
+            "entrypoint": "update_operators",
+            "value": [
+              {
+                "prim": "Left",
+                "args": [
+                  {
+                    "prim": "Pair",
+                    "args": [
+                      {"string": signer},
+                      {
+                        "prim": "Pair",
+                        "args": [
+                          {"string": swapContract},
+                          {"int": "0"}
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    });
+  }
+
+  authorizeContract2(String tokenContract, String swapContract) async {
+    _request({
+      "type": "OPERATION_REQUEST",
+      "sourcePkh": 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf',
       "opParams": [
         {
           "kind": "transaction",
@@ -263,7 +301,9 @@ class WalletProvider extends ChangeNotifier {
       } else if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_ERROR_RESPONSE') {
+        print('-----------');
         print(evt.data);
+        print('-----------');
       }
     }, true);
   }

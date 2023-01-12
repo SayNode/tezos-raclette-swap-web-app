@@ -1,0 +1,100 @@
+{
+    "error": [
+        {
+            "errors": [
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.runtime_error",
+                    "contract_handle": "KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB",
+                    "contract_code": "Deprecated"
+                },
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+                    "location": 4141,
+                    "with": {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "int": "106"
+                            },
+                            {
+                                "prim": "Pair",
+                                "args": [
+                                    {
+                                        "prim": "Pair",
+                                        "args": [
+                                            {
+                                                "int": "1100000000000000000"
+                                            },
+                                            {
+                                                "int": "2182682759407663149"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "int": "5503086819220862310"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "errorDetails": "Error occurred during estimation",
+            "name": "TezosOperationError",
+            "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+            "kind": "temporary",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"106\"},{\"prim\":\"Pair\",\"args\":[{\"prim\":\"Pair\",\"args\":[{\"int\":\"1100000000000000000\"},{\"int\":\"2182682759407663149\"}]},{\"int\":\"5503086819220862310\"}]}]}",
+            "isError": true
+        },
+        {
+            "errors": [
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.runtime_error",
+                    "contract_handle": "KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB",
+                    "contract_code": "Deprecated"
+                },
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+                    "location": 4141,
+                    "with": {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "int": "106"
+                            },
+                            {
+                                "prim": "Pair",
+                                "args": [
+                                    {
+                                        "prim": "Pair",
+                                        "args": [
+                                            {
+                                                "int": "1100000000000000000"
+                                            },
+                                            {
+                                                "int": "2182682759407663149"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "int": "5503086819220862310"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "errorDetails": "Error occurred during estimation",
+            "name": "TezosOperationError",
+            "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+            "kind": "temporary",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"106\"},{\"prim\":\"Pair\",\"args\":[{\"prim\":\"Pair\",\"args\":[{\"int\":\"1100000000000000000\"},{\"int\":\"2182682759407663149\"}]},{\"int\":\"5503086819220862310\"}]}]}",
+            "isError": true
+        }
+    ]
+}

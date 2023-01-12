@@ -50,7 +50,11 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-      home: FutureBuilder<List<dynamic>>(
+      home: 
+      
+      //TestWalletInteraction()
+      
+      FutureBuilder<List<dynamic>>(
         future: Future.wait([tokenRepo.init(), contractRepo.init()]),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
