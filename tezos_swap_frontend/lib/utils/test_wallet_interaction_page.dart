@@ -65,7 +65,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           ElevatedButton(
               onPressed: () async {
                 await provider.swap('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7',
-                    provider.address.string, BigInt.from(10), BigInt.from(1));
+                    provider.address.string, 10, 1);
               },
               child: Text('swap x->y')),
           SizedBox(
@@ -75,13 +75,16 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           ElevatedButton(
               onPressed: () async {
                 await provider.swap('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
-                    provider.address.string, BigInt.from(1), BigInt.from(10),
+                    provider.address.string, 1, 10,
                     yToX: true);
               },
               child: Text('swap y->x')),
           ElevatedButton(
               onPressed: () async {
-                var a = await walletProvider.authorizeContract('KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB', 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf');
+                var a = await walletProvider.authorizeContract(
+                    'KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA',
+                    'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
+                    'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf');
                 print('-------> $a');
               },
               child: Text('Test'))

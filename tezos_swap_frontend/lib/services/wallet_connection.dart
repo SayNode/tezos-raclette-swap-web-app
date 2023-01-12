@@ -22,12 +22,14 @@ class WalletProvider extends ChangeNotifier {
   }
 
 //FIXME: might be problems with tokenx and y amount calculation
-  swap(String contract, String recipient, BigInt tokenX, BigInt tokenY,
+  swap(String contract, String recipient, double tokenX, double tokenY,
       {bool yToX = false}) {
     String entrypoint = "x_to_y";
     if (yToX) {
       entrypoint = "y_to_x";
     }
+    BigInt x = fractionToFullToken(tokenX, 18);
+    BigInt y = fractionToFullToken(tokenY, 18);
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": recipient,
@@ -46,13 +48,13 @@ class WalletProvider extends ChangeNotifier {
                   "prim": "Pair",
                   "args": [
                     {"string": "2023-09-20T10:19:24Z"}, //TODO: set date
-                    {"int": "$tokenX"}
+                    {"int": "$x"}
                   ]
                 },
                 {
                   "prim": "Pair",
                   "args": [
-                    {"int": "$tokenY"},
+                    {"int": "$y"},
                     {"string": recipient}
                   ]
                 }
