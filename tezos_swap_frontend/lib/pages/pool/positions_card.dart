@@ -54,10 +54,8 @@ class PositionsCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         FutureBuilder<List<Map>>(
-                          future:
-                              positionsOfAddress(
-                                  walletProvider.address.string,
-                                  testContract),
+                          future: positionsOfAddress(
+                              walletProvider.address.string, testContract),
                           builder: (
                             BuildContext context,
                             AsyncSnapshot<List<Map>> snapshot,
@@ -85,10 +83,14 @@ class PositionsCard extends StatelessWidget {
                                                   Text(
                                                       '${getContractTokens(testContract)[0].symbol}/${getContractTokens(testContract)[1].symbol}'),
                                                   Text(
-                                                      'Liquidity proivided: ${snapshot.data![index]['value']['liquidity']}'),
+                                                      'Liquidity proivided: ${smallToFull(BigInt.parse(snapshot.data![index]['value']['liquidity']), 18)}'),
                                                   ElevatedButton(
-                                                      onPressed: ()async {
-                                                        await walletProvider.removePosition(testContract, snapshot.data![index]['key']);
+                                                      onPressed: () async {
+                                                        await walletProvider
+                                                            .removePosition(
+                                                                testContract,
+                                                                snapshot.data![
+                                                                    index]);
                                                       },
                                                       child: const Text(
                                                           'Remove Position'))

@@ -244,7 +244,7 @@ Future<List<Map>> positionsOfAddress(
   List<Map> myPositions = [];
 
   for (Map position in json.decode(positions)) {
-    if (position['value']['owner'] == address) {
+    if (position['value']['owner'] == address && position['active'] == true) {
       myPositions.add(position);
     }
   }
@@ -296,6 +296,10 @@ List<Token> getContractTokens(String contractAddress) {
 
 String addressToDisplayAddress(String address) {
   return '${address.substring(0, 7)}....${address.substring(32)}';
+}
+
+double smallToFull(BigInt amount, int decimal) {
+  return amount / BigInt.from(pow(10, decimal));
 }
 
 BigInt sqrtBigInt(BigInt x) {

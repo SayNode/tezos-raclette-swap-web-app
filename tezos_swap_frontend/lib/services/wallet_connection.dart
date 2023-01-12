@@ -242,7 +242,10 @@ class WalletProvider extends ChangeNotifier {
     });
   }
 
-  removePosition(String contract, String position) async {
+  removePosition(String contract, Map position) async {
+    print(position['key']);
+    var liquidity = '-${position['value']['liquidity']}';
+
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": address.value,
@@ -265,7 +268,7 @@ class WalletProvider extends ChangeNotifier {
                       "args": [
                         //TODO: do proper deadline
                         {"int": "2668508020"},
-                        {"int": "0"}
+                        {"int": liquidity}
                       ]
                     },
                     {
@@ -278,7 +281,7 @@ class WalletProvider extends ChangeNotifier {
                             {"int": "0"}
                           ]
                         },
-                        {"int": position}
+                        {"int": position['key']}
                       ]
                     }
                   ]

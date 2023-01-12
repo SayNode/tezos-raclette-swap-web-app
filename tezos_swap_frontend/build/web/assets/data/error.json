@@ -1,0 +1,268 @@
+[
+    {
+        "id": 2635046,
+        "active": false,
+        "hash": "exprtZBwZUeYYYfUs9B9Rg2ywHezVHnCCnmF9WsDQVrs582dSK63dC",
+        "key": "0",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "222483116980881686528",
+            "lower_tick_index": "15893",
+            "upper_tick_index": "16293",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1785757,
+        "lastLevel": 1785831,
+        "updates": 2
+    },
+    {
+        "id": 2635051,
+        "active": false,
+        "hash": "expru2dKqDfZG8hu4wNGkiyunvq2hdSKuVYtcKta7BWP6Q18oNxKjS",
+        "key": "1",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "7900162377169623040",
+            "lower_tick_index": "16293",
+            "upper_tick_index": "23027",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1785774,
+        "lastLevel": 1813630,
+        "updates": 3
+    },
+    {
+        "id": 2635054,
+        "active": true,
+        "hash": "expruDuAZnFKqmLoisJqUGqrNzXTvw7PJM2rYk97JErM5FHCerQqgn",
+        "key": "2",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "4119992771945981440",
+            "lower_tick_index": "0",
+            "upper_tick_index": "15893",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1785783,
+        "lastLevel": 1785783,
+        "updates": 1
+    },
+    {
+        "id": 2642797,
+        "active": false,
+        "hash": "exprujyHLX2vacVy6AcFmAt5K3Y93aMtccrbNtcsCRik6fjxR8wL6x",
+        "key": "3",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "21",
+            "lower_tick_index": "4",
+            "upper_tick_index": "8",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1804656,
+        "lastLevel": 1813621,
+        "updates": 2
+    },
+    {
+        "id": 2643659,
+        "active": true,
+        "hash": "exprtkcv5vD1Ct4y91FvZFgXVHCxebKhorSVs8hFmXYgmGsEMo4qdp",
+        "key": "4",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "21",
+            "lower_tick_index": "4",
+            "upper_tick_index": "8",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1806837,
+        "lastLevel": 1813543,
+        "updates": 2
+    },
+    {
+        "id": 2643871,
+        "active": true,
+        "hash": "exprtqoNj2hRg8PsPMaXLcy3dXjMM3B7nHKrRNqpfjbYpMbULbRj8k",
+        "key": "5",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "21",
+            "lower_tick_index": "4",
+            "upper_tick_index": "8",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1807112,
+        "lastLevel": 1807112,
+        "updates": 1
+    },
+    {
+        "id": 2643879,
+        "active": true,
+        "hash": "expruhrcC4osJigCeAywh27e6iYerzr5LnhYDwnWJc7VrLg7SxJbtm",
+        "key": "6",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "21",
+            "lower_tick_index": "4",
+            "upper_tick_index": "8",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1807129,
+        "lastLevel": 1807129,
+        "updates": 1
+    },
+    {
+        "id": 2643883,
+        "active": true,
+        "hash": "exprufunBN3FAVpZ21WXquoqiNyWB2PvYy1njkP4wHGtMexdKtcJEM",
+        "key": "7",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "21",
+            "lower_tick_index": "4",
+            "upper_tick_index": "8",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1807135,
+        "lastLevel": 1813286,
+        "updates": 4
+    },
+    {
+        "id": 2647594,
+        "active": true,
+        "hash": "exprtweQBK1emmeg9Q84E7YwE9c8AQrvn88c8SrG2JgjBCYkC1AWx5",
+        "key": "8",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "222483116980881686528",
+            "lower_tick_index": "15893",
+            "upper_tick_index": "16293",
+            "fee_growth_inside_last": {
+                "x": "1529475007086400385591693375060",
+                "y": "7647375035432001927958466875300"
+            }
+        },
+        "firstLevel": 1813122,
+        "lastLevel": 1813299,
+        "updates": 2
+    },
+    {
+        "id": 2647604,
+        "active": true,
+        "hash": "exprtvAzqNE9zfpBLL9nKEaY1Dd2rznyG9iTFtECJvDkuub1bj3XvW",
+        "key": "9",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "10676893147909754880",
+            "lower_tick_index": "13863",
+            "upper_tick_index": "20795",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1813139,
+        "lastLevel": 1813139,
+        "updates": 1
+    },
+    {
+        "id": 2647607,
+        "active": true,
+        "hash": "expruXiL5LQuHx7RcPZztJUFDi93bbuMnKL3AryPqLeM6HkWRAVCeL",
+        "key": "10",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "10676893147909754880",
+            "lower_tick_index": "13863",
+            "upper_tick_index": "20795",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1813143,
+        "lastLevel": 1813143,
+        "updates": 1
+    },
+    {
+        "id": 2647661,
+        "active": true,
+        "hash": "exprugoUUkTmJphCejTLPwF9gbKm2WonYuUBXYqtkc16JVBWe3bdqv",
+        "key": "11",
+        "value": {
+            "owner": "tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf",
+            "liquidity": "11742272433745558000",
+            "lower_tick_index": "13863",
+            "upper_tick_index": "20795",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1813200,
+        "lastLevel": 1813200,
+        "updates": 1
+    },
+    {
+        "id": 2647703,
+        "active": true,
+        "hash": "expruSKSLw7MS3ou3pPd7MUXy5QDPtVvkUNF4yWS2g6n8mXGzDJCG7",
+        "key": "12",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "10674793121586870000",
+            "lower_tick_index": "13863",
+            "upper_tick_index": "20795",
+            "fee_growth_inside_last": {
+                "x": "0",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1813265,
+        "lastLevel": 1813265,
+        "updates": 1
+    },
+    {
+        "id": 2647937,
+        "active": true,
+        "hash": "exprtdzbjWsSSvctJBA2SFXHnNS3oiwvq3dKbfc2FtshKaPdiBsDvc",
+        "key": "13",
+        "value": {
+            "owner": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+            "liquidity": "1174227243374555600000000",
+            "lower_tick_index": "13863",
+            "upper_tick_index": "20795",
+            "fee_growth_inside_last": {
+                "x": "1278036787258580436957943502437",
+                "y": "0"
+            }
+        },
+        "firstLevel": 1813643,
+        "lastLevel": 1813643,
+        "updates": 1
+    }
+]
