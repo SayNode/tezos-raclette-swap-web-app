@@ -34,7 +34,6 @@ class _NewPositionCardState extends State<NewPositionCard> {
   RxInt selected = 2.obs;
   final upperController = TextEditingController();
   final lowerController = TextEditingController();
-  final liquidityController = TextEditingController();
   TokenProvider token1 = TokenProvider();
   TokenProvider token2 = TokenProvider();
   RxInt min = 0.obs;
@@ -346,29 +345,29 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                     ),
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(24.0),
-                                    width: 400,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                        color: ThemeRaclette.gray500,
-                                        borderRadius:
-                                            BorderRadius.circular(12)),
-                                    child: TextFormField(
-                                      controller: liquidityController,
-                                      decoration:
-                                          const InputDecoration.collapsed(
-                                              hintText: 'enter liquidity',
-                                              hintStyle: TextStyle(
-                                                  color: ThemeRaclette.white)),
-                                      style: const TextStyle(
-                                          fontSize: 30,
-                                          color: ThemeRaclette.white),
-                                    ),
-                                  ),
-                                )
+                                // Padding(
+                                //   padding: const EdgeInsets.all(16.0),
+                                //   child: Container(
+                                //     padding: const EdgeInsets.all(24.0),
+                                //     width: 400,
+                                //     height: 100,
+                                //     decoration: BoxDecoration(
+                                //         color: ThemeRaclette.gray500,
+                                //         borderRadius:
+                                //             BorderRadius.circular(12)),
+                                //     child: TextFormField(
+                                //       controller: liquidityController,
+                                //       decoration:
+                                //           const InputDecoration.collapsed(
+                                //               hintText: 'enter liquidity',
+                                //               hintStyle: TextStyle(
+                                //                   color: ThemeRaclette.white)),
+                                //       style: const TextStyle(
+                                //           fontSize: 30,
+                                //           color: ThemeRaclette.white),
+                                //     ),
+                                //   ),
+                                // )
                               ],
                             ),
                             const SizedBox(
@@ -599,7 +598,6 @@ class _NewPositionCardState extends State<NewPositionCard> {
                 walletProvider.address.string,
                 double.parse(upperController.text),
                 double.parse(lowerController.text),
-                double.parse(liquidityController.text),
                 min.value,
                 max.value);
           },

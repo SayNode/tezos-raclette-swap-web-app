@@ -159,6 +159,30 @@ Future<List<int>> getTicks(String contract) async {
   return list;
 }
 
+getCurrentTick(String contract) async {
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+  var url =
+      Uri.parse('https://api.ghostnet.tzkt.io/v1/contracts/$contract/storage');
+
+  var res = await http.get(url, headers: headers);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+
+  Map map = jsonDecode(res.body);
+  print(map['cur_tick_index'].runtimeType);
+  return int.parse(map['cur_tick_index']);
+}
+
+getLiquidity(double y, int lowerTick, int currentTick, int decimals) {
+  return fractionToFullToken(
+      (y / (sqrt(pow(1.0001, currentTick)) - sqrt(pow(1.0001, lowerTick)))),
+      decimals);
+}
+
 Future<bool> getOperators(
     String tokenContract, String userAddress, String swapContract) async {
   var headers = {

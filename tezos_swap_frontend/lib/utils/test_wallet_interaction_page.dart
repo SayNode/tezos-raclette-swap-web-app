@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
@@ -52,7 +54,6 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
                     provider.address.string,
                     double.parse('100000000000000000000'),
                     double.parse('100000000000000000000'),
-                    double.parse('100000000000000000000'),
                     1,
                     20);
               },
@@ -78,14 +79,25 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
                     yToX: true);
               },
               child: Text('swap y->x')),
-          // ElevatedButton(
-          //     onPressed: () => print(fractionToFullToken(0.001)),
-          //     child: Text('Test'))
+          ElevatedButton(
+              onPressed: () async {
+                var lowerPrice = 4;
+                var lowerTick = logBase(lowerPrice, 1.0001);
+                print(lowerPrice);
+                var currentTick =
+                   await getCurrentTick('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+                   var res = await getLiquidity(5, lowerTick.toInt(), currentTick, 18);
+                   print(fractionToFullToken(21.18, 18));
+                   print(res);
+              },
+              child: Text('Test'))
         ],
       )),
     );
   }
 }
+
+double logBase(int x, double base) => log(x) / log(base);
 
 //100000.000000000123142256     99999.80509984167719272
 //100000.000000000123142256     99999.710149700016775194

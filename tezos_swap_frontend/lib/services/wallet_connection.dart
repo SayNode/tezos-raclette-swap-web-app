@@ -71,7 +71,6 @@ class WalletProvider extends ChangeNotifier {
     String signer,
     double xDouble,
     double yDouble,
-    double liquidityDouble,
     int lowerPrice,
     int upperPrice,
   ) async {
@@ -84,7 +83,10 @@ class WalletProvider extends ChangeNotifier {
     var upperWitness = ticks.where((e) => e <= upperTick).toList()
       ..sort()
       ..last;
-    BigInt liquidity = fractionToFullToken(liquidityDouble, 18);
+
+    var currentTick = await getCurrentTick(contract);
+    BigInt liquidity =
+        await getLiquidity(yDouble, lowerTick.toInt(), currentTick, 18);
     BigInt x = fractionToFullToken(xDouble, 18);
     BigInt y = fractionToFullToken(yDouble, 18);
 
