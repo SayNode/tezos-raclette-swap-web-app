@@ -123,7 +123,7 @@ class WalletProvider extends ChangeNotifier {
                       "prim": "Pair",
                       "args": [
                         {"int": "${lowerTick.toInt()}"},
-                        {"int": "-1048575"}
+                        {"int": '-1048575'}
                       ]
                     }
                   ]

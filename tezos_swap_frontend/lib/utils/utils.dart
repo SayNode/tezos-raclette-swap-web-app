@@ -149,7 +149,9 @@ Future<List<int>> getTicks(String contract) async {
   }
   List<int> list = [];
   for (var element in json.decode(res.body)) {
-    list.add(int.parse(element['key']));
+    if (element['active'] == true) {
+      list.add(int.parse(element['key']));
+    }
   }
   return list;
 }
@@ -173,28 +175,21 @@ getCurrentTick(String contract) async {
 
 getLiquidity(double y, double x, int lowerTick, int upperTick, int currentTick,
     int decimals) {
-  if (pow(1.0001, currentTick) < pow(1.0001, lowerTick)) {
-    // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pu))   )
-    return fractionToFullToken(
-        x /
-            ((1 / sqrt(pow(1.0001, lowerTick))) -
-                (1 / sqrt(pow(1.0001, upperTick)))),
-        decimals);
-  } else if (pow(1.0001, upperTick) < pow(1.0001, currentTick)) {
-    //Liq= dy/( sqrt(Pu) - sqrt(Pl) )
-    return fractionToFullToken(
-        y / (sqrt(pow(1.0001, upperTick)) - sqrt(pow(1.0001, lowerTick))),
-        decimals);
+  var pc = pow(1.0001, currentTick);
+  var pl = pow(1.0001, lowerTick);
+  var pu = pow(1.0001, upperTick);
+
+  if (pc < pl) {
+    // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pc))   )
+    return fractionToFullToken(x / ((1 / sqrt(pl)) - (1 / sqrt(pu))), decimals);
+  } else if (pu < pc) {
+    //Liq= dy/( sqrt(Pc) - sqrt(Pl) )
+    return fractionToFullToken(y / (sqrt(pu) - sqrt(pl)), decimals);
   } else {
     var xLiquidity = fractionToFullToken(
-        (x *
-            ((sqrt(pow(1.0001, upperTick)) * sqrt(pow(1.0001, currentTick))) /
-                (sqrt(pow(1.0001, upperTick)) -
-                    sqrt(pow(1.0001, currentTick))))),
-        decimals);
-    var yLiquidity = fractionToFullToken(
-        ((y) / (sqrt(pow(1.0001, currentTick)) - sqrt(pow(1.0001, lowerTick)))),
-        decimals);
+        (x * ((sqrt(pu) * sqrt(pc)) / (sqrt(pu) - sqrt(pc)))), decimals);
+    var yLiquidity =
+        fractionToFullToken(((y) / (sqrt(pc) - sqrt(pl))), decimals);
     if (xLiquidity < yLiquidity) {
       return xLiquidity;
     } else {

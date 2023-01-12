@@ -27374,18 +27374,19 @@ ajL:function ajL(a){this.a=a},
 r5(a,b){var s=B.d.j(a),r=(!B.b.n(s,".")?s+".0":s).split("."),q=r[1]
 for(;q.length<18;)q+="0"
 return A.aOt(J.bY(r[0],q),null)},
-atU(a){var s=0,r=A.W(t.Cm),q,p,o,n,m
+atU(a){var s=0,r=A.W(t.Cm),q,p,o,n,m,l,k
 var $async$atU=A.X(function(b,c){if(b===1)return A.T(c,r)
-while(true)switch(s){case 0:o=t.N
-n=A.aa(["Accept","application/json","Content-type","application/json"],o,o)
+while(true)switch(s){case 0:m=t.N
+l=A.aa(["Accept","application/json","Content-type","application/json"],m,m)
 s=3
-return A.Y(A.atN(A.lV(u.n+a+"/bigmaps/ticks/keys",0,null),n),$async$atU)
-case 3:m=c
-o=m.b
-if(o!==200)throw A.d(A.d_("http.post error: statusCode= "+o))
+return A.Y(A.atN(A.lV(u.n+a+"/bigmaps/ticks/keys",0,null),l),$async$atU)
+case 3:k=c
+m=k.b
+if(m!==200)throw A.d(A.d_("http.post error: statusCode= "+m))
 p=A.b([],t.t)
-for(o=J.aF(B.aF.cU(0,A.atF(J.a2(A.asj(m.e).c.a,"charset")).cU(0,m.w)));o.u();)p.push(A.cY(J.a2(o.gI(o),"key"),null))
-q=p
+for(m=J.aF(B.aF.cU(0,A.atF(J.a2(A.asj(k.e).c.a,"charset")).cU(0,k.w)));m.u();){o=m.gI(m)
+n=J.ae(o)
+if(J.c(n.h(o,"active"),!0))p.push(A.cY(n.h(o,"key"),null))}q=p
 s=1
 break
 case 1:return A.U(q,r)}})
@@ -27404,11 +27405,11 @@ s=1
 break
 case 1:return A.U(q,r)}})
 return A.V($async$atQ,r)},
-aSX(a,b,c,d,e,f){var s,r
-if(Math.pow(1.0001,e)<Math.pow(1.0001,c))return A.r5(b/(1/Math.sqrt(Math.pow(1.0001,c))-1/Math.sqrt(Math.pow(1.0001,d))),f)
-else if(Math.pow(1.0001,d)<Math.pow(1.0001,e))return A.r5(a/(Math.sqrt(Math.pow(1.0001,d))-Math.sqrt(Math.pow(1.0001,c))),f)
-else{s=A.r5(b*(Math.sqrt(Math.pow(1.0001,d))*Math.sqrt(Math.pow(1.0001,e))/(Math.sqrt(Math.pow(1.0001,d))-Math.sqrt(Math.pow(1.0001,e)))),f)
-r=A.r5(a/(Math.sqrt(Math.pow(1.0001,e))-Math.sqrt(Math.pow(1.0001,c))),f)
+aSX(a,b,c,d,e,f){var s,r,q=Math.pow(1.0001,e),p=Math.pow(1.0001,c),o=Math.pow(1.0001,d)
+if(q<p)return A.r5(b/(1/Math.sqrt(p)-1/Math.sqrt(o)),f)
+else if(o<q)return A.r5(a/(Math.sqrt(o)-Math.sqrt(p)),f)
+else{s=A.r5(b*(Math.sqrt(o)*Math.sqrt(q)/(Math.sqrt(o)-Math.sqrt(q))),f)
+r=A.r5(a/(Math.sqrt(q)-Math.sqrt(p)),f)
 if(s.aT(0,r)<0)return s
 else return r}},
 a11(a){var s=0,r=A.W(t.z),q,p,o,n
