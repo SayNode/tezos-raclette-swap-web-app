@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/test_page.dart';
 import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
 import 'package:tezos_swap_frontend/repositories/token_repo.dart';
+import 'package:tezos_swap_frontend/services/wallet_service.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
 import 'package:tezos_swap_frontend/utils/test_wallet_interaction_page.dart';
 import 'pages/home_page.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var tokenRepo = Get.put(TokenRepository());
     var contractRepo = Get.put(ContractRepository());
+    Get.put(WalletService());
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Raclette Swap',

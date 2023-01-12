@@ -151,7 +151,6 @@ Future<List<int>> getTicks(String contract) async {
   if (res.statusCode != 200) {
     throw Exception('http.post error: statusCode= ${res.statusCode}');
   }
-  print(res.body);
   List<int> list = [];
   for (var element in json.decode(res.body)) {
     list.add(int.parse(element['key']));
@@ -173,7 +172,6 @@ getCurrentTick(String contract) async {
   }
 
   Map map = jsonDecode(res.body);
-  print(map['cur_tick_index'].runtimeType);
   return int.parse(map['cur_tick_index']);
 }
 

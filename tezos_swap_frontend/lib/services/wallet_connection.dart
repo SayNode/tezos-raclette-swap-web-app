@@ -87,12 +87,18 @@ class WalletProvider extends ChangeNotifier {
     var currentTick = await getCurrentTick(contract);
     BigInt liquidity =
         await getLiquidity(yDouble, lowerTick.toInt(), currentTick, 18);
-    print(liquidity);
+    
     BigInt x = fractionToFullToken(xDouble, 18);
     BigInt y = fractionToFullToken(yDouble, 18);
 
-    print(lowerWitness);
-    print(upperWitness);
+    print('LowerWitness: ${lowerWitness.last}');
+    print('UpperWitness: ${upperWitness.last}');
+    print('Liquidity: $liquidity');
+    print('x: $x');
+    print('y: $y');
+    print('LowerTick: ${lowerTick.toInt()}');
+    print('UpperTick: ${upperTick.toInt()}');
+
 
     _request({
       "type": "OPERATION_REQUEST",

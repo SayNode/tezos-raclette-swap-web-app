@@ -538,8 +538,44 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                     child: SizedBox(
                                       width: 400,
                                       height: 60,
-                                      child: _submitButton(
-                                          widget.provider.address.string),
+                                      child: Obx(() => (widget.provider.address
+                                              .string.isNotEmpty)
+                                          ? ElevatedButton(
+                                              style: ThemeRaclette
+                                                  .invertedButtonStyle,
+                                              onPressed: () async {
+                                                //TODO: proper contract selection
+
+                                                // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
+
+                                                walletProvider.setPosition(
+                                                    testContract,
+                                                    walletProvider
+                                                        .address.string,
+                                                    double.parse(
+                                                        upperController.text),
+                                                    double.parse(
+                                                        lowerController.text),
+                                                    min.value,
+                                                    max.value);
+                                              },
+                                              child: Text(
+                                                'Submit',
+                                                style: ThemeRaclette
+                                                    .invertedButtonTextStyle,
+                                              ))
+                                          : ElevatedButton(
+                                              style: ThemeRaclette
+                                                  .invertedButtonStyle,
+                                              onPressed: () async {
+                                                await widget.provider
+                                                    .requestPermission();
+                                              },
+                                              child: Text(
+                                                'Connect Wallet',
+                                                style: ThemeRaclette
+                                                    .invertedButtonTextStyle,
+                                              ))),
                                     )),
                               ],
                             )
@@ -582,40 +618,5 @@ class _NewPositionCardState extends State<NewPositionCard> {
     }
 
     return const SizedBox();
-  }
-
-  _submitButton(String address) {
-    if (address.isNotEmpty) {
-      return ElevatedButton(
-          style: ThemeRaclette.invertedButtonStyle,
-          onPressed: () async {
-            //TODO: proper contract selection
-            print(upperController.text);
-            print(lowerController.text);
-
-            // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
-
-            walletProvider.setPosition(
-                testContract,
-                walletProvider.address.string,
-                double.parse(upperController.text),
-                double.parse(lowerController.text),
-                min.value,
-                max.value);
-          },
-          child: Text(
-            'Submit',
-            style: ThemeRaclette.invertedButtonTextStyle,
-          ));
-    }
-    return ElevatedButton(
-        style: ThemeRaclette.invertedButtonStyle,
-        onPressed: () async {
-          await widget.provider.requestPermission();
-        },
-        child: Text(
-          'Connect Wallet',
-          style: ThemeRaclette.invertedButtonTextStyle,
-        ));
   }
 }

@@ -1,0 +1,69 @@
+[
+    {
+        "destination": "KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB",
+        "kind": "transaction",
+        "amount": 0,
+        "parameters": {
+            "entrypoint": "set_position",
+            "value": {
+                "prim": "Pair",
+                "args": [
+                    {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "prim": "Pair",
+                                "args": [
+                                    {
+                                        "int": "2665581460"
+                                    },
+                                    {
+                                        "int": "23305153642647820000"
+                                    }
+                                ]
+                            },
+                            {
+                                "prim": "Pair",
+                                "args": [
+                                    {
+                                        "int": "13863"
+                                    },
+                                    {
+                                        "int": "8"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "prim": "Pair",
+                                "args": [
+                                    {
+                                        "prim": "Pair",
+                                        "args": [
+                                            {
+                                                "int": "1100000000000000000"
+                                            },
+                                            {
+                                                "int": "5500000000000000000"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "int": "20795"
+                                    }
+                                ]
+                            },
+                            {
+                                "int": "16293"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+]
