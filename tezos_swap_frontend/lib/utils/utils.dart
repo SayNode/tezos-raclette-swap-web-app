@@ -17,32 +17,16 @@ double roundDouble(double value, int places) {
 
 //TODO: find better way
 fractionToFullToken(num amount, int decimals) {
-  print('------------');
-  print(decimals);
-  print(amount);
-  print('------------');
-  amount = amount.toDouble();
-  print('to double');
   String amountString = amount.toString();
-
-  int afterComma = 0;
-  if (amountString.contains('.')) {
-    afterComma = amountString.substring(amountString.indexOf('.')).length;
+  if (!amountString.contains('.')) {
+    amountString = amountString + '.0';
   }
-
-  String addedZeros = '';
-  amountString = amountString.replaceAll('.', '');
-
-  if (decimals - afterComma < 0) {
-    amountString = amountString.substring(
-        0, amountString.length - (afterComma - decimals - 1));
-  } else {
-    for (var i = 0; i < (decimals + 1) - afterComma; i++) {
-      addedZeros = '${addedZeros}0';
-    }
+  var list = amountString.split('.');
+  var nachKomma = list[1];
+  while (nachKomma.length < 18) {
+    nachKomma = nachKomma + '0';
   }
-
-  return BigInt.parse(amountString + addedZeros);
+  return BigInt.parse(list[0] + nachKomma);
 }
 
 // Future<String> forgeSwap(String adressX, String addressY) async {

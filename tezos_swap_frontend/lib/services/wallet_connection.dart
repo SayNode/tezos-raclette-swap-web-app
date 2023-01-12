@@ -28,6 +28,8 @@ class WalletProvider extends ChangeNotifier {
     if (yToX) {
       entrypoint = "y_to_x";
     }
+    print('Token X: $tokenX');
+    print(tokenX.runtimeType);
     BigInt x = fractionToFullToken(tokenX, 18);
     BigInt y = fractionToFullToken(tokenY, 18);
     _request({
@@ -87,24 +89,10 @@ class WalletProvider extends ChangeNotifier {
       ..last;
 
     var currentTick = await getCurrentTick(contract);
-    print('here');
     BigInt liquidity = await getLiquidity(yDouble, xDouble, lowerTick.toInt(),
         upperTick.toInt(), currentTick, 18);
-    print('got liquidity');
-    print(xDouble);
-    print(yDouble);
     BigInt x = fractionToFullToken(xDouble, 18);
     BigInt y = fractionToFullToken(yDouble, 18);
-    print('got x and y');
-
-    print('LowerWitness: ${lowerWitness.last}');
-    print('UpperWitness: ${upperWitness.last}');
-    print('Liquidity: $liquidity');
-    print('x: $x');
-    print('y: $y');
-    print('LowerTick: ${lowerTick.toInt()}');
-    print('UpperTick: ${upperTick.toInt()}');
-
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": signer,

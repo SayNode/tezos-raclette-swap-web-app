@@ -13,16 +13,16 @@ void main() {
       "id": "KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL",
       "name": "Youves YOU Governance",
       "symbol": "YOU",
-      "icon": "image/eth_logo.png",
-      "iconBlack": "image/eth_logo_black.png",
+      "icon": "image/Tezos_Logo_2022.png",
+      "iconBlack": "image/Tezos_Logo_2022_black.png",
       "tokenAddress": "KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL"
     });
     Token token2 = Token.fromJson({
       "id": "KT19y6R8x53uDKiM46ahgguS6Tjqhdj2rSzZ",
       "name": "Instaraise ",
       "symbol": "INSTA",
-      "icon": "image/eth_logo.png",
-      "iconBlack": "image/eth_logo_black.png",
+      "icon": "image/Tezos_Logo_2022.png",
+      "iconBlack": "image/Tezos_Logo_2022_black.png",
       "tokenAddress": "KT19y6R8x53uDKiM46ahgguS6Tjqhdj2rSzZ"
     });
 
@@ -39,8 +39,8 @@ void main() {
       "id": "KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL",
       "name": "Youves YOU Governance",
       "symbol": "YOU",
-      "icon": "image/eth_logo.png",
-      "iconBlack": "image/eth_logo_black.png",
+      "icon": "image/Tezos_Logo_2022.png",
+      "iconBlack": "image/Tezos_Logo_2022_black.png",
       "tokenAddress": "KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL"
     });
 
@@ -54,8 +54,8 @@ void main() {
       "id": "tezos",
       "name": "Tezos",
       "symbol": "XTZ",
-      "icon": "image/eth_logo.png",
-      "iconBlack": "image/eth_logo_black.png",
+      "icon": "image/Tezos_Logo_2022.png",
+      "iconBlack": "image/Tezos_Logo_2022_black.png",
       "tokenAddress": ""
     });
 
@@ -69,16 +69,16 @@ void main() {
       "id": "tezos",
       "name": "Tezos",
       "symbol": "XTZ",
-      "icon": "image/eth_logo.png",
-      "iconBlack": "image/eth_logo_black.png",
+      "icon": "image/Tezos_Logo_2022.png",
+      "iconBlack": "image/Tezos_Logo_2022_black.png",
       "tokenAddress": ""
     });
     Token token2 = Token.fromJson({
       "id": "KT19y6R8x53uDKiM46ahgguS6Tjqhdj2rSzZ",
       "name": "Instaraise ",
       "symbol": "INSTA",
-      "icon": "image/eth_logo.png",
-      "iconBlack": "image/eth_logo_black.png",
+      "icon": "image/Tezos_Logo_2022.png",
+      "iconBlack": "image/Tezos_Logo_2022_black.png",
       "tokenAddress": "KT19y6R8x53uDKiM46ahgguS6Tjqhdj2rSzZ"
     });
 

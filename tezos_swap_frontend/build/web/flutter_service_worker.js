@@ -3,10 +3,10 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "f1612d3f2f3d1fa09295b3d6b22727f7",
+  "assets/AssetManifest.json": "daa60a514be6171ec11975d6d5543691",
 "assets/assets/data/contracts.json": "da8692e68c2c5d61e78aceef59eda1f2",
-"assets/assets/data/error.json": "ff705b2dd90a90d53e2be129898e3e6d",
-"assets/assets/data/token.json": "f368ca75647d9688891c973f3897976c",
+"assets/assets/data/error.json": "b060e5c5d33149ea6fb4123bdd083cbd",
+"assets/assets/data/token.json": "357be937c5c4287df414834f4e3ac9af",
 "assets/assets/image/BG%2520(0).jpg": "c4431049959227b889b535d95c8e21e3",
 "assets/assets/image/BG%2520(1).jpg": "57a15be9991bfc77bbac61db384755b8",
 "assets/assets/image/BG%2520(10).jpg": "5a41f3453bea23cff079ece2e61c29fe",
@@ -29,6 +29,7 @@ const RESOURCES = {
 "assets/assets/image/logo_medium.png": "2b3c6bc39956d51e0cee5ff70d5a08c1",
 "assets/assets/image/logo_medium_1.png": "677a0490e47a6fbd0f553c0a81f35e22",
 "assets/assets/image/Logo_w.png": "eccd640fa5a318a5681fc198c27c1ccf",
+"assets/assets/image/Tezos_Logo_2022.png": "9499621c14f07205d264c420f895d76c",
 "assets/assets/translations/de.json": "6e23c7bd4b485627ba319067aeab249a",
 "assets/assets/translations/en.json": "37b8e6058195a2296689d16da3b14a09",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
@@ -50,9 +51,9 @@ const RESOURCES = {
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "190aac35928cdc895eea8c89c9ebd080",
-"/": "190aac35928cdc895eea8c89c9ebd080",
-"main.dart.js": "e27608d927fd3c2980798b2feccce799",
+"index.html": "559a1257209030cebbc3385e8f913912",
+"/": "559a1257209030cebbc3385e8f913912",
+"main.dart.js": "0f31edf9b70d458d7769c4f54c4f203e",
 "manifest.json": "e78302696d1b47a98d35c18570d45684",
 "sodium.js": "4652c40c29e6140369a6deca42ebb770",
 "version.json": "813a653185f1a7e92235b092db779f98"

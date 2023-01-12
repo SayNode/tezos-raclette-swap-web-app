@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart';
 
 import '../../services/new_position_service.dart';
@@ -97,23 +96,7 @@ class PositionsCard extends StatelessWidget {
                                                 ],
                                               ),
                                             ),
-                                          )
-
-                                      // Container(
-                                      //       color: Colors.green,
-                                      //       child: Row(
-                                      //         mainAxisSize: MainAxisSize.min,
-                                      //         children: [
-                                      //           Text(
-                                      //               'Min: ${snapshot.data![index]['value']['lower_tick_index']}, '),
-                                      //           Text(
-                                      //               'Max: ${snapshot.data![index]['value']['upper_tick_index']}, '),
-                                      //           Text(
-                                      //               'Liquidity: ${snapshot.data![index]['value']['liquidity']}'),
-                                      //         ],
-                                      //       ),
-                                      //     )
-                                      ),
+                                          )),
                                 );
                               } else {
                                 return const Text('Empty data');
