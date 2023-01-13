@@ -27405,11 +27405,11 @@ s=1
 break
 case 1:return A.U(q,r)}})
 return A.V($async$atQ,r)},
-aSX(a,b,c,d,e,f){var s,r,q=Math.pow(1.0001,e),p=Math.pow(1.0001,c),o=Math.pow(1.0001,d)
-if(q<p)return A.r5(b/(1/Math.sqrt(p)-1/Math.sqrt(o)),f)
-else if(o<q)return A.r5(a/(Math.sqrt(o)-Math.sqrt(p)),f)
-else{s=A.r5(b*(Math.sqrt(o)*Math.sqrt(q)/(Math.sqrt(o)-Math.sqrt(q))),f)
-r=A.r5(a/(Math.sqrt(q)-Math.sqrt(p)),f)
+aSX(a,b,c,d,e,f){var s,r,q=Math.pow(1.0001,e)
+if(q<c)return A.r5(b/(1/Math.sqrt(c)-1/Math.sqrt(d)),f)
+else if(d<q)return A.r5(a/(Math.sqrt(d)-Math.sqrt(c)),f)
+else{s=A.r5(b*(Math.sqrt(d)*Math.sqrt(q)/(Math.sqrt(d)-Math.sqrt(q))),f)
+r=A.r5(a/(Math.sqrt(q)-Math.sqrt(c)),f)
 if(s.aT(0,r)<0)return s
 else return r}},
 a11(a){var s=0,r=A.W(t.z),q,p,o,n
@@ -94712,38 +94712,40 @@ A.TC.prototype={
 FM(a){var s=t.N,r=t.z
 this.vu(A.aa(["type","PERMISSION_REQUEST","network","ghostnet","appMeta",A.aa(["name","TezosSwap"],s,s),"force",!0],r,r))},
 nM(a,b,c,d,e,f,g){return this.TU(0,b,c,d,e,f,g)},
-TU(a0,a1,a2,a3,a4,a5,a6){var s=0,r=A.W(t.z),q=this,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a
-var $async$nM=A.X(function(a7,a8){if(a7===1)return A.T(a8,r)
+TU(a2,a3,a4,a5,a6,a7,a8){var s=0,r=A.W(t.z),q=this,p,o,n,m,l,k,j,i,h,g,f,e,d,c,b,a,a0,a1
+var $async$nM=A.X(function(a9,b0){if(a9===1)return A.T(b0,r)
 while(true)switch(s){case 0:s=2
-return A.Y(A.atU(a1),$async$nM)
-case 2:f=a8
-e=Math.log(a5)/Math.log(1.0001)
-d=Math.log(a6)/Math.log(1.0001)
-c=J.c4(f)
-b=c.iw(f,new A.akC(e))
-a=A.aH(b,!0,b.$ti.i("q.E"))
-B.c.dk(a)
-B.c.gY(a)
-c=c.iw(f,new A.akD(d))
-p=A.aH(c,!0,c.$ti.i("q.E"))
+return A.Y(A.atU(a3),$async$nM)
+case 2:i=b0
+h=Math.log(a7)/Math.log(1.0001)
+g=Math.log(a8)/Math.log(1.0001)
+f=J.c4(i)
+e=f.iw(i,new A.akC(h))
+d=A.aH(e,!0,e.$ti.i("q.E"))
+B.c.dk(d)
+B.c.gY(d)
+f=f.iw(i,new A.akD(g))
+p=A.aH(f,!0,f.$ti.i("q.E"))
 B.c.dk(p)
 B.c.gY(p)
-s=3
-return A.Y(A.atQ(a1),$async$nM)
-case 3:o=a8
-c=B.d.bd(e)
-b=B.d.bd(d)
+c=A
+b=a6
+a=a5
+a0=a7
+a1=a8
 s=4
-return A.Y(A.aSX(a4,a3,c,b,o,18),$async$nM)
-case 4:n=a8
-m=A.r5(a3,18)
-l=A.r5(a4,18)
-k=t.N
-j=t.SN
-i=t.K
-h=t.Mq
-g=t.z
-q.vu(A.aa(["type","OPERATION_REQUEST","sourcePkh",a2,"opParams",A.b([A.aa(["kind","transaction","to",a1,"amount",0,"mutez",!0,"parameter",A.aa(["entrypoint","set_position","value",A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["int","2665581460"],k,k),A.aa(["int",n.j(0)],k,k)],j)],k,i),A.aa(["prim","Pair","args",A.b([A.aa(["int",""+c],k,k),A.aa(["int","-1048575"],k,k)],j)],k,i)],h)],k,i),A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["int",m.j(0)],k,k),A.aa(["int",l.j(0)],k,k)],j)],k,i),A.aa(["int",""+b],k,k)],h)],k,i),A.aa(["int",A.i(B.c.gY(p))],k,k)],h)],k,i)],h)],k,i)],k,i)],k,i)],h)],g,g))
+return A.Y(A.atQ(a3),$async$nM)
+case 4:s=3
+return A.Y(c.aSX(b,a,a0,a1,b0,18),$async$nM)
+case 3:o=b0
+n=A.r5(a5,18)
+m=A.r5(a6,18)
+f=t.N
+e=t.SN
+l=t.K
+k=t.Mq
+j=t.z
+q.vu(A.aa(["type","OPERATION_REQUEST","sourcePkh",a4,"opParams",A.b([A.aa(["kind","transaction","to",a3,"amount",0,"mutez",!0,"parameter",A.aa(["entrypoint","set_position","value",A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["int","2665581460"],f,f),A.aa(["int",o.j(0)],f,f)],e)],f,l),A.aa(["prim","Pair","args",A.b([A.aa(["int",""+B.d.bd(h)],f,f),A.aa(["int","-1048575"],f,f)],e)],f,l)],k)],f,l),A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["prim","Pair","args",A.b([A.aa(["int",n.j(0)],f,f),A.aa(["int",m.j(0)],f,f)],e)],f,l),A.aa(["int",""+B.d.bd(g)],f,f)],k)],f,l),A.aa(["int",A.i(B.c.gY(p))],f,f)],k)],f,l)],k)],f,l)],f,l)],f,l)],k)],j,j))
 return A.U(null,r)}})
 return A.V($async$nM,r)},
 FI(a,b){return this.aiU(a,b)},

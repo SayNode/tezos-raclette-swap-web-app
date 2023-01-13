@@ -173,12 +173,9 @@ getCurrentTick(String contract) async {
   return int.parse(map['cur_tick_index']);
 }
 
-getLiquidity(double y, double x, int lowerTick, int upperTick, int currentTick,
-    int decimals) {
+getLiquidity(
+    double y, double x, int pl, int pu, int currentTick, int decimals) {
   var pc = pow(1.0001, currentTick);
-  var pl = pow(1.0001, lowerTick);
-  var pu = pow(1.0001, upperTick);
-
   if (pc < pl) {
     // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pc))   )
     return fractionToFullToken(x / ((1 / sqrt(pl)) - (1 / sqrt(pu))), decimals);

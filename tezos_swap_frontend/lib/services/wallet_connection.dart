@@ -90,8 +90,8 @@ class WalletProvider extends ChangeNotifier {
 
     var currentTick = await getCurrentTick(contract);
 
-    BigInt liquidity = await getLiquidity(yDouble, xDouble, lowerTick.toInt(),
-        upperTick.toInt(), currentTick, 18);
+    BigInt liquidity = await getLiquidity(
+        yDouble, xDouble, lowerPrice, upperPrice, currentTick, 18);
 
     BigInt x = fractionToFullToken(xDouble, 18);
     BigInt y = fractionToFullToken(yDouble, 18);
