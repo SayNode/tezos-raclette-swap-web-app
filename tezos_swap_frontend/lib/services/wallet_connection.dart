@@ -91,7 +91,7 @@ class WalletProvider extends ChangeNotifier {
     var currentTick = await getCurrentTick(contract);
 
     BigInt liquidity = await getLiquidity(
-        yDouble, xDouble, lowerPrice, upperPrice, currentTick, 18);
+        xDouble, yDouble, lowerPrice, upperPrice, currentTick, 18);
 
     BigInt x = fractionToFullToken(xDouble, 18);
     BigInt y = fractionToFullToken(yDouble, 18);
@@ -123,7 +123,7 @@ class WalletProvider extends ChangeNotifier {
                       "prim": "Pair",
                       "args": [
                         {"int": "${lowerTick.toInt()}"},
-                        {"int": '-1048575'}
+                        {"int": "${lowerWitness.last}"}
                       ]
                     }
                   ]

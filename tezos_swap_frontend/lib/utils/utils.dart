@@ -16,17 +16,37 @@ double roundDouble(double value, int places) {
 }
 
 //TODO: find better way
-fractionToFullToken(num amount, int decimals) {
-  String amountString = amount.toString();
-  if (!amountString.contains('.')) {
-    amountString = amountString + '.0';
+fractionToFullToken(num ether, int decimals) {
+  String numString = ether.toStringAsFixed(18);
+  List<String> numParts = [];
+
+  //Check if string has decimals
+  if (numString.contains('.')) {
+    numParts = numString.split('.');
+  } else {
+    numParts.add(ether.toString());
   }
-  var list = amountString.split('.');
-  var nachKomma = list[1];
-  while (nachKomma.length < 18) {
-    nachKomma = nachKomma + '0';
+
+  if (numParts.length == 2) {
+    List<int> splitnums1 = numParts[0].split('').map(int.parse).toList();
+    List<int> splitnums2 = numParts[1].split('').map(int.parse).toList();
+    if (splitnums2.length > decimals) {
+      while (splitnums2.length > decimals) {
+        splitnums2.removeLast();
+      }
+    } else {
+      while (splitnums2.length < decimals) {
+        splitnums2.add(0);
+      }
+    }
+    return BigInt.parse((splitnums1 + splitnums2).join(''));
+  } else {
+    List<int> splitnums = numParts[0].split('').map(int.parse).toList();
+    for (var i = 0; i < decimals; i++) {
+      splitnums.add(0);
+    }
+    return BigInt.parse(splitnums.join(''));
   }
-  return BigInt.parse(list[0] + nachKomma);
 }
 
 // Future<String> forgeSwap(String adressX, String addressY) async {
@@ -173,20 +193,25 @@ getCurrentTick(String contract) async {
   return int.parse(map['cur_tick_index']);
 }
 
+extension TruncateDoubles on double {
+   double truncateToDecimalPlaces(int fractionalDigits) => (this * pow(10, 
+     fractionalDigits)).truncate() / pow(10, fractionalDigits);
+}
+
 getLiquidity(
-    double y, double x, int pl, int pu, int currentTick, int decimals) {
+    double x, double y, int pl, int pu, int currentTick, int decimals) {
   var pc = pow(1.0001, currentTick);
   if (pc < pl) {
     // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pc))   )
-    return fractionToFullToken(x / ((1 / sqrt(pl)) - (1 / sqrt(pu))), decimals);
+    return fractionToFullToken((x / ((1 / sqrt(pl)) - (1 / sqrt(pu)))).truncateToDecimalPlaces(14), decimals);
   } else if (pu < pc) {
     //Liq= dy/( sqrt(Pc) - sqrt(Pl) )
-    return fractionToFullToken(y / (sqrt(pu) - sqrt(pl)), decimals);
+    return fractionToFullToken((y / (sqrt(pu) - sqrt(pl))).truncateToDecimalPlaces(14), decimals);
   } else {
     var xLiquidity = fractionToFullToken(
-        (x * ((sqrt(pu) * sqrt(pc)) / (sqrt(pu) - sqrt(pc)))), decimals);
+        (x * ((sqrt(pu) * sqrt(pc)) / (sqrt(pu) - sqrt(pc)))).truncateToDecimalPlaces(14), decimals);
     var yLiquidity =
-        fractionToFullToken(((y) / (sqrt(pc) - sqrt(pl))), decimals);
+        fractionToFullToken(((y) / (sqrt(pc) - sqrt(pl))).truncateToDecimalPlaces(14), decimals);
     if (xLiquidity < yLiquidity) {
       return xLiquidity;
     } else {
