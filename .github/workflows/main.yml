@@ -3,13 +3,13 @@ name: Upload Website
 on:
   push:
     branches:
-    - production
+    - development
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@production
+    - uses: actions/checkout@development
     - uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl public-read --follow-symlinks --delete --exclude '.git*/*'
