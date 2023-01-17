@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../models/chart_datapoint.dart';
 import '../models/token.dart';
-import '../repositories/contract_repo.dart';
-import '../repositories/token_repo.dart';
+import '../services/contract_service.dart';
+import '../services/token_service.dart';
 import 'globals.dart' as global;
 
 double roundDouble(double value, int places) {
@@ -274,11 +274,11 @@ Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
 }
 
 List<Token> getContractTokens(String contractAddress) {
-  var contracts = Get.put(ContractRepository()).contracts;
+  var contracts = Get.put(ContractService()).contracts;
   var contract =
       contracts.firstWhere((element) => element.address == contractAddress);
   List<Token> tokens = [];
-  var tokenRepo = Get.put(TokenRepository()).tokens;
+  var tokenRepo = Get.put(TokenService()).tokens;
   tokens.addAll(tokenRepo.where((element) =>
       element.tokenAddress == contract.tokenX ||
       element.tokenAddress == contract.tokenY));

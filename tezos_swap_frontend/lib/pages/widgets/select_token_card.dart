@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import '../../main.dart';
 import '../../models/token.dart';
-import '../../repositories/token_repo.dart';
+import '../../services/token_service.dart';
 import '../../theme/ThemeRaclette.dart';
 
 class SelectTokenCard extends StatefulWidget {
@@ -14,7 +12,7 @@ class SelectTokenCard extends StatefulWidget {
 }
 
 class _SelectTokenCardState extends State<SelectTokenCard> {
-  TokenRepository tokenRepository = getIt.get<TokenRepository>();
+  TokenService tokenService = getIt.get<TokenService>();
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -45,7 +43,7 @@ class _SelectTokenCardState extends State<SelectTokenCard> {
                   height: 20,
                 ),
                 FutureBuilder<List<Token>>(
-                    future: tokenRepository.loadTokens(),
+                    future: tokenService.loadTokens(),
                     builder: (BuildContext context,
                         AsyncSnapshot<List<Token>> snapshot) {
                       if (!snapshot.hasData) {

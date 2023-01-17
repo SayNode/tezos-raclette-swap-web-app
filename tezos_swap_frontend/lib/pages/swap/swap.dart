@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
-import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
+import 'package:tezos_swap_frontend/services/contract_service.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
@@ -28,6 +28,7 @@ class _SwapState extends State<Swap> {
   bool tokenPairSelected = false;
   final tokenProvider1 = TokenProvider();
   final tokenProvider2 = TokenProvider();
+  var contracts = Get.put(ContractService()).contracts;
   //mock ratio
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,7 @@ class _SwapState extends State<Swap> {
     if (address.isNotEmpty) {
       if (tokenProvider1.token != null &&
           tokenProvider2.token != null &&
-          contracts!.any((element) =>
+          contracts.any((element) =>
               element.tokenX == tokenProvider1.token!.tokenAddress &&
                   element.tokenY == tokenProvider2.token!.tokenAddress ||
               element.tokenX == tokenProvider2.token!.tokenAddress &&
@@ -130,7 +131,7 @@ class _SwapState extends State<Swap> {
         if (upperController.text.isNotEmpty &&
             double.parse(upperController.text) != 0) {
           bool yToX = false;
-          if (contracts!.any((element) =>
+          if (contracts.any((element) =>
               element.tokenX == tokenProvider2.token!.tokenAddress &&
               element.tokenY == tokenProvider1.token!.tokenAddress)) {
             yToX = true;
