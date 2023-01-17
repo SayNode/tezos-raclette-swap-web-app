@@ -107,8 +107,8 @@ class _SwapState extends State<Swap> {
                                   first: tokenProvider1,
                                   second: tokenProvider2,
                                   builder: ((context, a, b, child) => Obx(() =>
-                                      _connectWallet(
-                                          widget.walletService.address.string)))))),
+                                      _connectWallet(widget
+                                          .walletService.address.string)))))),
                 ],
               ),
             ),
@@ -148,7 +148,9 @@ class _SwapState extends State<Swap> {
                     widget.walletService.address.string,
                     double.parse(upperController.text),
                     double.parse(lowerController.text),
-                    yToX: yToX);
+                    yToX: yToX,
+                    tokenProvider1.token!.tokenAddress,
+                    tokenProvider2.token!.tokenAddress);
               },
               child: Text(
                 'Swap',

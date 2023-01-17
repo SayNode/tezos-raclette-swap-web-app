@@ -8,10 +8,53 @@ import 'package:tezos_swap_frontend/utils/globals.dart' as global;
 import 'package:tezos_swap_frontend/utils/utils.dart';
 
 import '../models/contract_model.dart';
+import '../pages/widgets/card_route.dart';
+import '../pages/widgets/select_token_card.dart';
+import '../theme/ThemeRaclette.dart';
 
 class WalletService extends GetxService {
   RxString address = ''.obs;
   RxBool connected = false.obs;
+
+  authorize(String tokenContract, String swapContract) async {
+    bool isOp =
+        await checkIfOperator(tokenContract, address.value, swapContract);
+
+    if (isOp) {
+      String id = nanoid();
+      html.window.addEventListener("message", (event) {
+        final evt = (event as html.MessageEvent);
+        if (evt.source == html.window &&
+            evt.data['reqId'] == id &&
+            evt.data['type'] == 'TEMPLE_PAGE_RESPONSE') {
+          Get.close(1);
+        }
+      }, true);
+      var done = await Navigator.of(Get.context!).push(CardDialogRoute(
+          builder: (context) {
+            authorizeContract(tokenContract, swapContract, id);
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 400,
+                  height: 500,
+                  child: Card(
+                    color: ThemeRaclette.primaryStatic,
+                    shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: const Center(
+                      child: Text('Waiting for authorization.'),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          barrierDismissible: false));
+    }
+  }
 
   requestPermission() {
     _request({
@@ -24,15 +67,18 @@ class WalletService extends GetxService {
 
 //FIXME: might be problems with tokenx and y amount calculation
   swap(String contract, String recipient, double tokenX, double tokenY,
+      String tokenXAddress, String tokenYAddress,
       {bool yToX = false}) {
     String entrypoint = "x_to_y";
     if (yToX) {
       entrypoint = "y_to_x";
     }
+    authorize(contract, tokenXAddress);
+    authorize(contract, tokenYAddress);
     print('Token X: $tokenX');
     print(tokenX.runtimeType);
-    BigInt x = fractionToFullToken(tokenX, 18);
-    BigInt y = fractionToFullToken(tokenY, 18);
+    BigInt x = etherToWei(tokenX, 18);
+    BigInt y = etherToWei(tokenY, 18);
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": recipient,
@@ -78,7 +124,11 @@ class WalletService extends GetxService {
     double yDouble,
     int lowerPrice,
     int upperPrice,
+    String tokenXAddress,
+    String tokenYAddress,
   ) async {
+    authorize(contract, tokenXAddress);
+    authorize(contract, tokenYAddress);
     var ticks = await getTicks(contract);
     var lowerTick = logBase(lowerPrice, 1.0001);
     var upperTick = logBase(upperPrice, 1.0001);
@@ -94,8 +144,8 @@ class WalletService extends GetxService {
     BigInt liquidity = await getLiquidity(
         yDouble, xDouble, lowerPrice, upperPrice, currentTick, 18);
 
-    BigInt x = fractionToFullToken(xDouble, 18);
-    BigInt y = fractionToFullToken(yDouble, 18);
+    BigInt x = etherToWei(xDouble, 18);
+    BigInt y = etherToWei(yDouble, 18);
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": signer,
@@ -157,45 +207,7 @@ class WalletService extends GetxService {
   }
 
   authorizeContract(
-      String tokenContract, String swapContract, String signer) async {
-    _request({
-      "type": "OPERATION_REQUEST",
-      "sourcePkh": signer,
-      "opParams": [
-        {
-          "kind": "transaction",
-          "to": tokenContract,
-          "amount": 0,
-          "mutez": true,
-          "parameter": {
-            "entrypoint": "update_operators",
-            "value": [
-              {
-                "prim": "Left",
-                "args": [
-                  {
-                    "prim": "Pair",
-                    "args": [
-                      {"string": signer},
-                      {
-                        "prim": "Pair",
-                        "args": [
-                          {"string": swapContract},
-                          {"int": "0"}
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      ]
-    });
-  }
-
-  authorizeContract2(String tokenContract, String swapContract) async {
+      String tokenContract, String swapContract, String id) async {
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf',
@@ -230,7 +242,7 @@ class WalletService extends GetxService {
           }
         }
       ]
-    });
+    }, id: id);
   }
 
   removePosition(String contract, Map position) async {
@@ -292,8 +304,8 @@ class WalletService extends GetxService {
     });
   }
 
-  _request(Map payload) {
-    String id = nanoid();
+  _request(Map payload, {String? id}) {
+    id ??= nanoid();
     var msg = {'type': 'TEMPLE_PAGE_REQUEST', 'payload': payload, 'reqId': id};
     html.window.postMessage(msg, "*");
 

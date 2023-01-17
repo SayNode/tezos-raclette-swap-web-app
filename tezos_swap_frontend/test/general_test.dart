@@ -5,7 +5,7 @@ import 'package:tezos_swap_frontend/utils/utils.dart';
 
 void main() {
   test('small to full test', () {
-    var a = fractionToFullToken(0.1234567, 5);
+    var a = etherToWei(0.1234567, 5);
     print(a);
   });
 }

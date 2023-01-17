@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
@@ -27,12 +29,18 @@ class _VotePageState extends State<VotePage> {
           decoration: BoxDecoration(
               color: ThemeRaclette.black,
               borderRadius: BorderRadius.circular(12)),
-          child: const Center(
-            child:  Text(
-              'coming soon...',
-              style: TextStyle(fontSize: 24),
-            ),
-          )),
+          child: Center(
+              child: ElevatedButton(
+                  onPressed: () async {
+                    await Get.put(WalletService()).authorize('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+                        // .authorizeContract('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+                  },
+                  child: Text('test'))
+              // Text(
+              //   'coming soon...',
+              //   style: TextStyle(fontSize: 24),
+              // ),
+              )),
     );
   }
 }

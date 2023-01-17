@@ -555,7 +555,9 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                                     double.parse(
                                                         lowerController.text),
                                                     min.value,
-                                                    max.value);
+                                                    max.value,
+                                                    token1.token!.tokenAddress,
+                                                    token2.token!.tokenAddress);
                                               },
                                               child: Text(
                                                 'Submit',
