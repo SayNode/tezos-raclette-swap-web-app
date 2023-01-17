@@ -3,7 +3,7 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "0090b7438776858a9e1a841120f1ef91",
+  "assets/AssetManifest.json": "c2f5812524541e5cd638383c5e1dedfc",
 "assets/assets/data/contracts.json": "da8692e68c2c5d61e78aceef59eda1f2",
 "assets/assets/data/token.json": "357be937c5c4287df414834f4e3ac9af",
 "assets/assets/image/BG%2520(0).jpg": "c4431049959227b889b535d95c8e21e3",
@@ -33,13 +33,9 @@ const RESOURCES = {
 "assets/assets/translations/en.json": "37b8e6058195a2296689d16da3b14a09",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "95db9098c58fd6db106f1116bae85a0b",
-"assets/NOTICES": "66a10adaae839298ce46b2256fdc8a1e",
+"assets/NOTICES": "01b8322a186b8a14170c822ad1f1bf41",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
-"assets/packages/easy_localization/i18n/ar-DZ.json": "acc0a8eebb2fcee312764600f7cc41ec",
-"assets/packages/easy_localization/i18n/ar.json": "acc0a8eebb2fcee312764600f7cc41ec",
-"assets/packages/easy_localization/i18n/en-US.json": "5f5fda8715e8bf5116f77f469c5cf493",
-"assets/packages/easy_localization/i18n/en.json": "5f5fda8715e8bf5116f77f469c5cf493",
-"assets/shaders/ink_sparkle.frag": "ea069b3696bd7d3013e627bbf48994ec",
+"assets/shaders/ink_sparkle.frag": "ca43c9112596ec461174ab1e74530b18",
 "canvaskit/canvaskit.js": "2bc454a691c631b07a9307ac4ca47797",
 "canvaskit/canvaskit.wasm": "bf50631470eb967688cca13ee181af62",
 "canvaskit/profiling/canvaskit.js": "38164e5a72bdad0faa4ce740c9b8e564",
@@ -50,9 +46,9 @@ const RESOURCES = {
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "8558b563b1a37844918d39e994beb1f8",
-"/": "8558b563b1a37844918d39e994beb1f8",
-"main.dart.js": "70b9a776e127dbd0ded89406fecf88a3",
+"index.html": "ea9f5bb4a6a7626e862170776e44ccc6",
+"/": "ea9f5bb4a6a7626e862170776e44ccc6",
+"main.dart.js": "be51b878075a92213f995bc2c9ac3543",
 "manifest.json": "e78302696d1b47a98d35c18570d45684",
 "sodium.js": "4652c40c29e6140369a6deca42ebb770",
 "version.json": "813a653185f1a7e92235b092db779f98"

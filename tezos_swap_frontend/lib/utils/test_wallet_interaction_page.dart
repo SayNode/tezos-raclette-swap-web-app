@@ -14,7 +14,7 @@ class TestWalletInteraction extends StatefulWidget {
 }
 
 class _TestWalletInteractionState extends State<TestWalletInteraction> {
-  final provider = WalletProvider();
+  final provider = Get.put(WalletService());
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,9 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
                     double.parse('100000000000000000000'),
                     double.parse('100000000000000000000'),
                     1,
-                    20);
+                    20,
+                    'KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7',
+                    'KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA');
               },
               child: Text('Test set_position')),
           SizedBox(
@@ -64,8 +66,13 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           Text('swap 10x for min 1y'),
           ElevatedButton(
               onPressed: () async {
-                await provider.swap('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7',
-                    provider.address.string, 10, 1);
+                await provider.swap(
+                    'KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7',
+                    provider.address.string,
+                    10,
+                    1,
+                    'KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7',
+                    'KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA');
               },
               child: Text('swap x->y')),
           SizedBox(
@@ -74,20 +81,16 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
           Text('swap 10y for min 1x'),
           ElevatedButton(
               onPressed: () async {
-                await provider.swap('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
-                    provider.address.string, 1, 10,
-                    yToX: true);
+                await provider.swap(
+                    'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
+                    provider.address.string,
+                    1,
+                    10,
+                    yToX: true,
+                    'KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7',
+                    'KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA');
               },
               child: Text('swap y->x')),
-          ElevatedButton(
-              onPressed: () async {
-                var a = await walletProvider.authorizeContract(
-                    'KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA',
-                    'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
-                    'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf');
-                print('-------> $a');
-              },
-              child: Text('Test'))
         ],
       )),
     );

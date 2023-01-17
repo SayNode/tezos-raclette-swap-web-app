@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/pool/controllers/positions_controller.dart';
+import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart';
 
 import '../../services/new_position_service.dart';
@@ -13,6 +14,7 @@ class PositionsCard extends GetView<PositionsController> {
   @override
   Widget build(BuildContext context) {
     Get.put(PositionsController());
+    var walletProvider = Get.put(WalletService());
     return Center(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),

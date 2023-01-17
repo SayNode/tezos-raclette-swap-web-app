@@ -3,7 +3,7 @@ import 'package:flutter/services.dart' as root_bundle;
 import 'package:get/get.dart';
 import '../models/token.dart';
 
-class TokenRepository extends GetxService{
+class TokenService extends GetxService{
   late List<Token> _tokens;
 
   List<Token> get tokens => _tokens;

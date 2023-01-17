@@ -17,10 +17,8 @@ import 'package:syncfusion_flutter_core/core.dart';
 import '../../utils/globals.dart';
 
 class NewPositionCard extends StatefulWidget {
-  final WalletProvider provider;
   const NewPositionCard({
     Key? key,
-    required this.provider,
   }) : super(key: key);
 
   @override
@@ -41,7 +39,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
   RangeController rangeController = RangeController(start: 5, end: 11);
 //mock ratio
   double tokenRatio = 2;
-
+  var walletService = Get.put(WalletService());
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -538,8 +536,8 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                     child: SizedBox(
                                       width: 400,
                                       height: 60,
-                                      child: Obx(() => (widget.provider.address
-                                              .string.isNotEmpty)
+                                      child: Obx(() => (walletService
+                                              .address.string.isNotEmpty)
                                           ? ElevatedButton(
                                               style: ThemeRaclette
                                                   .invertedButtonStyle,
@@ -548,16 +546,18 @@ class _NewPositionCardState extends State<NewPositionCard> {
 
                                                 // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
 
-                                                walletProvider.setPosition(
+                                                walletService.setPosition(
                                                     testContract,
-                                                    walletProvider
+                                                    walletService
                                                         .address.string,
                                                     double.parse(
                                                         upperController.text),
                                                     double.parse(
                                                         lowerController.text),
                                                     min.value,
-                                                    max.value);
+                                                    max.value,
+                                                    token1.token!.tokenAddress,
+                                                    token2.token!.tokenAddress);
                                               },
                                               child: Text(
                                                 'Submit',
@@ -568,7 +568,7 @@ class _NewPositionCardState extends State<NewPositionCard> {
                                               style: ThemeRaclette
                                                   .invertedButtonStyle,
                                               onPressed: () async {
-                                                await widget.provider
+                                                await walletService
                                                     .requestPermission();
                                               },
                                               child: Text(

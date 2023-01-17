@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
-import 'package:tezos_swap_frontend/repositories/contract_repo.dart';
+import 'package:tezos_swap_frontend/services/contract_service.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
@@ -12,10 +12,9 @@ import '../../utils/globals.dart';
 import '../../utils/value_listenable2.dart';
 
 class Swap extends StatefulWidget {
-  final WalletProvider provider;
-  const Swap({
+  var walletService = Get.put(WalletService());
+  Swap({
     Key? key,
-    required this.provider,
   }) : super(key: key);
 
   @override
@@ -28,6 +27,7 @@ class _SwapState extends State<Swap> {
   bool tokenPairSelected = false;
   final tokenProvider1 = TokenProvider();
   final tokenProvider2 = TokenProvider();
+  var contracts = Get.put(ContractService()).contracts;
   //mock ratio
   @override
   Widget build(BuildContext context) {
@@ -107,8 +107,8 @@ class _SwapState extends State<Swap> {
                                   first: tokenProvider1,
                                   second: tokenProvider2,
                                   builder: ((context, a, b, child) => Obx(() =>
-                                      _connectWallet(
-                                          walletProvider.address.string)))))),
+                                      _connectWallet(widget
+                                          .walletService.address.string)))))),
                 ],
               ),
             ),
@@ -122,7 +122,7 @@ class _SwapState extends State<Swap> {
     if (address.isNotEmpty) {
       if (tokenProvider1.token != null &&
           tokenProvider2.token != null &&
-          contracts!.any((element) =>
+          contracts.any((element) =>
               element.tokenX == tokenProvider1.token!.tokenAddress &&
                   element.tokenY == tokenProvider2.token!.tokenAddress ||
               element.tokenX == tokenProvider2.token!.tokenAddress &&
@@ -130,7 +130,7 @@ class _SwapState extends State<Swap> {
         if (upperController.text.isNotEmpty &&
             double.parse(upperController.text) != 0) {
           bool yToX = false;
-          if (contracts!.any((element) =>
+          if (contracts.any((element) =>
               element.tokenX == tokenProvider2.token!.tokenAddress &&
               element.tokenY == tokenProvider1.token!.tokenAddress)) {
             yToX = true;
@@ -143,12 +143,14 @@ class _SwapState extends State<Swap> {
                 //         element.tokenY == tokenProvider2.token!.tokenAddress ||
                 //     element.tokenX == tokenProvider2.token!.tokenAddress &&
                 //         element.tokenY == tokenProvider1.token!.tokenAddress);
-                await widget.provider.swap(
+                await widget.walletService.swap(
                     testContract,
-                    walletProvider.address.string,
+                    widget.walletService.address.string,
                     double.parse(upperController.text),
                     double.parse(lowerController.text),
-                    yToX: yToX);
+                    yToX: yToX,
+                    tokenProvider1.token!.tokenAddress,
+                    tokenProvider2.token!.tokenAddress);
               },
               child: Text(
                 'Swap',
@@ -174,7 +176,7 @@ class _SwapState extends State<Swap> {
     return ElevatedButton(
         style: ThemeRaclette.invertedButtonStyle,
         onPressed: () async {
-          await widget.provider.requestPermission();
+          await widget.walletService.requestPermission();
         },
         child: Text(
           'Connect Wallet',
