@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/pool/new_position_card.dart';
+import 'package:tezos_swap_frontend/pages/pool/new_position_card2.dart';
 import 'package:tezos_swap_frontend/pages/pool/positions_card.dart';
 import 'package:tezos_swap_frontend/services/new_position_service.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
@@ -28,7 +29,7 @@ class _PoolCardState extends State<PoolCard> {
   Widget build(BuildContext context) {
     var provider = Get.put(WalletService());
     return Obx((() => (Get.put(NewPositionService()).newPosition.isTrue)
-        ? NewPositionCard()
+        ? NewPositionCard2()
         : PositionsCard()));
   }
 }
