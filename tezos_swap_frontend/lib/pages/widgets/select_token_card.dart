@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../main.dart';
 import '../../models/token.dart';
 import '../../services/token_service.dart';
@@ -12,7 +13,7 @@ class SelectTokenCard extends StatefulWidget {
 }
 
 class _SelectTokenCardState extends State<SelectTokenCard> {
-  TokenService tokenService = getIt.get<TokenService>();
+  TokenService tokenService = Get.put(TokenService());
   @override
   Widget build(BuildContext context) {
     return Center(

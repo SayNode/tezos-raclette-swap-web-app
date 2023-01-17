@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/pool/pools_card.dart';
 import 'package:tezos_swap_frontend/pages/swap/swap.dart';
 import 'package:tezos_swap_frontend/pages/vote/vote_page.dart';
-
 import '../services/balance_provider.dart';
+import '../services/wallet_connection.dart';
 import '../theme/ThemeRaclette.dart';
 import '../utils/globals.dart';
 import '../utils/utils.dart';
@@ -12,11 +12,11 @@ import 'controllers/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});
-  
 
   @override
   Widget build(BuildContext context) {
     Get.put(HomeController());
+    var walletService = Get.put(WalletService());
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -153,7 +153,8 @@ class HomePage extends GetView<HomeController> {
             Expanded(
                 child: Align(
               alignment: Alignment.centerRight,
-              child: Obx(() => _connectWallet(walletProvider.address.string)),
+              child:
+                  Obx(() => _connectWalletButton(walletService.address.string)),
             )),
           ],
         ),
@@ -177,8 +178,8 @@ class HomePage extends GetView<HomeController> {
           return IndexedStack(
             index: controller.index.value,
             children: [
-              Swap(provider: walletProvider),
-              PoolCard(provider: walletProvider),
+              Swap(),
+              PoolCard(),
               const VotePage()
             ],
           );
@@ -187,7 +188,7 @@ class HomePage extends GetView<HomeController> {
     );
   }
 
-  Widget _connectWallet(String address) {
+  Widget _connectWalletButton(String address) {
     if (address.isNotEmpty) {
       return Align(
         alignment: Alignment.centerRight,
@@ -229,7 +230,7 @@ class HomePage extends GetView<HomeController> {
       return ElevatedButton(
           style: ThemeRaclette.invertedButtonStyle,
           onPressed: () async {
-            await walletProvider.requestPermission();
+            await Get.put(WalletService()).requestPermission();
           },
           child: Padding(
             padding: const EdgeInsets.all(8.0),

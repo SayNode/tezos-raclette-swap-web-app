@@ -14,7 +14,7 @@ class TestWalletInteraction extends StatefulWidget {
 }
 
 class _TestWalletInteractionState extends State<TestWalletInteraction> {
-  final provider = WalletProvider();
+  final provider = Get.put(WalletService());
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +81,7 @@ class _TestWalletInteractionState extends State<TestWalletInteraction> {
               child: Text('swap y->x')),
           ElevatedButton(
               onPressed: () async {
-                var a = await walletProvider.authorizeContract(
+                var a = await provider.authorizeContract(
                     'KT1V6MLV1xN5yMhaF3jywm87Y4Vqi5fiPpxA',
                     'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB',
                     'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf');

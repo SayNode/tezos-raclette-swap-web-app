@@ -1,13 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
 import 'package:tezos_swap_frontend/models/token.dart';
 import 'package:tezos_swap_frontend/services/token_service.dart';
 import 'package:tezos_swap_frontend/services/price_provider.dart';
 
 void main() {
-  GetIt getIt = GetIt.instance;
-  getIt.registerSingleton<TokenService>(TokenService(),
-      signalsReady: true);
   test('test getPriceForMultiple', () async {
     Token token1 = Token.fromJson({
       "id": "KT1Xobej4mc6XgEjDoJoHtTKgbD1ELMvcQuL",

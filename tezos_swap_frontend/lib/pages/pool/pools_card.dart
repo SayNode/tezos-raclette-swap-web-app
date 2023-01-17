@@ -9,10 +9,8 @@ import 'package:tezos_swap_frontend/utils/globals.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
 
 class PoolCard extends StatefulWidget {
-  final WalletProvider provider;
   const PoolCard({
     Key? key,
-    required this.provider,
   }) : super(key: key);
 
   @override
@@ -28,8 +26,9 @@ class _PoolCardState extends State<PoolCard> {
 
   @override
   Widget build(BuildContext context) {
+    var provider = Get.put(WalletService());
     return Obx((() => (Get.put(NewPositionService()).newPosition.isTrue)
-        ? NewPositionCard(provider: widget.provider)
+        ? NewPositionCard()
         : PositionsCard()));
   }
 }

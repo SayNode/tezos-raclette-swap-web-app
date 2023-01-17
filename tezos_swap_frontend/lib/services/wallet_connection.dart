@@ -9,8 +9,9 @@ import 'package:tezos_swap_frontend/utils/utils.dart';
 
 import '../models/contract_model.dart';
 
-class WalletProvider extends ChangeNotifier {
+class WalletService extends GetxService {
   RxString address = ''.obs;
+  RxBool connected = false.obs;
 
   requestPermission() {
     _request({
@@ -302,7 +303,6 @@ class WalletProvider extends ChangeNotifier {
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_RESPONSE') {
         address.value = evt.data['payload']['pkh'];
-        notifyListeners();
       } else if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_ERROR_RESPONSE') {

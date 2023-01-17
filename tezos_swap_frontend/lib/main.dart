@@ -3,13 +3,10 @@ import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/home_page.dart';
 import 'package:tezos_swap_frontend/services/contract_service.dart';
 import 'package:tezos_swap_frontend/services/token_service.dart';
-import 'package:tezos_swap_frontend/services/wallet_service.dart';
+import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'localization/languages.dart';
-import 'package:get_it/get_it.dart';
 import 'theme/ThemeRaclette.dart';
-
-GetIt getIt = GetIt.instance;
 void main() async {
   //Remove # from URL
   setPathUrlStrategy();

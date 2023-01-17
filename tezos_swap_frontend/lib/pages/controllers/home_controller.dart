@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math';
-
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -15,4 +14,6 @@ class HomeController extends GetxController {
     });
     super.onInit();
   }
+
+
 }

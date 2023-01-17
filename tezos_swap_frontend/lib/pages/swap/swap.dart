@@ -12,10 +12,9 @@ import '../../utils/globals.dart';
 import '../../utils/value_listenable2.dart';
 
 class Swap extends StatefulWidget {
-  final WalletProvider provider;
-  const Swap({
+  var walletService = Get.put(WalletService());
+  Swap({
     Key? key,
-    required this.provider,
   }) : super(key: key);
 
   @override
@@ -109,7 +108,7 @@ class _SwapState extends State<Swap> {
                                   second: tokenProvider2,
                                   builder: ((context, a, b, child) => Obx(() =>
                                       _connectWallet(
-                                          walletProvider.address.string)))))),
+                                          widget.walletService.address.string)))))),
                 ],
               ),
             ),
@@ -144,9 +143,9 @@ class _SwapState extends State<Swap> {
                 //         element.tokenY == tokenProvider2.token!.tokenAddress ||
                 //     element.tokenX == tokenProvider2.token!.tokenAddress &&
                 //         element.tokenY == tokenProvider1.token!.tokenAddress);
-                await widget.provider.swap(
+                await widget.walletService.swap(
                     testContract,
-                    walletProvider.address.string,
+                    widget.walletService.address.string,
                     double.parse(upperController.text),
                     double.parse(lowerController.text),
                     yToX: yToX);
@@ -175,7 +174,7 @@ class _SwapState extends State<Swap> {
     return ElevatedButton(
         style: ThemeRaclette.invertedButtonStyle,
         onPressed: () async {
-          await widget.provider.requestPermission();
+          await widget.walletService.requestPermission();
         },
         child: Text(
           'Connect Wallet',
