@@ -59,27 +59,33 @@ def calc_amount1(liq, pa, pb):
 #Swap x to y
 def swap_xtoy(cfmm_address):
     cfmm = pytezos.contract(cfmm_address)
+
+    #Fee of the swap
     fee = 0.001
+    #Amout of token we are inputting
     amount_in = 1*10**18
-    # sqrtp_cur = 2696296818671908502942364
-    # liq = 3388796696349066672112
+
+    #Current status of the pool
     sqrtp_cur = 2703324232521071249517405
     liq = 2217758416937709731840
 
     print(f"\nSelling {amount_in/10**18} X")
 
+    #Calculate the price that it will be after the swap
     price_next = int((liq * q80 * sqrtp_cur) // (liq * q80 + amount_in * sqrtp_cur))
 
     print("New price:", (price_next / q80) ** 2)
     print("New sqrtP:", price_next)
     print("New tick:", price_to_tick((price_next / q80) ** 2))
 
+    #Recalculate the amount in and amount out of tokens
     amount_in = calc_amount0(liq, price_next, sqrtp_cur)
     amount_out = calc_amount1(liq, price_next, sqrtp_cur)
 
     print("X in:", amount_in / 10**18)
     print("Y out:", amount_out / 10**18)
     print("In/Out=",amount_in/amount_out,'which should be bigger than the price')
+
     xtoy = cfmm.x_to_y({
             "deadline": 1704398681,
             "dx": int(amount_in),
@@ -92,18 +98,25 @@ def swap_xtoy(cfmm_address):
 #Swap y to x
 def swap_ytox(cfmm_address):
     cfmm = pytezos.contract(cfmm_address)
+
+    #Fee
     fee = 0.001
+
+    #Amount of token in
     amount_in = 5*10**18
-    # sqrtp_cur = 2696296818671908502942364
-    # liq = 3388796696349066672112
+
+    #Current status of the pool
     sqrtp_cur = 2703324232521071249517405
     liq = 2217758416937709731840
+
+    #Get the price after swap
     price_diff = (amount_in * q80) / liq
     price_next = sqrtp_cur + price_diff
     print("New price:", (price_next / q80) ** 2)
     print("New sqrtP:", price_next)
     print("New tick:", price_to_tick((price_next / q80) ** 2))
 
+    #Recalculate the amount in and amount out of tokens
     amount_in = calc_amount1(liq, price_next, sqrtp_cur)
     amount_out = calc_amount0(liq, price_next, sqrtp_cur)
 

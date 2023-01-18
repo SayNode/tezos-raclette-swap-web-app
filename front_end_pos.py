@@ -18,22 +18,27 @@ cfmm_address=config('cfmm_address')
 wallet_address='tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW'
 
 def get_vals():
+    #The inputs the user places
     dy = 50*10**18
     dx = 10*10**18
 
+    #Prices
     pu = 5.1
     sqrt_pc = 2703324232521071249517405/2**80
     pl = 4.9
 
+    #Ticks
     iu = math.log(math.sqrt(pu),math.sqrt(1.0001))
     ic = math.log(sqrt_pc,math.sqrt(1.0001))
     il = math.log(math.sqrt(pl),math.sqrt(1.0001))
 
+    #Liquidities
     liq1 = dx*((math.sqrt(pu)*sqrt_pc)/(math.sqrt(pu)-sqrt_pc))
     liq2 = dy/(sqrt_pc - math.sqrt(pl))
     liq3 = dx*((math.sqrt(pu)*math.sqrt(1.0001**ic))/(math.sqrt(pu)-math.sqrt(1.0001**ic)))
     liq4 = dy/(math.sqrt(1.0001**ic) - math.sqrt(pl))
 
+    #Mean liquidities
     liq = min(liq1,liq2, liq3, liq4)*0.9999
 
     #THESE ARE TO BE SHOWN IN THE FRONTEND
