@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../models/token.dart';
 import '../../../services/token_provider.dart';
 import '../../../theme/ThemeRaclette.dart';
 
 // ignore: must_be_immutable
 class PriceCard extends StatefulWidget {
-  TokenProvider token1;
-  TokenProvider token2;
+  Token? token1;
+  Token? token2;
   RxInt price;
   String text;
   bool enabled;
-  PriceCard(this.text, this.token1, this.token2, this.price, this.enabled, {super.key});
+  PriceCard(this.text, this.token1, this.token2, this.price, this.enabled,
+      {super.key});
 
   @override
   State<PriceCard> createState() => _PriceCardState();
@@ -39,7 +41,9 @@ class _PriceCardState extends State<PriceCard> {
               children: [
                 Expanded(
                   child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.price.value=widget.price.value-1;
+                      },
                       icon: const Icon(Icons.remove),
                       color: Colors.white),
                 ),
@@ -57,7 +61,7 @@ class _PriceCardState extends State<PriceCard> {
                     })),
                 Expanded(
                   child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {widget.price.value=widget.price.value+1;},
                       icon: const Icon(Icons.add),
                       color: Colors.white),
                 ),
@@ -66,36 +70,24 @@ class _PriceCardState extends State<PriceCard> {
             Row(
               children: [
                 Expanded(
-                  child: ValueListenableBuilder(
-                      valueListenable: widget.token1,
-                      builder: (context, value, child) {
-                        if (widget.token1.token != null) {
-                          return Text(
-                            widget.token1.token!.symbol,
-                            style: const TextStyle(color: ThemeRaclette.white),
-                          );
-                        } else {
-                          return const SizedBox();
-                        }
-                      }),
+                  child: (widget.token1 != null)
+                      ? Text(
+                          widget.token1!.symbol,
+                          style: const TextStyle(color: ThemeRaclette.white),
+                        )
+                      : const SizedBox(),
                 ),
                 const Text(
                   ' per ',
                   style: TextStyle(color: ThemeRaclette.white),
                 ),
                 Expanded(
-                  child: ValueListenableBuilder(
-                      valueListenable: widget.token2,
-                      builder: (context, value, child) {
-                        if (widget.token2.token != null) {
-                          return Text(
-                            widget.token2.token!.symbol,
-                            style: const TextStyle(color: ThemeRaclette.white),
-                          );
-                        } else {
-                          return const SizedBox();
-                        }
-                      }),
+                  child: (widget.token2 != null)
+                      ? Text(
+                          widget.token2!.symbol,
+                          style: const TextStyle(color: ThemeRaclette.white),
+                        )
+                      : const SizedBox(),
                 ),
               ],
             ),

@@ -9,6 +9,7 @@ import 'package:tezos_swap_frontend/utils/utils.dart';
 
 import '../models/contract_model.dart';
 import '../pages/widgets/card_route.dart';
+import '../pages/widgets/card_route_not dismissable.dart';
 import '../pages/widgets/select_token_card.dart';
 import '../theme/ThemeRaclette.dart';
 
@@ -30,7 +31,7 @@ class WalletService extends GetxService {
           Get.close(1);
         }
       }, true);
-      var done = await Navigator.of(Get.context!).push(CardDialogRoute(
+      var done = await Navigator.of(Get.context!).push(CardDialogRouteNoDismiss(
           builder: (context) {
             authorizeContract(tokenContract, swapContract, id);
             return Center(
@@ -51,8 +52,7 @@ class WalletService extends GetxService {
                 ),
               ),
             );
-          },
-          barrierDismissible: false));
+          },));
     }
   }
 
@@ -141,8 +141,9 @@ class WalletService extends GetxService {
 
     var currentTick = await getCurrentTick(contract);
 
-    BigInt liquidity = await getLiquidity(
-        yDouble, xDouble, lowerPrice, upperPrice, currentTick, 18);
+    BigInt liquidity = etherToWei(await getLiquidity(
+        yDouble, xDouble, lowerPrice, upperPrice, currentTick), 18);
+
 
     BigInt x = etherToWei(xDouble, 18);
     BigInt y = etherToWei(yDouble, 18);

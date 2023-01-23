@@ -7,17 +7,19 @@ class CardDialogRoute<T> extends PageRoute<T> {
     required WidgetBuilder builder,
     RouteSettings? settings,
     bool fullscreenDialog = false,
-    bool barrierDismissible = true,
   })  : _builder = builder,
         super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   final WidgetBuilder _builder;
 
+    @override
+  bool get barrierDismissible => true;
+
   @override
   bool get opaque => false;
 
   @override
-  Duration get transitionDuration => const Duration(milliseconds: 300);
+  Duration get transitionDuration => const Duration(milliseconds: 0);
 
   @override
   bool get maintainState => true;
