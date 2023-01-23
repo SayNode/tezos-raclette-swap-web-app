@@ -18,7 +18,9 @@ class NewPositionController extends GetxController {
   final lowerController = TextEditingController();
   Rx<Token?> tokenX = (null as Token?).obs;
   Rx<Token?> tokenY = (null as Token?).obs;
-
+  RxDouble firstTokenAmount = 0.0.obs;
+  RxDouble secondTokenAmount = 0.0.obs;
+  RxBool yUserInput = false.obs;
   RxList<ChartDatapoint> chart = <ChartDatapoint>[].obs;
   RxInt min = 1.obs;
   RxInt max = 20.obs;
@@ -28,19 +30,21 @@ class NewPositionController extends GetxController {
 
   updatedChart() async {
     //chart.value = await compute(buildChartPoints, testContract);
-    //chart.value = await buildChartPoints(testContract);
-    await Future.delayed(Duration(seconds: 1));
-    chart.value = [
-      ChartDatapoint(x: 0, y: 1),
-      ChartDatapoint(x: 3, y: 10),
-      ChartDatapoint(x: 5, y: 11),
-      ChartDatapoint(x: 6, y: 12),
-      ChartDatapoint(x: 9, y: 13),
-      ChartDatapoint(x: 10, y: 20),
-      ChartDatapoint(x: 14, y: 11),
-      ChartDatapoint(x: 15, y: 50),
-      
-    ];
+    chart.value = await buildChartPoints(testContract);
+    print(chart.value);
     chart.refresh();
+  }
+
+  calcAmount() async {
+    if (tokenX.value != null &&
+        tokenY.value != null &&
+        double.tryParse(upperController.text) != null) {
+      secondTokenAmount.value = await calcSecondTokenAmount(
+          double.parse(upperController.text),
+          18,
+          min.value,
+          max.value,
+          testContract);
+    }
   }
 }

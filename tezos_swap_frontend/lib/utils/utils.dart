@@ -87,7 +87,6 @@ getLiquidity(double y, double x, int pl, int pu, int currentTick) {
   }
 }
 
-
 ///Calculate the amount of X or Y given one of the two
 Future<double> calcSecondTokenAmount(
     double amount, int decimals, int pl, int pu, String contract,
@@ -95,21 +94,22 @@ Future<double> calcSecondTokenAmount(
   var currentTick = await getCurrentTick(contract);
   var pc = pow(1.0001, currentTick);
   if (isY) {
-
-    var liquidity = await getLiquidity(amount, amount*2*pc, pl, pu, currentTick);
-    double res = liquidity * (sqrt(pu) - sqrt(pc) / sqrt(pu) * sqrt(pc))*1.01;
-    if (res<0) {
+    var liquidity =
+        await getLiquidity(amount, amount * 2 * pc, pl, pu, currentTick);
+    double res = liquidity * (sqrt(pu) - sqrt(pc) / sqrt(pu) * sqrt(pc)) * 1.01;
+    if (res < 0) {
       res = 0;
     }
-    
+
     return res.toPrecision(3);
   } else {
-    var liquidity = await getLiquidity(amount*2*pc, amount, pl, pu, currentTick);
-    double res = liquidity * (sqrt(pc) - sqrt(pl))*1.01;
-        if (res<0) {
+    var liquidity =
+        await getLiquidity(amount * 2 * pc, amount, pl, pu, currentTick);
+    double res = liquidity * (sqrt(pc) - sqrt(pl)) * 1.01;
+    if (res < 0) {
       res = 0;
     }
-    
+
     return res.toPrecision(3);
   }
 }
@@ -162,39 +162,128 @@ Future<List<Map>> positionsOfAddress(
 }
 
 Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
-  ChartDatapoint(x: 11, y: 3.4);
   List positionsMaps = json.decode(await getPositions(contractAddress));
-
-
-
-
-
-  List<int> keys = [];
   List<ChartDatapoint> dataPoints = [];
-  Map range = {};
-  positionsMaps
-      .where((element) => element['value']['lower_tick_index'] == '-1048575'&&element['active']==true);
-  for (var map in positionsMaps) {
-    int lower = int.parse(map['value']['lower_tick_index']);
-    int upper = int.parse(map['value']['upper_tick_index']);
-    int liquidity = smallToFull(BigInt.parse(map['value']['liquidity']), 18).toInt();
-    if (lower != -1048575) {
-      for (var i = lower; i <= upper; i++) {
-        //FIXME: * liquidity correct?
-        if (range.containsKey('$i')) {
-          range['$i'] = range['$i'] + liquidity;
-        } else {
-          range['$i'] = liquidity;
-          keys.add(i);
-        }
+  var activePositions =
+      positionsMaps.where((element) => element['active'] == true);
+
+  Map<int, List> points;
+
+  for (var position in activePositions) {
+    int max =
+        pow(1.0001, int.parse(position['value']['upper_tick_index'])).toInt();
+    int min =
+        pow(1.0001, int.parse(position['value']['lower_tick_index'])).toInt();
+    int liquidity =
+        smallToFull(BigInt.parse(position['value']['liquidity']), 18).toInt();
+    print(liquidity);
+    for (var i = min; i < max; i++) {
+      var index = dataPoints.indexWhere((element) => element.x == i);
+      if (index == -1) {
+        dataPoints
+            .add(ChartDatapoint(x: i.toDouble(), y: liquidity.toDouble()));
+      } else {
+        dataPoints[index].y = dataPoints[index].y + liquidity.toDouble();
       }
     }
   }
-  for (var key in keys) {
-    dataPoints.add(ChartDatapoint(x: key.toDouble(), y: range['$key']));
-  }
+
   dataPoints.sort((a, b) => a.x.compareTo(b.x));
+
   return dataPoints;
+}
+
+Future<List<ChartDatapoint>> buildChartPoints2(
+    String contractAddress, int from, int to) async {
+  ChartDatapoint(x: 11, y: 3.4);
+  List positionsMaps = json.decode(await getPositions(contractAddress));
+
+  List<Range> ranges = [];
+  List<ChartDatapoint> dataPoints = [];
+  var activePositions =
+      positionsMaps.where((element) => element['active'] == true);
+  print(activePositions.length);
+
+  for (var position in activePositions) {
+    int max =
+        pow(1.0001, int.parse(position['value']['upper_tick_index'])).toInt();
+    int min =
+        pow(1.0001, int.parse(position['value']['lower_tick_index'])).toInt();
+    int liquidity =
+        smallToFull(BigInt.parse(position['value']['liquidity']), 18).toInt();
+    Range currentRange = Range(liquidity, max, min);
+    var a = 0;
+    var rangesOld = ranges;
+    for (var range in rangesOld) {
+      a++;
+      print(a);
+      ranges.add(currentRange);
+      // if (currentRange.min == range.min && currentRange.max == range.max) {
+      //   ranges.remove(range);
+      //   ranges.add(Range(currentRange.liquidity + range.liquidity, max, min));
+      // } else {
+      //   if (currentRange.min < range.max && currentRange.min > range.min) {
+      //     //new range completly in other range
+      //     if (currentRange.max < range.max) {
+      //       ranges.remove(range);
+      //       ranges.add(Range(range.liquidity, currentRange.min - 1, range.min));
+      //       ranges.add(Range(currentRange.liquidity + range.liquidity,
+      //           currentRange.max, currentRange.min));
+      //       ranges.add(Range(range.liquidity, range.max, currentRange.max + 1));
+      //     } else {
+      //       //new range clips from right side
+      //       ranges.remove(range);
+      //       ranges.add(Range(range.liquidity, currentRange.min - 1, range.min));
+      //       ranges.add(Range(currentRange.liquidity + range.liquidity,
+      //           range.max, currentRange.min));
+      //       ranges.add(Range(range.liquidity, range.max + 1, currentRange.max));
+      //     }
+      //   } else if (currentRange.min < range.min &&
+      //       currentRange.max > range.min) {
+      //     //new range clips from left side
+      //     ranges.remove(range);
+      //     ranges
+      //         .add(Range(currentRange.liquidity, currentRange.min, range.min));
+      //     ranges.add(Range(currentRange.liquidity + range.liquidity, range.min,
+      //         currentRange.max));
+      //     ranges.add(Range(range.liquidity, currentRange.max + 1, range.max));
+      //   } else {
+      //     ranges.add(currentRange);
+      //   }
+      // }
+    }
+
+    if (ranges.isEmpty) {
+      ranges.add(currentRange);
+    }
+  }
+  var end = 0;
+  var index = 0;
+  var start = ranges.indexWhere((element) => element.min < from);
+  index = start;
+  if (start == -1) {
+    print('done-1');
+    return dataPoints;
+  }
+  print('while');
+  while (from < end && index <= ranges.last.max) {
+    var range = ranges[index];
+    end = range.max;
+    index++;
+    for (var i = range.min; i < range.max; i++) {
+      dataPoints
+          .add(ChartDatapoint(x: i.toDouble(), y: range.liquidity.toDouble()));
+    }
+  }
+  print('done');
+  return dataPoints;
+}
+
+class Range {
+  Range(this.liquidity, this.max, this.min);
+  final int liquidity;
+  final int max;
+  final int min;
 }
 
 List<Token> getContractTokens(String contractAddress) {

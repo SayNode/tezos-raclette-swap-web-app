@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart' as chart;
@@ -5,16 +7,13 @@ import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:tezos_swap_frontend/pages/pool/controllers/new_position_controller.dart';
 import 'package:tezos_swap_frontend/pages/pool/widgets/fee_tier_card.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
-
 import '../../models/chart_datapoint.dart';
 import '../../services/new_position_service.dart';
 import '../../theme/ThemeRaclette.dart';
 import '../../utils/globals.dart';
 import '../../utils/utils.dart';
-import '../../utils/value_listenable2.dart';
 import '../widgets/card_route.dart';
 import '../widgets/select_token_card.dart';
-import '../widgets/token_select_button.dart';
 import 'widgets/price_card.dart';
 
 class NewPositionCard2 extends GetView<NewPositionController> {
@@ -350,48 +349,48 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                           width: 200,
                                           height: 30,
                                           child: Obx(() {
-                                              return TextFormField(
-                                                                                            enabled: (controller.tokenX.value !=
-                                                        null &&
-                                                    controller.tokenY.value !=
-                                                        null),
-                                                onChanged: (value) async {
-                                                  print('change');
-                                                  // try {
-                                                  var a =
-                                                      await calcSecondTokenAmount(
-                                                          double.parse(controller
-                                                              .upperController
-                                                              .text),
-                                                          18,
-                                                          controller.min.value,
-                                                          controller.max.value,
-                                                          testContract);
-                                                  print(a);
+                                            return TextFormField(
+                                              enabled:
+                                                  (controller.tokenX.value !=
+                                                          null &&
+                                                      controller.tokenY.value !=
+                                                          null),
+                                              onChanged: (value) async {
+                                                print('change');
+                                                // try {
+                                                var a =
+                                                    await calcSecondTokenAmount(
+                                                        double.parse(controller
+                                                            .upperController
+                                                            .text),
+                                                        18,
+                                                        controller.min.value,
+                                                        controller.max.value,
+                                                        testContract);
+                                                print(a);
 
-                                                  controller.lowerController.text =
-                                                      a.toString();
-                                                  // } catch (e) {
-                                                  //   print('error: ${e.toString()}');
-                                                  // }
-                                                  // lowerController.text =
-                                                  //     (price / tokenFactor)
-                                                  //         .toString();
-                                                },
-                                                controller:
-                                                    controller.upperController,
-                                                decoration:
-                                                    const InputDecoration.collapsed(
-                                                        hintText: '0.0',
-                                                        hintStyle: TextStyle(
-                                                            color: ThemeRaclette
-                                                                .white)),
-                                                style: const TextStyle(
-                                                    fontSize: 30,
-                                                    color: ThemeRaclette.white),
-                                              );
-                                            }
-                                          ),
+                                                controller.lowerController
+                                                    .text = a.toString();
+                                                // } catch (e) {
+                                                //   print('error: ${e.toString()}');
+                                                // }
+                                                // lowerController.text =
+                                                //     (price / tokenFactor)
+                                                //         .toString();
+                                              },
+                                              controller:
+                                                  controller.upperController,
+                                              decoration: const InputDecoration
+                                                      .collapsed(
+                                                  hintText: '0.0',
+                                                  hintStyle: TextStyle(
+                                                      color:
+                                                          ThemeRaclette.white)),
+                                              style: const TextStyle(
+                                                  fontSize: 30,
+                                                  color: ThemeRaclette.white),
+                                            );
+                                          }),
                                         ),
                                         Obx(() {
                                           return Row(
@@ -443,41 +442,41 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                           width: 200,
                                           height: 30,
                                           child: Obx(() {
-                                              return TextFormField(
-                                                enabled: (controller.tokenX.value !=
-                                                        null &&
-                                                    controller.tokenY.value !=
-                                                        null),
-                                                onChanged: (value) async {
-                                                  var a =
-                                                      await calcSecondTokenAmount(
-                                                          double.parse(controller
-                                                              .upperController
-                                                              .text),
-                                                          18,
-                                                          controller.min.value,
-                                                          controller.max.value,
-                                                          testContract,
-                                                          isY: true);
-                                                  print(a);
+                                            return TextFormField(
+                                              enabled:
+                                                  (controller.tokenX.value !=
+                                                          null &&
+                                                      controller.tokenY.value !=
+                                                          null),
+                                              onChanged: (value) async {
+                                                var a =
+                                                    await calcSecondTokenAmount(
+                                                        double.parse(controller
+                                                            .upperController
+                                                            .text),
+                                                        18,
+                                                        controller.min.value,
+                                                        controller.max.value,
+                                                        testContract,
+                                                        isY: true);
+                                                print(a);
 
-                                                  controller.upperController.text =
-                                                      a.toString();
-                                                },
-                                                controller:
-                                                    controller.lowerController,
-                                                decoration:
-                                                    const InputDecoration.collapsed(
-                                                        hintText: '0.0',
-                                                        hintStyle: TextStyle(
-                                                            color: ThemeRaclette
-                                                                .white)),
-                                                style: const TextStyle(
-                                                    fontSize: 30,
-                                                    color: ThemeRaclette.white),
-                                              );
-                                            }
-                                          ),
+                                                controller.upperController
+                                                    .text = a.toString();
+                                              },
+                                              controller:
+                                                  controller.lowerController,
+                                              decoration: const InputDecoration
+                                                      .collapsed(
+                                                  hintText: '0.0',
+                                                  hintStyle: TextStyle(
+                                                      color:
+                                                          ThemeRaclette.white)),
+                                              style: const TextStyle(
+                                                  fontSize: 30,
+                                                  color: ThemeRaclette.white),
+                                            );
+                                          }),
                                         ),
                                         Obx(() {
                                           return Row(
@@ -532,6 +531,7 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                         controller.tokenY.value != null) {
                                       return SizedBox(
                                         width: 300,
+                                        height: 300,
                                         child: Obx(
                                           (() {
                                             controller.rangeController.start =
@@ -556,6 +556,7 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                               showLabels: true,
                                               child: SizedBox(
                                                   height: 200,
+                                                  width: 300,
                                                   child: chart.SfCartesianChart(
                                                     margin:
                                                         const EdgeInsets.all(0),
@@ -568,7 +569,7 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                                     primaryYAxis:
                                                         chart.NumericAxis(
                                                             isVisible: false,
-                                                            maximum: 50),
+                                                            maximum: 50000),
                                                     series: <
                                                         chart.SplineAreaSeries<
                                                             ChartDatapoint,
