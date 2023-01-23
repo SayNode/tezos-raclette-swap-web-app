@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_charts/charts.dart' as chart;
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:tezos_swap_frontend/pages/pool/controllers/new_position_controller.dart';
 import 'package:tezos_swap_frontend/pages/pool/widgets/fee_tier_card.dart';
+import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 
+import '../../models/chart_datapoint.dart';
 import '../../services/new_position_service.dart';
 import '../../theme/ThemeRaclette.dart';
+import '../../utils/globals.dart';
+import '../../utils/utils.dart';
+import '../../utils/value_listenable2.dart';
 import '../widgets/card_route.dart';
 import '../widgets/select_token_card.dart';
 import '../widgets/token_select_button.dart';
+import 'widgets/price_card.dart';
 
 class NewPositionCard2 extends GetView<NewPositionController> {
   const NewPositionCard2({super.key});
@@ -15,6 +23,7 @@ class NewPositionCard2 extends GetView<NewPositionController> {
   @override
   Widget build(BuildContext context) {
     Get.put(NewPositionController());
+    var walletService = Get.put(WalletService());
     return Center(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -90,6 +99,12 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Obx(() {
+                                              if (controller.tokenX.value !=
+                                                      null &&
+                                                  controller.tokenY.value !=
+                                                      null) {
+                                                controller.updatedChart();
+                                              }
                                               return TextButton(
                                                   onPressed: () async {
                                                     var newToken = await Navigator
@@ -158,6 +173,12 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                           child: Padding(
                                             padding: const EdgeInsets.all(.0),
                                             child: Obx(() {
+                                              if (controller.tokenX.value !=
+                                                      null &&
+                                                  controller.tokenY.value !=
+                                                      null) {
+                                                controller.updatedChart();
+                                              }
                                               return TextButton(
                                                   onPressed: () async {
                                                     var newToken = await Navigator
@@ -328,28 +349,48 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                         SizedBox(
                                           width: 200,
                                           height: 30,
-                                          child: TextFormField(
-                                            onChanged: (value) {
-                                              double price = 0;
-                                              try {
-                                                price = double.parse(controller
-                                                    .upperController.text);
-                                              } catch (e) {}
-                                              // lowerController.text =
-                                              //     (price / tokenFactor)
-                                              //         .toString();
-                                            },
-                                            controller:
-                                                controller.upperController,
-                                            decoration:
-                                                const InputDecoration.collapsed(
-                                                    hintText: '0.0',
-                                                    hintStyle: TextStyle(
-                                                        color: ThemeRaclette
-                                                            .white)),
-                                            style: const TextStyle(
-                                                fontSize: 30,
-                                                color: ThemeRaclette.white),
+                                          child: Obx(() {
+                                              return TextFormField(
+                                                                                            enabled: (controller.tokenX.value !=
+                                                        null &&
+                                                    controller.tokenY.value !=
+                                                        null),
+                                                onChanged: (value) async {
+                                                  print('change');
+                                                  // try {
+                                                  var a =
+                                                      await calcSecondTokenAmount(
+                                                          double.parse(controller
+                                                              .upperController
+                                                              .text),
+                                                          18,
+                                                          controller.min.value,
+                                                          controller.max.value,
+                                                          testContract);
+                                                  print(a);
+
+                                                  controller.lowerController.text =
+                                                      a.toString();
+                                                  // } catch (e) {
+                                                  //   print('error: ${e.toString()}');
+                                                  // }
+                                                  // lowerController.text =
+                                                  //     (price / tokenFactor)
+                                                  //         .toString();
+                                                },
+                                                controller:
+                                                    controller.upperController,
+                                                decoration:
+                                                    const InputDecoration.collapsed(
+                                                        hintText: '0.0',
+                                                        hintStyle: TextStyle(
+                                                            color: ThemeRaclette
+                                                                .white)),
+                                                style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: ThemeRaclette.white),
+                                              );
+                                            }
                                           ),
                                         ),
                                         Obx(() {
@@ -401,28 +442,41 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                         SizedBox(
                                           width: 200,
                                           height: 30,
-                                          child: TextFormField(
-                                            onChanged: (value) {
-                                              double price = 0;
-                                              try {
-                                                price = double.parse(controller
-                                                    .upperController.text);
-                                              } catch (e) {}
-                                              // lowerController.text =
-                                              //     (price / tokenFactor)
-                                              //         .toString();
-                                            },
-                                            controller:
-                                                controller.upperController,
-                                            decoration:
-                                                const InputDecoration.collapsed(
-                                                    hintText: '0.0',
-                                                    hintStyle: TextStyle(
-                                                        color: ThemeRaclette
-                                                            .white)),
-                                            style: const TextStyle(
-                                                fontSize: 30,
-                                                color: ThemeRaclette.white),
+                                          child: Obx(() {
+                                              return TextFormField(
+                                                enabled: (controller.tokenX.value !=
+                                                        null &&
+                                                    controller.tokenY.value !=
+                                                        null),
+                                                onChanged: (value) async {
+                                                  var a =
+                                                      await calcSecondTokenAmount(
+                                                          double.parse(controller
+                                                              .upperController
+                                                              .text),
+                                                          18,
+                                                          controller.min.value,
+                                                          controller.max.value,
+                                                          testContract,
+                                                          isY: true);
+                                                  print(a);
+
+                                                  controller.upperController.text =
+                                                      a.toString();
+                                                },
+                                                controller:
+                                                    controller.lowerController,
+                                                decoration:
+                                                    const InputDecoration.collapsed(
+                                                        hintText: '0.0',
+                                                        hintStyle: TextStyle(
+                                                            color: ThemeRaclette
+                                                                .white)),
+                                                style: const TextStyle(
+                                                    fontSize: 30,
+                                                    color: ThemeRaclette.white),
+                                              );
+                                            }
                                           ),
                                         ),
                                         Obx(() {
@@ -446,7 +500,7 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                                               .black),
                                                     )
                                                   : const Text(
-                                                      "Select Token", 
+                                                      "Select Token",
                                                       style: TextStyle(
                                                           color: Colors.white),
                                                     ),
@@ -472,202 +526,163 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                 const Text(
                                   'Current Price:',
                                 ),
-                                // FutureBuilder<List<ChartDatapoint>>(
-                                //   future: buildChartPoints(testContract),
-                                //   builder: (
-                                //     BuildContext context,
-                                //     AsyncSnapshot<List<ChartDatapoint>>
-                                //         snapshot,
-                                //   ) {
-                                //     if (snapshot.connectionState ==
-                                //         ConnectionState.waiting) {
-                                //       return CircularProgressIndicator();
-                                //     } else if (snapshot.connectionState ==
-                                //         ConnectionState.done) {
-                                //       if (snapshot.hasError) {
-                                //         return const Text('Error');
-                                //       } else if (snapshot.hasData) {
-                                //         return ValueListenableBuilder2(
-                                //           first: token1,
-                                //           second: token2,
-                                //           builder: (context, a, b, child) {
-                                //             if (token1.token != null &&
-                                //                 token2.token != null) {
-                                //               return SizedBox(
-                                //                 width: 300,
-                                //                 child: Obx(
-                                //                   (() {
-                                //                     rangeController.start =
-                                //                         min.value;
-                                //                     rangeController.end =
-                                //                         max.value;
-                                //                     return SfRangeSelector(
-                                //                       controller:
-                                //                           rangeController,
-                                //                       min: 1,
-                                //                       max: 50,
-                                //                       onChangeEnd: ((value) {
-                                //                         min.value =
-                                //                             value.start.round();
-                                //                         max.value =
-                                //                             value.end.round();
-                                //                       }),
-                                //                       labelPlacement:
-                                //                           LabelPlacement
-                                //                               .onTicks,
-                                //                       interval: 5,
-                                //                       showTicks: true,
-                                //                       showLabels: true,
-                                //                       child: SizedBox(
-                                //                           height: 200,
-                                //                           child: chart
-                                //                               .SfCartesianChart(
-                                //                             margin:
-                                //                                 const EdgeInsets
-                                //                                     .all(0),
-                                //                             primaryXAxis: chart
-                                //                                 .NumericAxis(
-                                //                               minimum: 0,
-                                //                               maximum: 50,
-                                //                               isVisible: false,
-                                //                             ),
-                                //                             primaryYAxis: chart
-                                //                                 .NumericAxis(
-                                //                                     isVisible:
-                                //                                         false,
-                                //                                     maximum:
-                                //                                         20000),
-                                //                             series: <
-                                //                                 chart.SplineAreaSeries<
-                                //                                     ChartDatapoint,
-                                //                                     double>>[
-                                //                               chart.SplineAreaSeries<
-                                //                                       ChartDatapoint,
-                                //                                       double>(
-                                //                                   dataSource:
-                                //                                       snapshot
-                                //                                           .data!,
-                                //                                   xValueMapper:
-                                //                                       (ChartDatapoint sales,
-                                //                                               int
-                                //                                                   index) =>
-                                //                                           sales
-                                //                                               .x,
-                                //                                   yValueMapper:
-                                //                                       (ChartDatapoint sales,
-                                //                                               int index) =>
-                                //                                           sales.y)
-                                //                             ],
-                                //                           )),
-                                //                     );
-                                //                   }),
-                                //                 ),
-                                //               );
-                                //             } else {
-                                //               return const SizedBox(
-                                //                   width: 300,
-                                //                   height: 300,
-                                //                   child: Center(
-                                //                     child: Text(
-                                //                         'Your position will appear here.'),
-                                //                   ));
-                                //             }
-                                //           },
-                                //         );
-                                //       } else {
-                                //         return const Text('Empty data');
-                                //       }
-                                //     } else {
-                                //       return Text(
-                                //           'State: ${snapshot.connectionState}');
-                                //     }
-                                //   },
-                                // ),
+                                Obx(
+                                  () {
+                                    if (controller.tokenX.value != null &&
+                                        controller.tokenY.value != null) {
+                                      return SizedBox(
+                                        width: 300,
+                                        child: Obx(
+                                          (() {
+                                            controller.rangeController.start =
+                                                controller.min.value;
+                                            controller.rangeController.end =
+                                                controller.max.value;
+                                            return SfRangeSelector(
+                                              controller:
+                                                  controller.rangeController,
+                                              min: controller.chartStart.value,
+                                              max: controller.chartEnd.value,
+                                              onChangeEnd: ((value) {
+                                                controller.min.value =
+                                                    value.start.round();
+                                                controller.max.value =
+                                                    value.end.round();
+                                              }),
+                                              labelPlacement:
+                                                  LabelPlacement.onTicks,
+                                              interval: 5,
+                                              showTicks: true,
+                                              showLabels: true,
+                                              child: SizedBox(
+                                                  height: 200,
+                                                  child: chart.SfCartesianChart(
+                                                    margin:
+                                                        const EdgeInsets.all(0),
+                                                    primaryXAxis:
+                                                        chart.NumericAxis(
+                                                      minimum: 0,
+                                                      maximum: 30,
+                                                      isVisible: false,
+                                                    ),
+                                                    primaryYAxis:
+                                                        chart.NumericAxis(
+                                                            isVisible: false,
+                                                            maximum: 50),
+                                                    series: <
+                                                        chart.SplineAreaSeries<
+                                                            ChartDatapoint,
+                                                            double>>[
+                                                      chart.SplineAreaSeries<
+                                                              ChartDatapoint,
+                                                              double>(
+                                                          dataSource: controller
+                                                              .chart.value,
+                                                          xValueMapper:
+                                                              (ChartDatapoint
+                                                                          sales,
+                                                                      int
+                                                                          index) =>
+                                                                  sales.x,
+                                                          yValueMapper:
+                                                              (ChartDatapoint
+                                                                          sales,
+                                                                      int index) =>
+                                                                  sales.y)
+                                                    ],
+                                                  )),
+                                            );
+                                          }),
+                                        ),
+                                      );
+                                    } else {
+                                      return const SizedBox(
+                                          width: 300,
+                                          height: 300,
+                                          child: Center(
+                                            child: Text(
+                                                'Your position will appear here.'),
+                                          ));
+                                    }
+                                  },
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
                                     children: [
-                                      // Padding(
-                                      //   padding: const EdgeInsets.all(8.0),
-                                      //   child: ValueListenableBuilder2(
-                                      //     first: token1,
-                                      //     second: token2,
-                                      //     builder: (context, a, b, child) {
-                                      //       bool enable = false;
-                                      //       if (token1.token != null &&
-                                      //           token2.token != null) {
-                                      //         enable = true;
-                                      //       }
-                                      //       return PriceCard('Min Price',
-                                      //           token1, token2, min, enable);
-                                      //     },
-                                      //   ),
-                                      // ),
-                                      // Padding(
-                                      //   padding: const EdgeInsets.all(8.0),
-                                      //   child: ValueListenableBuilder2(
-                                      //     first: token1,
-                                      //     second: token2,
-                                      //     builder: (context, a, b, child) {
-                                      //       bool enable = false;
-                                      //       if (token1.token != null &&
-                                      //           token2.token != null) {
-                                      //         enable = true;
-                                      //       }
-                                      //       return PriceCard('Max Price',
-                                      //           token1, token2, max, enable);
-                                      //     },
-                                      //   ),
-                                      // ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Obx(() => PriceCard(
+                                            'Min Price',
+                                            controller.tokenX.value,
+                                            controller.tokenY.value,
+                                            controller.min,
+                                            (controller.tokenX.value != null &&
+                                                controller.tokenY.value !=
+                                                    null))),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Obx(() => PriceCard(
+                                            'Max Price',
+                                            controller.tokenX.value,
+                                            controller.tokenY.value,
+                                            controller.max,
+                                            (controller.tokenX.value != null &&
+                                                controller.tokenY.value !=
+                                                    null))),
+                                      ),
                                     ],
                                   ),
                                 ),
-                                // Padding(
-                                //     padding: const EdgeInsets.all(8.0),
-                                //     child: SizedBox(
-                                //       width: 400,
-                                //       height: 60,
-                                //       child: Obx(() => (walletService
-                                //               .address.string.isNotEmpty)
-                                //           ? ElevatedButton(
-                                //               style: ThemeRaclette
-                                //                   .invertedButtonStyle,
-                                //               onPressed: () async {
-                                //                 //TODO: proper contract selection
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 400,
+                                      height: 60,
+                                      child: Obx(() => (walletService
+                                              .address.string.isNotEmpty)
+                                          ? ElevatedButton(
+                                              style: ThemeRaclette
+                                                  .invertedButtonStyle,
+                                              onPressed: () async {
+                                                //TODO: proper contract selection
 
-                                //                 // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
+                                                // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
 
-                                //                 walletService.setPosition(
-                                //                     testContract,
-                                //                     walletService
-                                //                         .address.string,
-                                //                     double.parse(
-                                //                         upperController.text),
-                                //                     double.parse(
-                                //                         lowerController.text),
-                                //                     min.value,
-                                //                     max.value,
-                                //                     token1.token!.tokenAddress,
-                                //                     token2.token!.tokenAddress);
-                                //               },
-                                //               child: Text(
-                                //                 'Submit',
-                                //                 style: ThemeRaclette
-                                //                     .invertedButtonTextStyle,
-                                //               ))
-                                //           : ElevatedButton(
-                                //               style: ThemeRaclette
-                                //                   .invertedButtonStyle,
-                                //               onPressed: () async {
-                                //                 await walletService
-                                //                     .requestPermission();
-                                //               },
-                                //               child: Text(
-                                //                 'Connect Wallet',
-                                //                 style: ThemeRaclette
-                                //                     .invertedButtonTextStyle,
-                                //               ))),
-                                //     )),
+                                                walletService.setPosition(
+                                                    testContract,
+                                                    walletService
+                                                        .address.string,
+                                                    double.parse(controller
+                                                        .upperController.text),
+                                                    double.parse(controller
+                                                        .lowerController.text),
+                                                    controller.min.value,
+                                                    controller.max.value,
+                                                    controller.tokenX.value!
+                                                        .tokenAddress,
+                                                    controller.tokenY.value!
+                                                        .tokenAddress);
+                                              },
+                                              child: Text(
+                                                'Submit',
+                                                style: ThemeRaclette
+                                                    .invertedButtonTextStyle,
+                                              ))
+                                          : ElevatedButton(
+                                              style: ThemeRaclette
+                                                  .invertedButtonStyle,
+                                              onPressed: () async {
+                                                await walletService
+                                                    .requestPermission();
+                                              },
+                                              child: Text(
+                                                'Connect Wallet',
+                                                style: ThemeRaclette
+                                                    .invertedButtonTextStyle,
+                                              ))),
+                                    )),
                               ],
                             )
                           ],

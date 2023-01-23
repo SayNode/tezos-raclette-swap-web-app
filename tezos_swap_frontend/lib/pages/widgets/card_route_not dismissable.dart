@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 
-class CardDialogRoute<T> extends PageRoute<T> {
+class CardDialogRouteNoDismiss<T> extends PageRoute<T> {
 
-  CardDialogRoute({
+
+//TODO: change from this lazy fix
+  CardDialogRouteNoDismiss({
     required WidgetBuilder builder,
     RouteSettings? settings,
     bool fullscreenDialog = false,
@@ -13,7 +15,7 @@ class CardDialogRoute<T> extends PageRoute<T> {
   final WidgetBuilder _builder;
 
     @override
-  bool get barrierDismissible => true;
+  bool get barrierDismissible => false;
 
   @override
   bool get opaque => false;

@@ -13,7 +13,7 @@ double roundDouble(double value, int places) {
 }
 
 //TODO: find better way
-etherToWei(num amount, int decimals) {
+BigInt etherToWei(num amount, int decimals) {
   String amountString = amount.toString();
   if (!amountString.contains('.')) {
     amountString = amountString + '.0';
@@ -46,6 +46,10 @@ Future<List<int>> getTicks(String contract) async {
   return list;
 }
 
+double weiToEther(BigInt wei) {
+  return wei / BigInt.from(pow(10, 18));
+}
+
 getCurrentTick(String contract) async {
   var headers = {
     "Accept": "application/json",
@@ -63,25 +67,50 @@ getCurrentTick(String contract) async {
   return int.parse(map['cur_tick_index']);
 }
 
-getLiquidity(
-    double y, double x, int pl, int pu, int currentTick, int decimals) {
+getLiquidity(double y, double x, int pl, int pu, int currentTick) {
   var pc = pow(1.0001, currentTick);
   if (pc < pl) {
     // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pc))   )
-    return etherToWei(x / ((1 / sqrt(pl)) - (1 / sqrt(pu))), decimals);
+    return x / ((1 / sqrt(pl)) - (1 / sqrt(pu))) * 0.9999;
   } else if (pu < pc) {
     //Liq= dy/( sqrt(Pc) - sqrt(Pl) )
-    return etherToWei(y / (sqrt(pu) - sqrt(pl)), decimals);
+    return y / (sqrt(pu) - sqrt(pl)) * 0.9999;
   } else {
-    var xLiquidity = etherToWei(
-        (x * ((sqrt(pu) * sqrt(pc)) / (sqrt(pu) - sqrt(pc)))), decimals);
-    var yLiquidity =
-        etherToWei(((y) / (sqrt(pc) - sqrt(pl))), decimals);
+    var xLiquidity =
+        (x * ((sqrt(pu) * sqrt(pc)) / (sqrt(pu) - sqrt(pc)))) * 0.9999;
+    var yLiquidity = ((y) / (sqrt(pc) - sqrt(pl))) * 0.9999;
     if (xLiquidity < yLiquidity) {
       return xLiquidity;
     } else {
       return yLiquidity;
     }
+  }
+}
+
+
+///Calculate the amount of X or Y given one of the two
+Future<double> calcSecondTokenAmount(
+    double amount, int decimals, int pl, int pu, String contract,
+    {bool isY = false}) async {
+  var currentTick = await getCurrentTick(contract);
+  var pc = pow(1.0001, currentTick);
+  if (isY) {
+
+    var liquidity = await getLiquidity(amount, amount*2*pc, pl, pu, currentTick);
+    double res = liquidity * (sqrt(pu) - sqrt(pc) / sqrt(pu) * sqrt(pc))*1.01;
+    if (res<0) {
+      res = 0;
+    }
+    
+    return res.toPrecision(3);
+  } else {
+    var liquidity = await getLiquidity(amount*2*pc, amount, pl, pu, currentTick);
+    double res = liquidity * (sqrt(pc) - sqrt(pl))*1.01;
+        if (res<0) {
+      res = 0;
+    }
+    
+    return res.toPrecision(3);
   }
 }
 
@@ -135,15 +164,20 @@ Future<List<Map>> positionsOfAddress(
 Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
   ChartDatapoint(x: 11, y: 3.4);
   List positionsMaps = json.decode(await getPositions(contractAddress));
+
+
+
+
+
   List<int> keys = [];
   List<ChartDatapoint> dataPoints = [];
   Map range = {};
   positionsMaps
-      .where((element) => element['value']['lower_tick_index'] == '-1048575');
+      .where((element) => element['value']['lower_tick_index'] == '-1048575'&&element['active']==true);
   for (var map in positionsMaps) {
     int lower = int.parse(map['value']['lower_tick_index']);
     int upper = int.parse(map['value']['upper_tick_index']);
-    int liquidity = int.parse(map['value']['liquidity']);
+    int liquidity = smallToFull(BigInt.parse(map['value']['liquidity']), 18).toInt();
     if (lower != -1048575) {
       for (var i = lower; i <= upper; i++) {
         //FIXME: * liquidity correct?
