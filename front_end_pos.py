@@ -19,33 +19,35 @@ wallet_address='tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW'
 
 def get_vals():
     #The inputs the user places
-    dy = 50*10**18
-    dx = 10*10**18
+    dx = 1*10**18
+    #dy = 700*10**18
 
     #Prices
-    pu = 5.1
-    sqrt_pc = 2703324232521071249517405/2**80
-    pl = 4.9
+    pu = 20
+    sqrt_pc = 2696296818671908502942364/2**80
+    pl = 1.1
 
     #Ticks
     iu = math.log(math.sqrt(pu),math.sqrt(1.0001))
-    ic = math.log(sqrt_pc,math.sqrt(1.0001))
+    ic = 16042
     il = math.log(math.sqrt(pl),math.sqrt(1.0001))
 
     #Liquidities
-    liq1 = dx*((math.sqrt(pu)*sqrt_pc)/(math.sqrt(pu)-sqrt_pc))
-    liq2 = dy/(sqrt_pc - math.sqrt(pl))
+    #With the sqrt_pc
+    # liq1 = dx*((math.sqrt(pu)*sqrt_pc)/(math.sqrt(pu)-sqrt_pc))
+    # liq2 = dy/(sqrt_pc - math.sqrt(pl))
+    #With the square root price being calculated from the current tick
     liq3 = dx*((math.sqrt(pu)*math.sqrt(1.0001**ic))/(math.sqrt(pu)-math.sqrt(1.0001**ic)))
-    liq4 = dy/(math.sqrt(1.0001**ic) - math.sqrt(pl))
+    #liq4 = dy/(math.sqrt(1.0001**ic) - math.sqrt(pl))
 
-    #Mean liquidities
-    liq = min(liq1,liq2, liq3, liq4)*0.9999
+    #Min liquidities
+    liq = liq3*0.9999
 
     #THESE ARE TO BE SHOWN IN THE FRONTEND
-    # front_end_dx= liq*(math.sqrt(pu)-sqrt_pc)/(math.sqrt(pu)*sqrt_pc)
-    # front_end_dy= liq*(sqrt_pc - math.sqrt(pl))
-    
-    return round(iu), round(il), liq, dx, dy
+    front_end_dx= liq*(math.sqrt(pu)-sqrt_pc)/(math.sqrt(pu)*sqrt_pc)
+    front_end_dy= liq*(sqrt_pc - math.sqrt(pl))
+    print('liq=',liq,'front_end_dx=',front_end_dx,'front_end_dy=',front_end_dy)
+    return round(iu), round(il), liq, dx, front_end_dy*1.01
 
 #Set Position
 def set_pos(cfmm_address, iu, il, liq, dx, dy):
