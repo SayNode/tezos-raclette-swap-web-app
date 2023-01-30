@@ -1,4 +1,5 @@
 // ignore: avoid_web_libraries_in_flutter
+import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:math';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
 import 'package:tezos_swap_frontend/utils/utils.dart';
-
+import 'package:flutter/services.dart' as root_bundle;
 import '../models/contract_model.dart';
 import '../pages/widgets/card_route.dart';
 import '../pages/widgets/card_route_not dismissable.dart';
@@ -32,27 +33,28 @@ class WalletService extends GetxService {
         }
       }, true);
       var done = await Navigator.of(Get.context!).push(CardDialogRouteNoDismiss(
-          builder: (context) {
-            authorizeContract(tokenContract, swapContract, id);
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: 400,
-                  height: 500,
-                  child: Card(
-                    color: ThemeRaclette.primaryStatic,
-                    shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(20.0)),
-                    child: const Center(
-                      child: Text('Waiting for authorization.'),
-                    ),
+        builder: (context) {
+          authorizeContract(tokenContract, swapContract, id);
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 400,
+                height: 500,
+                child: Card(
+                  color: ThemeRaclette.primaryStatic,
+                  shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: const Center(
+                    child: Text('Waiting for authorization.'),
                   ),
                 ),
               ),
-            );
-          },));
+            ),
+          );
+        },
+      ));
     }
   }
 
@@ -141,9 +143,10 @@ class WalletService extends GetxService {
 
     var currentTick = await getCurrentTick(contract);
 
-    BigInt liquidity = etherToWei(await getLiquidity(
-        yDouble, xDouble, lowerPrice, upperPrice, currentTick), 18);
-
+    BigInt liquidity = etherToWei(
+        await getLiquidity(
+            yDouble, xDouble, lowerPrice, upperPrice, currentTick),
+        18);
 
     BigInt x = etherToWei(xDouble, 18);
     BigInt y = etherToWei(yDouble, 18);
@@ -204,6 +207,16 @@ class WalletService extends GetxService {
           }
         }
       ]
+    });
+  }
+
+  initializeNewPool() async {
+    var contractAbi =
+        await root_bundle.rootBundle.loadString('data/init_pair.json');
+    _request({
+      "type": "OPERATION_REQUEST",
+      "sourcePkh": address.value,
+      "opParams": [json.decode(contractAbi)]
     });
   }
 

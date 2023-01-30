@@ -32,8 +32,7 @@ class _VotePageState extends State<VotePage> {
           child: Center(
               child: ElevatedButton(
                   onPressed: () async {
-                    await Get.put(WalletService()).authorize('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
-                        // .authorizeContract('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+                    Get.put(WalletService()).initializeNewPool();
                   },
                   child: Text('test'))
               // Text(
