@@ -47,7 +47,7 @@ Future<List<int>> getTicks(String contract) async {
 }
 
 double weiToEther(BigInt wei) {
-  return wei / BigInt.from(pow(10, 18));
+  return wei / powBigInt(BigInt.from(10), 18);
 }
 
 getCurrentTick(String contract) async {
@@ -65,6 +65,57 @@ getCurrentTick(String contract) async {
 
   Map map = jsonDecode(res.body);
   return int.parse(map['cur_tick_index']);
+}
+
+getLiquidityFromContract(String contract) async {
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+  var url =
+      Uri.parse('https://api.ghostnet.tzkt.io/v1/contracts/$contract/storage');
+
+  var res = await http.get(url, headers: headers);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+
+  Map map = jsonDecode(res.body);
+  return BigInt.parse(map['liquidity']);
+}
+
+getSqrtCurrentPrice(String contract) async {
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+  var url =
+      Uri.parse('https://api.ghostnet.tzkt.io/v1/contracts/$contract/storage');
+
+  var res = await http.get(url, headers: headers);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+
+  Map map = jsonDecode(res.body);
+  return BigInt.parse(map['sqrt_price']);
+}
+
+getFeeFromContract(String contract) async {
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+  var url =
+      Uri.parse('https://api.ghostnet.tzkt.io/v1/contracts/$contract/storage');
+
+  var res = await http.get(url, headers: headers);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+
+  Map map = jsonDecode(res.body);
+  return double.parse(map['constants']['fee_bps']);
 }
 
 getLiquidity(double y, double x, int pl, int pu, int currentTick) {
@@ -112,6 +163,36 @@ Future<double> calcSecondTokenAmount(
 
     return res.toPrecision(3);
   }
+}
+
+///Calculate the amount of X or Y given one of the two
+Future<double> calcSecondTokenAmountSwap(
+    double amount, int decimals, String contract) async {
+  var fee = await getFeeFromContract(contract);
+  fee = 1 - (fee / 10000);
+
+  var liquidity = await getLiquidityFromContract(contract);
+  var sqcp = await getSqrtCurrentPrice(contract);
+
+  BigInt pn = (liquidity * powBigInt(BigInt.from(2), 80) * sqcp) ~/
+      (liquidity * powBigInt(BigInt.from(2), 80) +
+          etherToWei(amount, decimals) * sqcp);
+
+  if (sqcp < pn) {
+    BigInt res = liquidity * (pn - sqcp) ~/ powBigInt(BigInt.from(2), 80);
+    return (weiToEther(res) * fee);
+  } else {
+    BigInt res = liquidity * (sqcp - pn) ~/ powBigInt(BigInt.from(2), 80);
+    return (weiToEther(res) * fee);
+  }
+}
+
+powBigInt(BigInt x, int exponent) {
+  var res = x;
+  for (var i = 0; i < exponent - 1; i++) {
+    res = res * x;
+  }
+  return res;
 }
 
 Future<bool> checkIfOperator(

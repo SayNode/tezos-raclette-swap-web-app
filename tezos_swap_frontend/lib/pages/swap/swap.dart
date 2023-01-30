@@ -6,6 +6,7 @@ import 'package:tezos_swap_frontend/services/contract_service.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../../models/contract_model.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
@@ -71,7 +72,14 @@ class _SwapState extends State<Swap> {
                       second: tokenProvider2,
                       builder: ((context, a, b, child) => SwapEntry(
                             controller: upperController,
-                            function: (value) {
+                            function: (value) async {
+                              var a = await calcSecondTokenAmountSwap(
+                                  double.parse(upperController.text),
+                                  18,
+                                  testContract);
+                              print(a);
+
+                              lowerController.text = a.toString();
                               // lowerController.text =
                               //     (value * tokenRatio).toString();
                             },
@@ -87,12 +95,8 @@ class _SwapState extends State<Swap> {
                       second: tokenProvider2,
                       builder: ((context, a, b, child) => SwapEntry(
                           controller: lowerController,
-                          function: (value) {
-                            // upperController.text =
-                            //     (value / tokenRatio).toString();
-                          },
-                          enabled: (tokenProvider1.token != null &&
-                              tokenProvider2.token != null),
+                          function: (value) async {},
+                          enabled: false,
                           tokenProvider: tokenProvider2))),
                   const SizedBox(
                     height: 30,

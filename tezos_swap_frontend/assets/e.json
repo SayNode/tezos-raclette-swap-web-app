@@ -1,0 +1,84 @@
+{
+    "error": [
+        {
+            "errors": [
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.runtime_error",
+                    "contract_handle": "KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB",
+                    "contract_code": "Deprecated"
+                },
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+                    "location": 7252,
+                    "with": {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "int": "104"
+                            },
+                            {
+                                "prim": "Pair",
+                                "args": [
+                                    {
+                                        "int": "4970000000000000000"
+                                    },
+                                    {
+                                        "int": "4969663118070924411"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "errorDetails": "Error occurred during estimation",
+            "name": "TezosOperationError",
+            "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+            "kind": "temporary",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"104\"},{\"prim\":\"Pair\",\"args\":[{\"int\":\"4970000000000000000\"},{\"int\":\"4969663118070924411\"}]}]}",
+            "isError": true
+        },
+        {
+            "errors": [
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.runtime_error",
+                    "contract_handle": "KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB",
+                    "contract_code": "Deprecated"
+                },
+                {
+                    "kind": "temporary",
+                    "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+                    "location": 7252,
+                    "with": {
+                        "prim": "Pair",
+                        "args": [
+                            {
+                                "int": "104"
+                            },
+                            {
+                                "prim": "Pair",
+                                "args": [
+                                    {
+                                        "int": "4970000000000000000"
+                                    },
+                                    {
+                                        "int": "4969663118070924411"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "errorDetails": "Error occurred during estimation",
+            "name": "TezosOperationError",
+            "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
+            "kind": "temporary",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"104\"},{\"prim\":\"Pair\",\"args\":[{\"int\":\"4970000000000000000\"},{\"int\":\"4969663118070924411\"}]}]}",
+            "isError": true
+        }
+    ]
+}
