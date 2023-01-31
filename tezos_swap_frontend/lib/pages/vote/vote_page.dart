@@ -30,17 +30,18 @@ class _VotePageState extends State<VotePage> {
               color: ThemeRaclette.black,
               borderRadius: BorderRadius.circular(12)),
           child: Center(
-              child: ElevatedButton(
-                  onPressed: () async {
-                    await Get.put(WalletService()).authorize('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
-                        // .authorizeContract('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
-                  },
-                  child: Text('test'))
-              // Text(
-              //   'coming soon...',
-              //   style: TextStyle(fontSize: 24),
-              // ),
-              )),
+            child:
+                // ElevatedButton(
+                //     onPressed: () async {
+                //       await Get.put(WalletService()).authorize('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+                //           // .authorizeContract('KT1AR4CSxb15uFKacgKDGmPDSSvBLZ5m1Fz7', 'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+                //     },
+                //     child: Text('test'))
+                Text(
+              'coming soon...',
+              style: TextStyle(fontSize: 24),
+            ),
+          )),
     );
   }
 }

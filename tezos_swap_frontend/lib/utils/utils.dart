@@ -167,23 +167,41 @@ Future<double> calcSecondTokenAmount(
 
 ///Calculate the amount of X or Y given one of the two
 Future<double> calcSecondTokenAmountSwap(
-    double amount, int decimals, String contract) async {
+    double amount, int decimals, String contract, bool yToX) async {
   var fee = await getFeeFromContract(contract);
   fee = 1 - (fee / 10000);
 
   var liquidity = await getLiquidityFromContract(contract);
   var sqcp = await getSqrtCurrentPrice(contract);
+  BigInt pn = BigInt.zero;
+  if (yToX) {
+    var priceDiff =
+        (etherToWei(amount, decimals) * powBigInt(BigInt.from(2), 80)) ~/
+            liquidity;
+    pn = sqcp + priceDiff;
 
-  BigInt pn = (liquidity * powBigInt(BigInt.from(2), 80) * sqcp) ~/
-      (liquidity * powBigInt(BigInt.from(2), 80) +
-          etherToWei(amount, decimals) * sqcp);
-
-  if (sqcp < pn) {
-    BigInt res = liquidity * (pn - sqcp) ~/ powBigInt(BigInt.from(2), 80);
-    return (weiToEther(res) * fee);
+    if (sqcp < pn) {
+      //(liq * q80 * (pb - pa) / pa / pb)
+      BigInt res =
+          liquidity * powBigInt(BigInt.from(2), 80) * (pn - sqcp) ~/ sqcp ~/ pn;
+      return (weiToEther(res) * fee);
+    } else {
+      BigInt res =
+          liquidity * powBigInt(BigInt.from(2), 80) * (sqcp - pn) ~/ pn ~/ sqcp;
+      return (weiToEther(res) * fee);
+    }
   } else {
-    BigInt res = liquidity * (sqcp - pn) ~/ powBigInt(BigInt.from(2), 80);
-    return (weiToEther(res) * fee);
+    pn = (liquidity * powBigInt(BigInt.from(2), 80) * sqcp) ~/
+        (liquidity * powBigInt(BigInt.from(2), 80) +
+            etherToWei(amount, decimals) * sqcp);
+
+    if (sqcp < pn) {
+      BigInt res = liquidity * (pn - sqcp) ~/ powBigInt(BigInt.from(2), 80);
+      return (weiToEther(res) * fee);
+    } else {
+      BigInt res = liquidity * (sqcp - pn) ~/ powBigInt(BigInt.from(2), 80);
+      return (weiToEther(res) * fee);
+    }
   }
 }
 
