@@ -73,11 +73,19 @@ class _SwapState extends State<Swap> {
                       builder: ((context, a, b, child) => SwapEntry(
                             controller: upperController,
                             function: (value) async {
+                              bool yToX = false;
+                              if (contracts.any((element) =>
+                                  element.tokenX ==
+                                      tokenProvider2.token!.tokenAddress &&
+                                  element.tokenY ==
+                                      tokenProvider1.token!.tokenAddress)) {
+                                yToX = true;
+                              }
                               var a = await calcSecondTokenAmountSwap(
                                   double.parse(upperController.text),
                                   18,
-                                  testContract);
-                              print(a);
+                                  testContract,
+                                  yToX);
 
                               lowerController.text = a.toString();
                               // lowerController.text =
