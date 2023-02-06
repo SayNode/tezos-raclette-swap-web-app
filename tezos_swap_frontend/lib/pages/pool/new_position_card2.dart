@@ -452,7 +452,7 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                                 var a =
                                                     await calcSecondTokenAmount(
                                                         double.parse(controller
-                                                            .upperController
+                                                            .lowerController
                                                             .text),
                                                         18,
                                                         controller.min.value,

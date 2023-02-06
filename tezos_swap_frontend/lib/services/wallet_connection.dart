@@ -6,11 +6,7 @@ import 'package:get/get.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
 import 'package:tezos_swap_frontend/utils/utils.dart';
-
-import '../models/contract_model.dart';
-import '../pages/widgets/card_route.dart';
 import '../pages/widgets/card_route_not dismissable.dart';
-import '../pages/widgets/select_token_card.dart';
 import '../theme/ThemeRaclette.dart';
 
 class WalletService extends GetxService {
@@ -20,8 +16,7 @@ class WalletService extends GetxService {
   authorize(String tokenContract, String swapContract) async {
     bool isOp =
         await checkIfOperator(tokenContract, address.value, swapContract);
-
-    if (isOp) {
+    if (!isOp) {
       String id = nanoid();
       html.window.addEventListener("message", (event) {
         final evt = (event as html.MessageEvent);
@@ -32,27 +27,28 @@ class WalletService extends GetxService {
         }
       }, true);
       var done = await Navigator.of(Get.context!).push(CardDialogRouteNoDismiss(
-          builder: (context) {
-            authorizeContract(tokenContract, swapContract, id);
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: 400,
-                  height: 500,
-                  child: Card(
-                    color: ThemeRaclette.primaryStatic,
-                    shape: RoundedRectangleBorder(
-                        side: const BorderSide(color: Colors.white, width: 2.0),
-                        borderRadius: BorderRadius.circular(20.0)),
-                    child: const Center(
-                      child: Text('Waiting for authorization.'),
-                    ),
+        builder: (context) {
+          authorizeContract(tokenContract, swapContract, id);
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: 400,
+                height: 500,
+                child: Card(
+                  color: ThemeRaclette.primaryStatic,
+                  shape: RoundedRectangleBorder(
+                      side: const BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(20.0)),
+                  child: const Center(
+                    child: Text('Waiting for authorization.'),
                   ),
                 ),
               ),
-            );
-          },));
+            ),
+          );
+        },
+      ));
     }
   }
 
@@ -68,13 +64,13 @@ class WalletService extends GetxService {
 //FIXME: might be problems with tokenx and y amount calculation
   swap(String contract, String recipient, double tokenX, double tokenY,
       String tokenXAddress, String tokenYAddress,
-      {bool yToX = false}) {
+      {bool yToX = false}) async{
     String entrypoint = "x_to_y";
     if (yToX) {
       entrypoint = "y_to_x";
     }
-    authorize(contract, tokenXAddress);
-    authorize(contract, tokenYAddress);
+    await authorize(tokenXAddress, contract);
+    await authorize(tokenYAddress, contract);
     print('Token X: $tokenX');
     print(tokenX.runtimeType);
     BigInt x = etherToWei(tokenX, 18);
@@ -127,8 +123,8 @@ class WalletService extends GetxService {
     String tokenXAddress,
     String tokenYAddress,
   ) async {
-    authorize(contract, tokenXAddress);
-    authorize(contract, tokenYAddress);
+    await authorize(tokenXAddress, contract);
+    await authorize(tokenYAddress, contract);
     var ticks = await getTicks(contract);
     var lowerTick = logBase(lowerPrice, 1.0001);
     var upperTick = logBase(upperPrice, 1.0001);
@@ -141,9 +137,10 @@ class WalletService extends GetxService {
 
     var currentTick = await getCurrentTick(contract);
 
-    BigInt liquidity = etherToWei(await getLiquidity(
-        yDouble, xDouble, lowerPrice, upperPrice, currentTick), 18);
-
+    BigInt liquidity = etherToWei(
+        await getLiquidity(
+            yDouble, xDouble, lowerPrice, upperPrice, currentTick),
+        18);
 
     BigInt x = etherToWei(xDouble, 18);
     BigInt y = etherToWei(yDouble, 18);
