@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nanoid/nanoid.dart';
+import 'package:tezos_swap_frontend/pages/widgets/card_route.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart' as global;
 import 'package:tezos_swap_frontend/utils/utils.dart';
 import '../pages/widgets/card_route_not dismissable.dart';
@@ -26,7 +27,7 @@ class WalletService extends GetxService {
           Get.close(1);
         }
       }, true);
-      var done = await Navigator.of(Get.context!).push(CardDialogRouteNoDismiss(
+      var done = await Navigator.of(Get.context!).push(CardDialogRoute(
         builder: (context) {
           authorizeContract(tokenContract, swapContract, id);
           return Center(
@@ -206,6 +207,10 @@ class WalletService extends GetxService {
 
   authorizeContract(
       String tokenContract, String swapContract, String id) async {
+        print(id);
+        print(tokenContract);
+        print(address.value);
+        print(swapContract);
     _request({
       "type": "OPERATION_REQUEST",
       "sourcePkh": 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf',
