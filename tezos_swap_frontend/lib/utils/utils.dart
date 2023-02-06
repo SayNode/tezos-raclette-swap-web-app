@@ -275,7 +275,6 @@ Future<List<ChartDatapoint>> buildChartPoints(String contractAddress) async {
         pow(1.0001, int.parse(position['value']['lower_tick_index'])).toInt();
     int liquidity =
         smallToFull(BigInt.parse(position['value']['liquidity']), 18).toInt();
-    print(liquidity);
     for (var i = min; i < max; i++) {
       var index = dataPoints.indexWhere((element) => element.x == i);
       if (index == -1) {

@@ -371,6 +371,7 @@ class NewPositionCard2 extends GetView<NewPositionController> {
 
                                                 controller.lowerController
                                                     .text = a.toString();
+                                                controller.changedX = 0;
                                                 // } catch (e) {
                                                 //   print('error: ${e.toString()}');
                                                 // }
@@ -463,6 +464,8 @@ class NewPositionCard2 extends GetView<NewPositionController> {
 
                                                 controller.upperController
                                                     .text = a.toString();
+
+                                                controller.changedX = 1;
                                               },
                                               controller:
                                                   controller.lowerController,
@@ -614,24 +617,70 @@ class NewPositionCard2 extends GetView<NewPositionController> {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Obx(() => PriceCard(
-                                            'Min Price',
-                                            controller.tokenX.value,
-                                            controller.tokenY.value,
-                                            controller.min,
-                                            (controller.tokenX.value != null &&
-                                                controller.tokenY.value !=
-                                                    null))),
+                                              'Min Price',
+                                              controller.tokenX.value,
+                                              controller.tokenY.value,
+                                              controller.min,
+                                              (controller.tokenX.value !=
+                                                      null &&
+                                                  controller.tokenY.value !=
+                                                      null),
+                                              (value) async {
+                                                var newMin = int.parse(
+                                                    controller
+                                                        .minController.text);
+
+                                                if (newMin >=
+                                                    controller.max.value) {
+                                                  controller.min.value =
+                                                      controller.max.value - 1;
+
+                                                  await controller
+                                                      .updateTokenCalc();
+                                                } else {
+                                                  controller.min.value =
+                                                      int.parse(controller
+                                                          .minController.text);
+                                                  await controller
+                                                      .updateTokenCalc();
+                                                }
+                                              },
+                                              controller:
+                                                  controller.minController,
+                                            )),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Obx(() => PriceCard(
-                                            'Max Price',
-                                            controller.tokenX.value,
-                                            controller.tokenY.value,
-                                            controller.max,
-                                            (controller.tokenX.value != null &&
-                                                controller.tokenY.value !=
-                                                    null))),
+                                                'Max Price',
+                                                controller.tokenX.value,
+                                                controller.tokenY.value,
+                                                controller.max,
+                                                (controller.tokenX.value !=
+                                                        null &&
+                                                    controller.tokenY.value !=
+                                                        null), (value) async {
+                                              var newMax = int.parse(controller
+                                                  .maxController.text);
+
+                                              if (newMax <=
+                                                  controller.min.value) {
+                                                controller.max.value =
+                                                    controller.min.value + 1;
+
+                                                await controller
+                                                    .updateTokenCalc();
+                                              } else {
+                                                controller.max.value =
+                                                    int.parse(controller
+                                                        .maxController.text);
+                                                await controller
+                                                    .updateTokenCalc();
+
+                                              }
+                                            },
+                                                controller:
+                                                    controller.maxController)),
                                       ),
                                     ],
                                   ),

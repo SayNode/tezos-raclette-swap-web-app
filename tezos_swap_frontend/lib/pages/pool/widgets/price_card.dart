@@ -11,15 +11,17 @@ class PriceCard extends StatefulWidget {
   RxInt price;
   String text;
   bool enabled;
+  final TextEditingController controller;
+  void Function(String) onChanged;
   PriceCard(this.text, this.token1, this.token2, this.price, this.enabled,
-      {super.key});
+      this.onChanged,
+      {super.key, required this.controller});
 
   @override
   State<PriceCard> createState() => _PriceCardState();
 }
 
 class _PriceCardState extends State<PriceCard> {
-  final controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +44,7 @@ class _PriceCardState extends State<PriceCard> {
                 Expanded(
                   child: IconButton(
                       onPressed: () {
-                        widget.price.value=widget.price.value-1;
+                        widget.price.value = widget.price.value - 1;
                       },
                       icon: const Icon(Icons.remove),
                       color: Colors.white),
@@ -50,18 +52,26 @@ class _PriceCardState extends State<PriceCard> {
                 SizedBox(
                     width: 100,
                     child: Obx(() {
-                      controller.text = widget.price.value.toString();
+                      widget.controller.value = TextEditingValue(
+                        text: widget.price.value.toString(),
+                        selection: TextSelection.collapsed(
+                            offset: widget.price.value.toString().length),
+                      );
+
+                      // widget.price.value.toString();
                       return TextField(
                         enabled: widget.enabled,
-                        controller: controller,
-                        onEditingComplete: () {
-                          widget.price.value = int.parse(controller.text);
+                        controller: widget.controller,
+                        onChanged: (value) {
+                          widget.onChanged(value);
                         },
                       );
                     })),
                 Expanded(
                   child: IconButton(
-                      onPressed: () {widget.price.value=widget.price.value+1;},
+                      onPressed: () {
+                        widget.price.value = widget.price.value + 1;
+                      },
                       icon: const Icon(Icons.add),
                       color: Colors.white),
                 ),
