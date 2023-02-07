@@ -130,11 +130,49 @@ getLiquidity(double y, double x, int pl, int pu, int currentTick) {
     var xLiquidity =
         (x * ((sqrt(pu) * sqrt(pc)) / (sqrt(pu) - sqrt(pc)))) * 0.9999;
     var yLiquidity = ((y) / (sqrt(pc) - sqrt(pl))) * 0.9999;
+
     if (xLiquidity < yLiquidity) {
       return xLiquidity;
     } else {
       return yLiquidity;
     }
+  }
+}
+
+getLiquidity2(double y, double x, int pl, int pu, int currentTick, bool isY) {
+  var pc = pow(1.0001, currentTick);
+  if (pc < pl) {
+    // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pc))   )
+    return x / ((1 / sqrt(pl)) - (1 / sqrt(pu))) * 0.9999;
+  } else if (pu < pc) {
+    //Liq= dy/( sqrt(Pc) - sqrt(Pl) )
+    return y / (sqrt(pu) - sqrt(pl)) * 0.9999;
+  } else {
+    var xLiquidity =
+        (x * ((sqrt(pu) * sqrt(pc)) / (sqrt(pu) - sqrt(pc)))) * 0.9999;
+    var yLiquidity = ((y) / (sqrt(pc) - sqrt(pl))) * 0.9999;
+
+    if (isY) {
+      return yLiquidity;
+    } else {
+      return xLiquidity;
+    }
+  }
+}
+
+_liquidity0(BigInt amount, BigInt pa, BigInt pb) {
+  if (pa > pb) {
+    return (amount * (pa * pb) ~/ powBigInt(BigInt.from(2), 80)) ~/ (pb - pa);
+  } else {
+    return (amount * (pa * pb) ~/ powBigInt(BigInt.from(2), 80)) ~/ (pb - pa);
+  }
+}
+
+liquidity1(BigInt amount, BigInt pa, BigInt pb) {
+  if (pa > pb) {
+    return amount * powBigInt(BigInt.from(2), 80) ~/ (pb - pa);
+  } else {
+    return amount * powBigInt(BigInt.from(2), 80) ~/ (pa - pb);
   }
 }
 
@@ -145,17 +183,20 @@ Future<double> calcSecondTokenAmount(
   var currentTick = await getCurrentTick(contract);
   var pc = pow(1.0001, currentTick);
   if (isY) {
-    var liquidity =
-        await getLiquidity(amount, amount * 2 * pc, pl, pu, currentTick);
-    double res = liquidity * (sqrt(pu) - sqrt(pc) / sqrt(pu) * sqrt(pc)) * 1.01;
+    var liquidity = await getLiquidity2(amount, 0, pl, pu, currentTick, true);
+    print('liquidity: $liquidity');
+
+    //'dx=',liq*(math.sqrt(pu)-sqrt_pc)/(math.sqrt(pu)*sqrt_pc)
+    double res =
+        liquidity * ((sqrt(pu) - sqrt(pc)) / (sqrt(pu) * sqrt(pc))) * 1.01;
     if (res < 0) {
       res = 0;
     }
 
     return res.toPrecision(3);
   } else {
-    var liquidity =
-        await getLiquidity(amount * 2 * pc, amount, pl, pu, currentTick);
+    var liquidity = await getLiquidity2(0, amount, pl, pu, currentTick, false);
+    print('liquidity: $liquidity');
     double res = liquidity * (sqrt(pc) - sqrt(pl)) * 1.01;
     if (res < 0) {
       res = 0;
