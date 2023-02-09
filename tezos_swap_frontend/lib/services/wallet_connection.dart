@@ -207,13 +207,9 @@ class WalletService extends GetxService {
 
   authorizeContract(
       String tokenContract, String swapContract, String id) async {
-        print(id);
-        print(tokenContract);
-        print(address.value);
-        print(swapContract);
     _request({
       "type": "OPERATION_REQUEST",
-      "sourcePkh": 'tz1NyKro1Qi2cWd66r91BwByT5gxyBoWSrFf',
+      "sourcePkh": address.value,
       "opParams": [
         {
           "kind": "transaction",
