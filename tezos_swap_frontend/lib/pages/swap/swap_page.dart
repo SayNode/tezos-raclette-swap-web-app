@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:tezos_swap_frontend/pages/swap/controllers/swap_page_controller.dart';
 import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
 import 'package:tezos_swap_frontend/services/contract_service.dart';
 import 'package:tezos_swap_frontend/services/token_provider.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/theme/ThemeRaclette.dart';
 import 'package:tezos_swap_frontend/utils/utils.dart';
-import '../../models/contract_model.dart';
 import '../../models/token.dart';
 import '../../utils/globals.dart';
 import '../../utils/value_listenable2.dart';
 
-class Swap extends StatefulWidget {
-  var walletService = Get.put(WalletService());
-  Swap({
+class SwapPage extends GetView<SwapController> {
+  SwapPage({
     Key? key,
   }) : super(key: key);
 
-  @override
-  State<Swap> createState() => _SwapState();
-}
+  
 
-class _SwapState extends State<Swap> {
-  TextEditingController upperController = TextEditingController();
-  TextEditingController lowerController = TextEditingController();
-  bool tokenPairSelected = false;
-  final tokenProvider1 = TokenProvider();
-  final tokenProvider2 = TokenProvider();
-  var contracts = Get.put(ContractService()).contracts;
   //mock ratio
   @override
   Widget build(BuildContext context) {
+    Get.put(SwapController());
     return Center(
       child: ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -68,44 +59,43 @@ class _SwapState extends State<Swap> {
                     height: 30,
                   ),
                   ValueListenableBuilder2(
-                      first: tokenProvider1,
-                      second: tokenProvider2,
+                      first: controller.tokenProvider1,
+                      second: controller.tokenProvider2,
                       builder: ((context, a, b, child) => SwapEntry(
-                            controller: upperController,
+                            controller: controller.upperController,
                             function: (value) async {
                               bool yToX = false;
-                              if (contracts.any((element) =>
+                              if (controller.contracts.any((element) =>
                                   element.tokenX ==
-                                      tokenProvider2.token!.tokenAddress &&
+                                      controller
+                                          .tokenProvider2.token!.tokenAddress &&
                                   element.tokenY ==
-                                      tokenProvider1.token!.tokenAddress)) {
+                                      controller.tokenProvider1.token!
+                                          .tokenAddress)) {
                                 yToX = true;
                               }
                               var a = await calcSecondTokenAmountSwap(
-                                  double.parse(upperController.text),
+                                  double.parse(controller.upperController.text),
                                   18,
                                   testContract,
                                   yToX);
 
-                              lowerController.text = a.toString();
-                              // lowerController.text =
-                              //     (value * tokenRatio).toString();
+                              controller.lowerController.text = a.toString();
                             },
-                            enabled: (tokenProvider1.token != null &&
-                                tokenProvider2.token != null),
-                            tokenProvider: tokenProvider1,
+                            enabled: controller.checkValidTokenPair(),
+                            tokenProvider: controller.tokenProvider1,
                           ))),
                   const SizedBox(
                     height: 15,
                   ),
                   ValueListenableBuilder2(
-                      first: tokenProvider1,
-                      second: tokenProvider2,
+                      first: controller.tokenProvider1,
+                      second: controller.tokenProvider2,
                       builder: ((context, a, b, child) => SwapEntry(
-                          controller: lowerController,
+                          controller: controller.lowerController,
                           function: (value) async {},
                           enabled: false,
-                          tokenProvider: tokenProvider2))),
+                          tokenProvider: controller.tokenProvider2))),
                   const SizedBox(
                     height: 30,
                   ),
@@ -113,13 +103,13 @@ class _SwapState extends State<Swap> {
                       width: double.infinity,
                       height: 60,
                       child: ValueListenableBuilder<TextEditingValue>(
-                          valueListenable: upperController,
+                          valueListenable: controller.upperController,
                           builder: (context, value, child) =>
                               ValueListenableBuilder2(
-                                  first: tokenProvider1,
-                                  second: tokenProvider2,
+                                  first: controller.tokenProvider1,
+                                  second: controller.tokenProvider2,
                                   builder: ((context, a, b, child) => Obx(() =>
-                                      _connectWallet(widget
+                                      controller.connectWallet(controller
                                           .walletService.address.string)))))),
                 ],
               ),
@@ -128,72 +118,6 @@ class _SwapState extends State<Swap> {
         ),
       ),
     );
-  }
-
-  _connectWallet(String address) {
-    if (address.isNotEmpty) {
-      if (tokenProvider1.token != null &&
-          tokenProvider2.token != null &&
-          contracts.any((element) =>
-              element.tokenX == tokenProvider1.token!.tokenAddress &&
-                  element.tokenY == tokenProvider2.token!.tokenAddress ||
-              element.tokenX == tokenProvider2.token!.tokenAddress &&
-                  element.tokenY == tokenProvider1.token!.tokenAddress)) {
-        if (upperController.text.isNotEmpty &&
-            double.parse(upperController.text) != 0) {
-          bool yToX = false;
-          if (contracts.any((element) =>
-              element.tokenX == tokenProvider2.token!.tokenAddress &&
-              element.tokenY == tokenProvider1.token!.tokenAddress)) {
-            yToX = true;
-          }
-          return ElevatedButton(
-              style: ThemeRaclette.invertedButtonStyle,
-              onPressed: () async {
-                // Contract contract = contracts!.firstWhere((element) =>
-                //     element.tokenX == tokenProvider1.token!.tokenAddress &&
-                //         element.tokenY == tokenProvider2.token!.tokenAddress ||
-                //     element.tokenX == tokenProvider2.token!.tokenAddress &&
-                //         element.tokenY == tokenProvider1.token!.tokenAddress);
-                await widget.walletService.swap(
-                    testContract,
-                    widget.walletService.address.string,
-                    double.parse(upperController.text),
-                    double.parse(lowerController.text),
-                    yToX: yToX,
-                    tokenProvider1.token!.tokenAddress,
-                    tokenProvider2.token!.tokenAddress);
-              },
-              child: Text(
-                'Swap',
-                style: ThemeRaclette.invertedButtonTextStyle,
-              ));
-        }
-        return ElevatedButton(
-            style: ThemeRaclette.invertedButtonStyle,
-            onPressed: null,
-            child: Text(
-              'Enter Amount',
-              style: ThemeRaclette.invertedButtonTextStyle,
-            ));
-      }
-      return ElevatedButton(
-          style: ThemeRaclette.invertedButtonStyle,
-          onPressed: null,
-          child: Text(
-            'Invalid Pair',
-            style: ThemeRaclette.invertedButtonTextStyle,
-          ));
-    }
-    return ElevatedButton(
-        style: ThemeRaclette.invertedButtonStyle,
-        onPressed: () async {
-          await widget.walletService.requestPermission();
-        },
-        child: Text(
-          'Connect Wallet',
-          style: ThemeRaclette.invertedButtonTextStyle,
-        ));
   }
 }
 

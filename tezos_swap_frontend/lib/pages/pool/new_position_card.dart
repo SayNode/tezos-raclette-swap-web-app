@@ -355,19 +355,19 @@ class NewPositionCard extends GetView<NewPositionController> {
                                                       .numberWithOptions(
                                                   decimal: true),
                                               enabled: (controller
-                                                  .checkValidTokenPair()),
+                                                  .checkValidTokenPair()&&!controller.overMax.value),
                                               onChanged: (value) async {
                                                 controller.changedX = 0;
                                                 controller.updateTokenCalc();
                                               },
                                               controller:
                                                   controller.upperController,
-                                              decoration: const InputDecoration
+                                              decoration:  InputDecoration
                                                       .collapsed(
-                                                  hintText: '0.0',
-                                                  hintStyle: TextStyle(
+                                                  hintText: (controller.overMax.value)?'Locked':'0.0',
+                                                  hintStyle: const TextStyle(
                                                       color:
-                                                          ThemeRaclette.white)),
+                                                           ThemeRaclette.white)),
                                               style: const TextStyle(
                                                   fontSize: 30,
                                                   color: ThemeRaclette.white),
@@ -433,17 +433,17 @@ class NewPositionCard extends GetView<NewPositionController> {
                                                       .numberWithOptions(
                                                   decimal: true),
                                               enabled: (controller
-                                                  .checkValidTokenPair()),
+                                                  .checkValidTokenPair()&&!controller.underMin.value),
                                               onChanged: (value) async {
                                                 controller.changedX = 1;
                                                 controller.updateTokenCalc();
                                               },
                                               controller:
                                                   controller.lowerController,
-                                              decoration: const InputDecoration
+                                              decoration:  InputDecoration
                                                       .collapsed(
-                                                  hintText: '0.0',
-                                                  hintStyle: TextStyle(
+                                                  hintText: (controller.underMin.value)?'Locked':'0.0',
+                                                  hintStyle: const TextStyle(
                                                       color:
                                                           ThemeRaclette.white)),
                                               style: const TextStyle(

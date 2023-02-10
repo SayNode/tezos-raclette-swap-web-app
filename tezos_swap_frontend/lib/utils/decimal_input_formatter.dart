@@ -14,9 +14,14 @@ class DecimalTextInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
+        if (newValue.text.isEmpty) {
+      return newValue;
+    }
     if (!isNumeric(newValue.text)) {
       return oldValue;
     }
+
+
     TextSelection newSelection = newValue.selection;
     String truncated = newValue.text;
 

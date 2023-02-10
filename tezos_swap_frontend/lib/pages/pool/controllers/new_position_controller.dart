@@ -34,6 +34,8 @@ class NewPositionController extends GetxController {
   RxInt chartEnd = 30.obs;
   RangeController rangeController = RangeController(start: 5, end: 11);
   int changedX = -1;
+  RxBool overMax = false.obs;
+  RxBool underMin = false.obs;
 
   updatedChart() async {
     //chart.value = await compute(buildChartPoints, testContract);
@@ -69,10 +71,13 @@ class NewPositionController extends GetxController {
     await updateTokenCalc();
   }
 
+  //TODO: change to more suitable way to update underMin and overMax
+
   checkIfUnderMin() async {
     var currentTick =
         await getCurrentTick('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
     var currentPrice = pow(1.0001, currentTick);
+    underMin.value = min.value > currentPrice;
 
     return min.value > currentPrice;
   }
@@ -81,6 +86,7 @@ class NewPositionController extends GetxController {
     var currentTick =
         await getCurrentTick('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
     var currentPrice = pow(1.0001, currentTick);
+    overMax.value = max.value < currentPrice;
     return max.value < currentPrice;
   }
 
@@ -90,13 +96,17 @@ class NewPositionController extends GetxController {
   }
 
   updateTokenCalc() async {
+    await checkIfOverMax();
+    await checkIfUnderMin();
+
     try {
       if (changedX == 1) {
         double input;
         try {
           input = double.parse(lowerController.text);
         } catch (e) {
-          input = 0;
+          upperController.text = '';
+          return;
         }
         var amount = await calcSecondTokenAmount(
             input, 18, min.value, max.value, testContract,
@@ -112,7 +122,8 @@ class NewPositionController extends GetxController {
         try {
           input = double.parse(upperController.text);
         } catch (e) {
-          input = 0;
+          lowerController.text = '';
+          return;
         }
         var amount = await calcSecondTokenAmount(
             input, 18, min.value, max.value, testContract,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tezos_swap_frontend/pages/pool/pools_card.dart';
-import 'package:tezos_swap_frontend/pages/swap/swap.dart';
+import 'package:tezos_swap_frontend/pages/swap/swap_page.dart';
 import 'package:tezos_swap_frontend/pages/vote/vote_page.dart';
 import '../services/balance_provider.dart';
 import '../services/wallet_connection.dart';
@@ -178,7 +178,7 @@ class HomePage extends GetView<HomeController> {
           return IndexedStack(
             index: controller.index.value,
             children: [
-              Swap(),
+              SwapPage(),
               PoolCard(),
               const VotePage()
             ],
