@@ -196,9 +196,9 @@ Future<double> calcSecondTokenAmount(
 
     //'dx=',liq*(math.sqrt(pu)-sqrt_pc)/(math.sqrt(pu)*sqrt_pc)
     double res =
-        liquidity * ((sqrt(pu) - sqrt(pc)) / (sqrt(pu) * sqrt(pc))) * 0.99;
+        liquidity * ((sqrt(pu) - sqrt(pc)) / (sqrt(pu) * sqrt(pc))) * 0.99;        
     if (res < 0) {
-      res = 0;
+      res = 0;     
     }
 
     return res.toPrecision(4);

@@ -203,21 +203,21 @@ class HomePage extends GetView<HomeController> {
               const SizedBox(
                 height: 50,
               ),
-              FutureBuilder<String>(
-                  future: BalanceProvider.getBalanceTezos(
-                      address, 'https://api.ghostnet.tzkt.io'),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return const Text('Error');
-                    }
-                    return Text('${snapshot.data} XTZ');
-                  }),
+              // FutureBuilder<String>(
+              //     future: BalanceProvider.getBalanceTezos(
+              //         address, 'https://api.ghostnet.tzkt.io'),
+              //     builder:
+              //         (BuildContext context, AsyncSnapshot<String> snapshot) {
+              //       if (!snapshot.hasData) {
+              //         return const Center(
+              //           child: CircularProgressIndicator(),
+              //         );
+              //       }
+              //       if (snapshot.hasError) {
+              //         return const Text('Error');
+              //       }
+              //       return Text('${snapshot.data} XTZ');
+              //     }),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(addressToDisplayAddress(address)),
