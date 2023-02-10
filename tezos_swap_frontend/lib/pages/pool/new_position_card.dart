@@ -1,640 +1,733 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import 'package:tezos_swap_frontend/models/chart_datapoint.dart';
-// import 'package:tezos_swap_frontend/pages/pool/widgets/fee_tier_card.dart';
-// import 'package:tezos_swap_frontend/pages/pool/widgets/price_card.dart';
-// import 'package:tezos_swap_frontend/pages/widgets/token_select_button.dart';
-// import 'package:tezos_swap_frontend/services/new_position_service.dart';
-// import 'package:tezos_swap_frontend/services/token_provider.dart';
-// import 'package:tezos_swap_frontend/utils/utils.dart';
-// import 'package:tezos_swap_frontend/utils/value_listenable2.dart';
-// import '../../services/wallet_connection.dart';
-// import '../../theme/ThemeRaclette.dart';
-// import 'package:syncfusion_flutter_sliders/sliders.dart';
-// import 'package:syncfusion_flutter_charts/charts.dart' as chart;
-// import 'package:syncfusion_flutter_core/core.dart';
+import 'dart:math';
 
-// import '../../utils/globals.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:syncfusion_flutter_charts/charts.dart' as chart;
+import 'package:syncfusion_flutter_sliders/sliders.dart';
+import 'package:tezos_swap_frontend/pages/pool/controllers/new_position_controller.dart';
+import 'package:tezos_swap_frontend/pages/pool/widgets/fee_tier_card.dart';
+import 'package:tezos_swap_frontend/services/wallet_connection.dart';
+import '../../models/chart_datapoint.dart';
+import '../../services/new_position_service.dart';
+import '../../theme/ThemeRaclette.dart';
+import '../../utils/decimal_input_formatter.dart';
+import '../../utils/globals.dart';
+import '../../utils/utils.dart';
+import '../widgets/card_route.dart';
+import '../widgets/select_token_card.dart';
+import 'widgets/price_card.dart';
 
-// class NewPositionCard extends StatefulWidget {
-//   const NewPositionCard({
-//     Key? key,
-//   }) : super(key: key);
+class NewPositionCard extends GetView<NewPositionController> {
+  const NewPositionCard({super.key});
 
-//   @override
-//   State<NewPositionCard> createState() => _NewPositionCardState();
-// }
+  @override
+  Widget build(BuildContext context) {
+    Get.put(NewPositionController());
+    var walletService = Get.put(WalletService());
+    return Center(
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 100.0),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 200,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                      color: ThemeRaclette.black,
+                      borderRadius: BorderRadius.circular(12)),
+                  child: SizedBox(
+                    width: 1000,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () => Get.put(NewPositionService())
+                                  .newPosition
+                                  .value = false,
+                              icon: const Icon(Icons.arrow_back),
+                              color: Colors.white,
+                            ),
+                            const Text(
+                              'Add Liquidity',
+                              style: TextStyle(fontSize: 24),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  debugPrint('pressing settings');
+                                },
+                                icon: const Icon(
+                                  Icons.settings,
+                                  color: ThemeRaclette.white,
+                                ))
+                          ],
+                        ),
+                        const Divider(
+                          color: Colors.white,
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Text(
+                                    'Select Pair',
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: SizedBox(
+                                    width: 400,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Obx(() {
+                                              if (controller
+                                                  .checkValidTokenPair()) {
+                                                controller.updatedChart();
+                                              }
+                                              return TextButton(
+                                                  onPressed: () async {
+                                                    var newToken = await Navigator
+                                                            .of(context)
+                                                        .push(CardDialogRoute(
+                                                            builder: (context) {
+                                                      return const SelectTokenCard();
+                                                    }));
 
-// class _NewPositionCardState extends State<NewPositionCard> {
-//   final List<double> feeTier = [0.01, 0.05, 0.3, 1];
-//   double tokenFactor = 1;
-//   bool edit = false;
-//   RxInt selected = 2.obs;
-//   final upperController = TextEditingController();
-//   final lowerController = TextEditingController();
-//   TokenProvider token1 = TokenProvider();
-//   TokenProvider token2 = TokenProvider();
-//   RxInt min = 1.obs;
-//   RxInt max = 20.obs;
-//   RangeController rangeController = RangeController(start: 5, end: 11);
-// //mock ratio
-//   double tokenRatio = 2;
-//   var walletService = Get.put(WalletService());
-//   @override
-//   Widget build(BuildContext context) {
-//     return Center(
-//       child: ScrollConfiguration(
-//         behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-//         child: SingleChildScrollView(
-//           child: Padding(
-//             padding: const EdgeInsets.only(bottom: 100.0),
-//             child: Column(
-//               children: [
-//                 const SizedBox(
-//                   height: 200,
-//                 ),
-//                 Container(
-//                   padding: const EdgeInsets.all(24),
-//                   decoration: BoxDecoration(
-//                       color: ThemeRaclette.black,
-//                       borderRadius: BorderRadius.circular(12)),
-//                   child: SizedBox(
-//                     width: 1000,
-//                     child: Column(
-//                       mainAxisSize: MainAxisSize.min,
-//                       children: [
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           //mainAxisSize: MainAxisSize.min,
-//                           children: [
-//                             IconButton(
-//                               onPressed: () => Get.put(NewPositionService())
-//                                   .newPosition
-//                                   .value = false,
-//                               icon: const Icon(Icons.arrow_back),
-//                               color: Colors.white,
-//                             ),
-//                             const Text(
-//                               'Add Liquidity',
-//                               style: TextStyle(fontSize: 24),
-//                             ),
-//                             IconButton(
-//                                 onPressed: () {
-//                                   debugPrint('pressing settings');
-//                                 },
-//                                 icon: const Icon(
-//                                   Icons.settings,
-//                                   color: ThemeRaclette.white,
-//                                 ))
-//                           ],
-//                         ),
-//                         const Divider(
-//                           color: Colors.white,
-//                         ),
-//                         Row(
-//                           mainAxisSize: MainAxisSize.min,
-//                           mainAxisAlignment: MainAxisAlignment.start,
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Column(
-//                               mainAxisAlignment: MainAxisAlignment.start,
-//                               crossAxisAlignment: CrossAxisAlignment.start,
-//                               children: [
-//                                 const Padding(
-//                                   padding: EdgeInsets.all(16.0),
-//                                   child: Text(
-//                                     'Select Pair',
-//                                     style: TextStyle(fontSize: 20),
-//                                   ),
-//                                 ),
-//                                 Padding(
-//                                   padding: const EdgeInsets.all(16.0),
-//                                   child: SizedBox(
-//                                     width: 400,
-//                                     child: Row(
-//                                       children: [
-//                                         Expanded(
-//                                           child: Padding(
-//                                             padding: const EdgeInsets.all(8.0),
-//                                             child: TokenSelectButton(token1),
-//                                           ),
-//                                         ),
-//                                         Expanded(
-//                                           child: Padding(
-//                                             padding: const EdgeInsets.all(.0),
-//                                             child: TokenSelectButton(token2),
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 Padding(
-//                                   padding: const EdgeInsets.all(16.0),
-//                                   child: Container(
-//                                     width: 400,
-//                                     decoration: BoxDecoration(
-//                                         border: Border.all(
-//                                           color: Colors.white,
-//                                           width: 2,
-//                                         ),
-//                                         borderRadius: const BorderRadius.all(
-//                                             Radius.circular(18))),
-//                                     child: Row(
-//                                       children: [
-//                                         Padding(
-//                                           padding: const EdgeInsets.all(8.0),
-//                                           child: Obx((() => Text(
-//                                               '${feeTier[selected.value]}% fee tier'))),
-//                                         ),
-//                                         const Expanded(child: SizedBox()),
-//                                         Padding(
-//                                           padding: const EdgeInsets.all(8.0),
-//                                           child: ElevatedButton(
-//                                               onPressed: () {
-//                                                 setState(() {
-//                                                   edit = !edit;
-//                                                 });
-//                                               },
-//                                               child: edit
-//                                                   ? const Text('Hide')
-//                                                   : const Text('Edit')),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 Padding(
-//                                   padding: const EdgeInsets.all(16.0),
-//                                   child: Obx((() =>
-//                                       _feeSelection(edit, selected.value))),
-//                                 ),
-//                                 const Padding(
-//                                   padding: EdgeInsets.all(16.0),
-//                                   child: Text('Deposit Amounts'),
-//                                 ),
-//                                 Padding(
-//                                   padding: const EdgeInsets.all(16.0),
-//                                   child: Container(
-//                                     padding: const EdgeInsets.all(24.0),
-//                                     width: 400,
-//                                     height: 100,
-//                                     decoration: BoxDecoration(
-//                                         color: ThemeRaclette.gray500,
-//                                         borderRadius:
-//                                             BorderRadius.circular(12)),
-//                                     child: Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceBetween,
-//                                       children: [
-//                                         SizedBox(
-//                                           width: 200,
-//                                           height: 30,
-//                                           child: ValueListenableBuilder2(
-//                                             first: token1,
-//                                             second: token2,
-//                                             builder: (context, a, b, child) {
-//                                               bool enabled = false;
-//                                               if (token1.token != null &&
-//                                                   token2.token != null) {
-//                                                 enabled = true;
-//                                               }
-//                                               return TextFormField(
-//                                                 enabled: enabled,
-//                                                 onChanged: (value) async {
-//                                                   print('change');
-//                                                   // try {
-//                                                   var a =
-//                                                       await calcSecondTokenAmount(
-//                                                           double.parse(
-//                                                               upperController
-//                                                                   .text),
-//                                                           18,
-//                                                           min.value,
-//                                                           max.value,
-//                                                           testContract);
-//                                                   print(a);
+                                                    controller.tokenX.value =
+                                                        newToken;
+                                                  },
+                                                  style:
+                                                      ThemeRaclette.buttonStyle,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        (controller.tokenX
+                                                                    .value !=
+                                                                null)
+                                                            ? Image.asset(
+                                                                controller
+                                                                    .tokenX
+                                                                    .value!
+                                                                    .icon,
+                                                                width: 25,
+                                                              )
+                                                            : const SizedBox(),
+                                                        (controller.tokenX
+                                                                    .value !=
+                                                                null)
+                                                            ? Text(
+                                                                controller
+                                                                    .tokenX
+                                                                    .value!
+                                                                    .symbol,
+                                                                style: const TextStyle(
+                                                                    color: ThemeRaclette
+                                                                        .black),
+                                                              )
+                                                            : const Text(
+                                                                "Select Token",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                        const Icon(
+                                                          Icons
+                                                              .arrow_drop_down_outlined,
+                                                          color: ThemeRaclette
+                                                              .black,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ));
+                                            }),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(.0),
+                                            child: Obx(() {
+                                              if (controller
+                                                  .checkValidTokenPair()) {
+                                                controller.updatedChart();
+                                              }
+                                              return TextButton(
+                                                  onPressed: () async {
+                                                    var newToken = await Navigator
+                                                            .of(context)
+                                                        .push(CardDialogRoute(
+                                                            builder: (context) {
+                                                      return const SelectTokenCard();
+                                                    }));
 
-//                                                   lowerController.text =
-//                                                       a.toString();
-//                                                   // } catch (e) {
-//                                                   //   print('error: ${e.toString()}');
-//                                                   // }
-//                                                   // lowerController.text =
-//                                                   //     (price / tokenFactor)
-//                                                   //         .toString();
-//                                                 },
-//                                                 controller: upperController,
-//                                                 decoration:
-//                                                     const InputDecoration
-//                                                             .collapsed(
-//                                                         hintText: '0.0',
-//                                                         hintStyle: TextStyle(
-//                                                             color: ThemeRaclette
-//                                                                 .white)),
-//                                                 style: const TextStyle(
-//                                                     fontSize: 30,
-//                                                     color: ThemeRaclette.white),
-//                                               );
-//                                             },
-//                                           ),
-//                                         ),
-//                                         ValueListenableBuilder(
-//                                           valueListenable: token1,
-//                                           builder: (context, value, child) =>
-//                                               Row(
-//                                             mainAxisAlignment:
-//                                                 MainAxisAlignment.spaceBetween,
-//                                             children: [
-//                                               (token1.token != null)
-//                                                   ? Image.asset(
-//                                                       token1.token!.icon,
-//                                                       width: 25,
-//                                                     )
-//                                                   : const SizedBox(),
-//                                               (token1.token != null)
-//                                                   ? Text(
-//                                                       token1.token!.symbol,
-//                                                       style: const TextStyle(
-//                                                           color: ThemeRaclette
-//                                                               .black),
-//                                                     )
-//                                                   : const Text(
-//                                                       "Select Token",
-//                                                       style: TextStyle(
-//                                                           color: Colors.white),
-//                                                     ),
-//                                             ],
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 Padding(
-//                                   padding: const EdgeInsets.all(16.0),
-//                                   child: Container(
-//                                     padding: const EdgeInsets.all(24.0),
-//                                     width: 400,
-//                                     height: 100,
-//                                     decoration: BoxDecoration(
-//                                         color: ThemeRaclette.gray500,
-//                                         borderRadius:
-//                                             BorderRadius.circular(12)),
-//                                     child: Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceBetween,
-//                                       children: [
-//                                         SizedBox(
-//                                           width: 200,
-//                                           height: 30,
-//                                           child: ValueListenableBuilder2(
-//                                             first: token1,
-//                                             second: token2,
-//                                             builder: (context, a, b, child) {
-//                                               bool enabled = false;
-//                                               if (token1.token != null &&
-//                                                   token2.token != null) {
-//                                                 enabled = true;
-//                                               }
-//                                               return TextFormField(
-//                                                 enabled: enabled,
-//                                                 controller: lowerController,
-//                                                 onChanged: (value) async {
-//                                                     var a =
-//                                                         await calcSecondTokenAmount(
-//                                                             double.parse(
-//                                                                 upperController
-//                                                                     .text),
-//                                                             18,
-//                                                             min.value,
-//                                                             max.value,
-//                                                             testContract, isY: true);
-//                                                     print(a);
+                                                    controller.tokenY.value =
+                                                        newToken;
+                                                  },
+                                                  style:
+                                                      ThemeRaclette.buttonStyle,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        (controller.tokenY
+                                                                    .value !=
+                                                                null)
+                                                            ? Image.asset(
+                                                                controller
+                                                                    .tokenY
+                                                                    .value!
+                                                                    .icon,
+                                                                width: 25,
+                                                              )
+                                                            : const SizedBox(),
+                                                        (controller.tokenY
+                                                                    .value !=
+                                                                null)
+                                                            ? Text(
+                                                                controller
+                                                                    .tokenY
+                                                                    .value!
+                                                                    .symbol,
+                                                                style: const TextStyle(
+                                                                    color: ThemeRaclette
+                                                                        .black),
+                                                              )
+                                                            : const Text(
+                                                                "Select Token",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                        const Icon(
+                                                          Icons
+                                                              .arrow_drop_down_outlined,
+                                                          color: ThemeRaclette
+                                                              .black,
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ));
+                                            }),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Container(
+                                    width: 400,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 2,
+                                        ),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(18))),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Obx((() => Text(
+                                              '${controller.feeTier[controller.feeIndex.value]}% fee tier'))),
+                                        ),
+                                        const Expanded(child: SizedBox()),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                controller.expandFeeSelection
+                                                        .value =
+                                                    !controller
+                                                        .expandFeeSelection
+                                                        .value;
+                                              },
+                                              child: controller
+                                                      .expandFeeSelection.value
+                                                  ? const Text('Hide')
+                                                  : const Text('Edit')),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Obx((() => (controller
+                                          .expandFeeSelection.value)
+                                      ? SizedBox(
+                                          width: 400,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              FeeTierCard(
+                                                  'Best for very stable pairs.',
+                                                  controller.feeTier[0],
+                                                  controller.feeIndex.value ==
+                                                      0, () {
+                                                controller.feeIndex.value = 0;
+                                              }),
+                                              FeeTierCard(
+                                                  'Best for stable pairs.',
+                                                  controller.feeTier[1],
+                                                  controller.feeIndex.value ==
+                                                      1, () {
+                                                controller.feeIndex.value = 1;
+                                              }),
+                                              FeeTierCard(
+                                                  'Best for most pairs',
+                                                  controller.feeTier[2],
+                                                  controller.feeIndex.value ==
+                                                      2, () {
+                                                controller.feeIndex.value = 2;
+                                              }),
+                                              FeeTierCard(
+                                                  'Best for exotic pairs.',
+                                                  controller.feeTier[3],
+                                                  controller.feeIndex.value ==
+                                                      3, () {
+                                                controller.feeIndex.value = 3;
+                                              }),
+                                            ],
+                                          ),
+                                        )
+                                      : const SizedBox())),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Text('Deposit Amounts'),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24.0),
+                                    width: 400,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        color: ThemeRaclette.gray500,
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          height: 30,
+                                          child: Obx(() {
+                                            return TextFormField(
+                                              inputFormatters: [
+                                                DecimalTextInputFormatter(
+                                                    decimalRange: 4)
+                                              ],
+                                              keyboardType: const TextInputType
+                                                      .numberWithOptions(
+                                                  decimal: true),
+                                              enabled: (controller
+                                                  .checkValidTokenPair()),
+                                              onChanged: (value) async {
+                                                controller.changedX = 0;
+                                                controller.updateTokenCalc();
+                                              },
+                                              controller:
+                                                  controller.upperController,
+                                              decoration: const InputDecoration
+                                                      .collapsed(
+                                                  hintText: '0.0',
+                                                  hintStyle: TextStyle(
+                                                      color:
+                                                          ThemeRaclette.white)),
+                                              style: const TextStyle(
+                                                  fontSize: 30,
+                                                  color: ThemeRaclette.white),
+                                            );
+                                          }),
+                                        ),
+                                        Obx(() {
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              (controller.tokenX.value != null)
+                                                  ? Image.asset(
+                                                      controller
+                                                          .tokenX.value!.icon,
+                                                      width: 25,
+                                                    )
+                                                  : const SizedBox(),
+                                              (controller.tokenX.value != null)
+                                                  ? Text(
+                                                      controller
+                                                          .tokenX.value!.symbol,
+                                                      style: const TextStyle(
+                                                          color: ThemeRaclette
+                                                              .black),
+                                                    )
+                                                  : const Text(
+                                                      "Select Token",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                            ],
+                                          );
+                                        })
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.all(24.0),
+                                    width: 400,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                        color: ThemeRaclette.gray500,
+                                        borderRadius:
+                                            BorderRadius.circular(12)),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          width: 200,
+                                          height: 30,
+                                          child: Obx(() {
+                                            return TextFormField(
+                                              inputFormatters: [
+                                                DecimalTextInputFormatter(
+                                                    decimalRange: 4)
+                                              ],
+                                              keyboardType: const TextInputType
+                                                      .numberWithOptions(
+                                                  decimal: true),
+                                              enabled: (controller
+                                                  .checkValidTokenPair()),
+                                              onChanged: (value) async {
+                                                controller.changedX = 1;
+                                                controller.updateTokenCalc();
+                                              },
+                                              controller:
+                                                  controller.lowerController,
+                                              decoration: const InputDecoration
+                                                      .collapsed(
+                                                  hintText: '0.0',
+                                                  hintStyle: TextStyle(
+                                                      color:
+                                                          ThemeRaclette.white)),
+                                              style: const TextStyle(
+                                                  fontSize: 30,
+                                                  color: ThemeRaclette.white),
+                                            );
+                                          }),
+                                        ),
+                                        Obx(() {
+                                          return Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              (controller.tokenY.value != null)
+                                                  ? Image.asset(
+                                                      controller
+                                                          .tokenY.value!.icon,
+                                                      width: 25,
+                                                    )
+                                                  : const SizedBox(),
+                                              (controller.tokenY.value != null)
+                                                  ? Text(
+                                                      controller
+                                                          .tokenY.value!.symbol,
+                                                      style: const TextStyle(
+                                                          color: ThemeRaclette
+                                                              .black),
+                                                    )
+                                                  : const Text(
+                                                      "Select Token",
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                            ],
+                                          );
+                                        })
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Select Price Range',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                const Text(
+                                  'Current Price:',
+                                ),
+                                Obx(
+                                  () {
+                                    if (controller.checkValidTokenPair()) {
+                                      return SizedBox(
+                                        width: 300,
+                                        height: 300,
+                                        child: Obx(
+                                          (() {
+                                            controller.rangeController.start =
+                                                controller.min.value;
+                                            controller.rangeController.end =
+                                                controller.max.value;
+                                            return SfRangeSelector(
+                                              controller:
+                                                  controller.rangeController,
+                                              min: controller.chartStart.value,
+                                              max: controller.chartEnd.value,
+                                              onChangeEnd: ((value) {
+                                                controller.updateMin(
+                                                    value.start.round());
+                                                controller.updateMax(
+                                                    value.end.round());
+                                              }),
+                                              labelPlacement:
+                                                  LabelPlacement.onTicks,
+                                              interval: 5,
+                                              showTicks: true,
+                                              showLabels: true,
+                                              child: SizedBox(
+                                                  height: 200,
+                                                  width: 300,
+                                                  child: chart.SfCartesianChart(
+                                                    margin:
+                                                        const EdgeInsets.all(0),
+                                                    primaryXAxis:
+                                                        chart.NumericAxis(
+                                                      minimum: 0,
+                                                      maximum: 30,
+                                                      isVisible: false,
+                                                    ),
+                                                    primaryYAxis:
+                                                        chart.NumericAxis(
+                                                            isVisible: false,
+                                                            maximum: 50000),
+                                                    series: <
+                                                        chart.SplineAreaSeries<
+                                                            ChartDatapoint,
+                                                            double>>[
+                                                      chart.SplineAreaSeries<
+                                                              ChartDatapoint,
+                                                              double>(
+                                                          dataSource: controller
+                                                              .chart.value,
+                                                          xValueMapper:
+                                                              (ChartDatapoint
+                                                                          sales,
+                                                                      int
+                                                                          index) =>
+                                                                  sales.x,
+                                                          yValueMapper:
+                                                              (ChartDatapoint
+                                                                          sales,
+                                                                      int index) =>
+                                                                  sales.y)
+                                                    ],
+                                                  )),
+                                            );
+                                          }),
+                                        ),
+                                      );
+                                    } else {
+                                      return const SizedBox(
+                                          width: 300,
+                                          height: 300,
+                                          child: Center(
+                                            child: Text(
+                                                'Your position will appear here.'),
+                                          ));
+                                    }
+                                  },
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Obx(() => PriceCard(
+                                              'Min Price',
+                                              controller.tokenX.value,
+                                              controller.tokenY.value,
+                                              controller.min,
+                                              (controller
+                                                  .checkValidTokenPair()),
+                                              (value) async {
+                                                var newMin = int.parse(
+                                                    controller
+                                                        .minController.text);
 
-//                                                     upperController.text =
-//                                                         a.toString();
-//                                                 },
-//                                                 decoration:
-//                                                     const InputDecoration
-//                                                             .collapsed(
-//                                                         hintText: '0.0',
-//                                                         hintStyle: TextStyle(
-//                                                             color: ThemeRaclette
-//                                                                 .white)),
-//                                                 style: const TextStyle(
-//                                                     fontSize: 30,
-//                                                     color: ThemeRaclette.white),
-//                                               );
-//                                             },
-//                                           ),
-//                                         ),
-//                                         ValueListenableBuilder(
-//                                           valueListenable: token2,
-//                                           builder: (context, value, child) =>
-//                                               Row(
-//                                             mainAxisAlignment:
-//                                                 MainAxisAlignment.spaceBetween,
-//                                             children: [
-//                                               (token2.token != null)
-//                                                   ? Image.asset(
-//                                                       token2.token!.icon,
-//                                                       width: 25,
-//                                                     )
-//                                                   : const SizedBox(),
-//                                               (token2.token != null)
-//                                                   ? Text(
-//                                                       token2.token!.symbol,
-//                                                       style: const TextStyle(
-//                                                           color: ThemeRaclette
-//                                                               .black),
-//                                                     )
-//                                                   : const Text(
-//                                                       "Select Token",
-//                                                       style: TextStyle(
-//                                                           color: Colors.white),
-//                                                     ),
-//                                             ],
-//                                           ),
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 // Padding(
-//                                 //   padding: const EdgeInsets.all(16.0),
-//                                 //   child: Container(
-//                                 //     padding: const EdgeInsets.all(24.0),
-//                                 //     width: 400,
-//                                 //     height: 100,
-//                                 //     decoration: BoxDecoration(
-//                                 //         color: ThemeRaclette.gray500,
-//                                 //         borderRadius:
-//                                 //             BorderRadius.circular(12)),
-//                                 //     child: TextFormField(
-//                                 //       controller: liquidityController,
-//                                 //       decoration:
-//                                 //           const InputDecoration.collapsed(
-//                                 //               hintText: 'enter liquidity',
-//                                 //               hintStyle: TextStyle(
-//                                 //                   color: ThemeRaclette.white)),
-//                                 //       style: const TextStyle(
-//                                 //           fontSize: 30,
-//                                 //           color: ThemeRaclette.white),
-//                                 //     ),
-//                                 //   ),
-//                                 // )
-//                               ],
-//                             ),
-//                             const SizedBox(
-//                               width: 20,
-//                             ),
-//                             Column(
-//                               mainAxisAlignment: MainAxisAlignment.start,
-//                               children: [
-//                                 const Text(
-//                                   'Select Price Range',
-//                                   style: TextStyle(fontSize: 20),
-//                                 ),
-//                                 const Text(
-//                                   'Current Price:',
-//                                 ),
-//                                 FutureBuilder<List<ChartDatapoint>>(
-//                                   future: buildChartPoints(testContract),
-//                                   builder: (
-//                                     BuildContext context,
-//                                     AsyncSnapshot<List<ChartDatapoint>>
-//                                         snapshot,
-//                                   ) {
-//                                     if (snapshot.connectionState ==
-//                                         ConnectionState.waiting) {
-//                                       return CircularProgressIndicator();
-//                                     } else if (snapshot.connectionState ==
-//                                         ConnectionState.done) {
-//                                       if (snapshot.hasError) {
-//                                         return const Text('Error');
-//                                       } else if (snapshot.hasData) {
-//                                         return ValueListenableBuilder2(
-//                                           first: token1,
-//                                           second: token2,
-//                                           builder: (context, a, b, child) {
-//                                             if (token1.token != null &&
-//                                                 token2.token != null) {
-//                                               return SizedBox(
-//                                                 width: 300,
-//                                                 child: Obx(
-//                                                   (() {
-//                                                     rangeController.start =
-//                                                         min.value;
-//                                                     rangeController.end =
-//                                                         max.value;
-//                                                     return SfRangeSelector(
-//                                                       controller:
-//                                                           rangeController,
-//                                                       min: 1,
-//                                                       max: 50,
-//                                                       onChangeEnd: ((value) {
-//                                                         min.value =
-//                                                             value.start.round();
-//                                                         max.value =
-//                                                             value.end.round();
-//                                                       }),
-//                                                       labelPlacement:
-//                                                           LabelPlacement
-//                                                               .onTicks,
-//                                                       interval: 5,
-//                                                       showTicks: true,
-//                                                       showLabels: true,
-//                                                       child: SizedBox(
-//                                                           height: 200,
-//                                                           child: chart
-//                                                               .SfCartesianChart(
-//                                                             margin:
-//                                                                 const EdgeInsets
-//                                                                     .all(0),
-//                                                             primaryXAxis: chart
-//                                                                 .NumericAxis(
-//                                                               minimum: 0,
-//                                                               maximum: 50,
-//                                                               isVisible: false,
-//                                                             ),
-//                                                             primaryYAxis: chart
-//                                                                 .NumericAxis(
-//                                                                     isVisible:
-//                                                                         false,
-//                                                                     maximum:
-//                                                                         20000),
-//                                                             series: <
-//                                                                 chart.SplineAreaSeries<
-//                                                                     ChartDatapoint,
-//                                                                     double>>[
-//                                                               chart.SplineAreaSeries<
-//                                                                       ChartDatapoint,
-//                                                                       double>(
-//                                                                   dataSource:
-//                                                                       snapshot
-//                                                                           .data!,
-//                                                                   xValueMapper:
-//                                                                       (ChartDatapoint sales,
-//                                                                               int
-//                                                                                   index) =>
-//                                                                           sales
-//                                                                               .x,
-//                                                                   yValueMapper:
-//                                                                       (ChartDatapoint sales,
-//                                                                               int index) =>
-//                                                                           sales.y)
-//                                                             ],
-//                                                           )),
-//                                                     );
-//                                                   }),
-//                                                 ),
-//                                               );
-//                                             } else {
-//                                               return const SizedBox(
-//                                                   width: 300,
-//                                                   height: 300,
-//                                                   child: Center(
-//                                                     child: Text(
-//                                                         'Your position will appear here.'),
-//                                                   ));
-//                                             }
-//                                           },
-//                                         );
-//                                       } else {
-//                                         return const Text('Empty data');
-//                                       }
-//                                     } else {
-//                                       return Text(
-//                                           'State: ${snapshot.connectionState}');
-//                                     }
-//                                   },
-//                                 ),
-//                                 Padding(
-//                                   padding: const EdgeInsets.all(8.0),
-//                                   child: Row(
-//                                     children: [
-//                                       Padding(
-//                                         padding: const EdgeInsets.all(8.0),
-//                                         child: ValueListenableBuilder2(
-//                                           first: token1,
-//                                           second: token2,
-//                                           builder: (context, a, b, child) {
-//                                             bool enable = false;
-//                                             if (token1.token != null &&
-//                                                 token2.token != null) {
-//                                               enable = true;
-//                                             }
-//                                             return PriceCard('Min Price',
-//                                                 token1.token, token2.token, min, enable);
-//                                           },
-//                                         ),
-//                                       ),
-//                                       Padding(
-//                                         padding: const EdgeInsets.all(8.0),
-//                                         child: ValueListenableBuilder2(
-//                                           first: token1,
-//                                           second: token2,
-//                                           builder: (context, a, b, child) {
-//                                             bool enable = false;
-//                                             if (token1.token != null &&
-//                                                 token2.token != null) {
-//                                               enable = true;
-//                                             }
-//                                             return PriceCard('Max Price',
-//                                                 token1.token, token2.token, max, enable);
-//                                           },
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                 ),
-//                                 Padding(
-//                                     padding: const EdgeInsets.all(8.0),
-//                                     child: SizedBox(
-//                                       width: 400,
-//                                       height: 60,
-//                                       child: Obx(() => (walletService
-//                                               .address.string.isNotEmpty)
-//                                           ? ElevatedButton(
-//                                               style: ThemeRaclette
-//                                                   .invertedButtonStyle,
-//                                               onPressed: () async {
-//                                                 //TODO: proper contract selection
+                                                if (newMin >=
+                                                    controller.max.value) {
+                                                  controller.updateMin(
+                                                      controller.max.value - 1);
 
-//                                                 // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
+                                                  await controller
+                                                      .updateTokenCalc();
+                                                } else {
+                                                  controller.updateMin(
+                                                      int.parse(controller
+                                                          .minController.text));
+                                                  await controller
+                                                      .updateTokenCalc();
+                                                }
+                                              },
+                                              controller:
+                                                  controller.minController,
+                                            )),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Obx(() => PriceCard(
+                                                'Max Price',
+                                                controller.tokenX.value,
+                                                controller.tokenY.value,
+                                                controller.max,
+                                                (controller
+                                                    .checkValidTokenPair()),
+                                                (value) async {
+                                              var newMax = int.parse(controller
+                                                  .maxController.text);
 
-//                                                 walletService.setPosition(
-//                                                     testContract,
-//                                                     walletService
-//                                                         .address.string,
-//                                                     double.parse(
-//                                                         upperController.text),
-//                                                     double.parse(
-//                                                         lowerController.text),
-//                                                     min.value,
-//                                                     max.value,
-//                                                     token1.token!.tokenAddress,
-//                                                     token2.token!.tokenAddress);
-//                                               },
-//                                               child: Text(
-//                                                 'Submit',
-//                                                 style: ThemeRaclette
-//                                                     .invertedButtonTextStyle,
-//                                               ))
-//                                           : ElevatedButton(
-//                                               style: ThemeRaclette
-//                                                   .invertedButtonStyle,
-//                                               onPressed: () async {
-//                                                 await walletService
-//                                                     .requestPermission();
-//                                               },
-//                                               child: Text(
-//                                                 'Connect Wallet',
-//                                                 style: ThemeRaclette
-//                                                     .invertedButtonTextStyle,
-//                                               ))),
-//                                     )),
-//                               ],
-//                             )
-//                           ],
-//                         )
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
+                                              if (newMax <=
+                                                  controller.min.value) {
+                                                controller.max.value =
+                                                    controller.updateMax(
+                                                        controller.min.value +
+                                                            1);
 
-//   Widget _feeSelection(bool edit, int s) {
-//     if (edit) {
-//       return SizedBox(
-//         width: 400,
-//         child: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             FeeTierCard('Best for very stable pairs.', feeTier[0], s == 0, () {
-//               selected.value = 0;
-//             }),
-//             FeeTierCard('Best for stable pairs.', feeTier[1], s == 1, () {
-//               selected.value = 1;
-//             }),
-//             FeeTierCard('Best for most pairs', feeTier[2], s == 2, () {
-//               selected.value = 2;
-//             }),
-//             FeeTierCard('Best for exotic pairs.', feeTier[3], s == 3, () {
-//               selected.value = 3;
-//             }),
-//           ],
-//         ),
-//       );
-//     }
+                                                await controller
+                                                    .updateTokenCalc();
+                                              } else {
+                                                controller.max.value =
+                                                    controller.updateMax(
+                                                        int.parse(controller
+                                                            .maxController
+                                                            .text));
+                                                await controller
+                                                    .updateTokenCalc();
+                                              }
+                                            },
+                                                controller:
+                                                    controller.maxController)),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      width: 400,
+                                      height: 60,
+                                      child: Obx(() => (walletService
+                                              .address.string.isNotEmpty)
+                                          ? ElevatedButton(
+                                              style: ThemeRaclette
+                                                  .invertedButtonStyle,
+                                              onPressed: () async {
+                                                //TODO: proper contract selection
 
-//     return const SizedBox();
-//   }
-// }
+                                                // walletProvider.authorizeContract(token1.token!.tokenAddress, testContract);
+                                                var tkx;
+                                                var tky;
+
+                                                if (controller.tokenInverted) {
+                                                  tkx = controller.tokenY.value!
+                                                      .tokenAddress;
+                                                  tky = controller.tokenX.value!
+                                                      .tokenAddress;
+                                                } else {
+                                                  tkx = controller.tokenX.value!
+                                                      .tokenAddress;
+                                                  tky = controller.tokenY.value!
+                                                      .tokenAddress;
+                                                }
+
+                                                walletService.setPosition(
+                                                    testContract,
+                                                    walletService
+                                                        .address.string,
+                                                    double.parse(controller
+                                                        .upperController.text),
+                                                    double.parse(controller
+                                                        .lowerController.text),
+                                                    controller.min.value,
+                                                    controller.max.value,
+                                                    tkx,
+                                                    tky);
+                                              },
+                                              child: Text(
+                                                'Submit',
+                                                style: ThemeRaclette
+                                                    .invertedButtonTextStyle,
+                                              ))
+                                          : ElevatedButton(
+                                              style: ThemeRaclette
+                                                  .invertedButtonStyle,
+                                              onPressed: () async {
+                                                await walletService
+                                                    .requestPermission();
+                                              },
+                                              child: Text(
+                                                'Connect Wallet',
+                                                style: ThemeRaclette
+                                                    .invertedButtonTextStyle,
+                                              ))),
+                                    )),
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

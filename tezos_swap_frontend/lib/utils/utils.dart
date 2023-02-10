@@ -101,6 +101,13 @@ getSqrtCurrentPrice(String contract) async {
   return BigInt.parse(map['sqrt_price']);
 }
 
+bool isNumeric(String s) {
+ if (s == null) {
+   return false;
+ }
+ return double.tryParse(s) != null;
+}
+
 getFeeFromContract(String contract) async {
   var headers = {
     "Accept": "application/json",
@@ -193,18 +200,18 @@ Future<double> calcSecondTokenAmount(
       res = 0;
     }
 
-    return res.toPrecision(3);
+    return res.toPrecision(4);
   } else {
     var liquidity = await getLiquidity2(0, amount, pl, pu, currentTick, false);
-    print('liquidity: $liquidity');
-    double res = liquidity * (sqrt(pc) - sqrt(pl)) * 1.01;
+    double res = liquidity * (sqrt(pc) - sqrt(pl)) * 0.99;
     if (res < 0) {
       res = 0;
     }
 
-    return res.toPrecision(3);
+    return res.toPrecision(4);
   }
 }
+
 
 ///Calculate the amount of X or Y given one of the two
 Future<double> calcSecondTokenAmountSwap(

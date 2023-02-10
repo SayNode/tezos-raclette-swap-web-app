@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import '../../../models/token.dart';
 import '../../../services/token_provider.dart';
 import '../../../theme/ThemeRaclette.dart';
+import '../../../utils/decimal_input_formatter.dart';
 
 // ignore: must_be_immutable
 class PriceCard extends StatefulWidget {
@@ -39,66 +41,52 @@ class _PriceCardState extends State<PriceCard> {
               widget.text,
               style: const TextStyle(color: ThemeRaclette.white),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: IconButton(
-                      onPressed: () {
-                        widget.price.value = widget.price.value - 1;
-                      },
-                      icon: const Icon(Icons.remove),
-                      color: Colors.white),
-                ),
-                SizedBox(
-                    width: 100,
-                    child: Obx(() {
-                      widget.controller.value = TextEditingValue(
-                        text: widget.price.value.toString(),
-                        selection: TextSelection.collapsed(
-                            offset: widget.price.value.toString().length),
-                      );
+            Center(
+              child: SizedBox(
+                  width: 100,
+                  child: Obx(() {
+                    widget.controller.value = TextEditingValue(
+                      text: widget.price.value.toString(),
+                      selection: TextSelection.collapsed(
+                          offset: widget.price.value.toString().length),
+                    );
 
-                      // widget.price.value.toString();
-                      return TextField(
+                    // widget.price.value.toString();
+                    return Center(
+                      child: TextField(
+                        textAlign: TextAlign.center,
                         enabled: widget.enabled,
                         controller: widget.controller,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        keyboardType: TextInputType.number,
                         onChanged: (value) {
                           widget.onChanged(value);
                         },
-                      );
-                    })),
-                Expanded(
-                  child: IconButton(
-                      onPressed: () {
-                        widget.price.value = widget.price.value + 1;
-                      },
-                      icon: const Icon(Icons.add),
-                      color: Colors.white),
-                ),
-              ],
+                      ),
+                    );
+                  })),
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: (widget.token1 != null)
-                      ? Text(
-                          widget.token1!.symbol,
-                          style: const TextStyle(color: ThemeRaclette.white),
-                        )
-                      : const SizedBox(),
-                ),
+                (widget.token1 != null)
+                    ? Text(
+                        widget.token1!.symbol,
+                        style: const TextStyle(color: ThemeRaclette.white),
+                      )
+                    : const SizedBox(),
                 const Text(
                   ' per ',
                   style: TextStyle(color: ThemeRaclette.white),
                 ),
-                Expanded(
-                  child: (widget.token2 != null)
-                      ? Text(
-                          widget.token2!.symbol,
-                          style: const TextStyle(color: ThemeRaclette.white),
-                        )
-                      : const SizedBox(),
-                ),
+                (widget.token2 != null)
+                    ? Text(
+                        widget.token2!.symbol,
+                        style: const TextStyle(color: ThemeRaclette.white),
+                      )
+                    : const SizedBox(),
               ],
             ),
           ],

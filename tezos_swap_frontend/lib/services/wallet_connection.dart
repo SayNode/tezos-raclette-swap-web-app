@@ -72,8 +72,6 @@ class WalletService extends GetxService {
     }
     await authorize(tokenXAddress, contract);
     await authorize(tokenYAddress, contract);
-    print('Token X: $tokenX');
-    print(tokenX.runtimeType);
     BigInt x = etherToWei(tokenX, 18);
     BigInt y = etherToWei(tokenY, 18);
     _request({

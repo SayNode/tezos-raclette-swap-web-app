@@ -11,21 +11,29 @@
                 {
                     "kind": "temporary",
                     "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
-                    "location": 7252,
+                    "location": 4168,
                     "with": {
                         "prim": "Pair",
                         "args": [
                             {
-                                "int": "104"
+                                "int": "106"
                             },
                             {
                                 "prim": "Pair",
                                 "args": [
                                     {
-                                        "int": "4970000000000000000"
+                                        "prim": "Pair",
+                                        "args": [
+                                            {
+                                                "int": "185900000000000000"
+                                            },
+                                            {
+                                                "int": "185903495447828381"
+                                            }
+                                        ]
                                     },
                                     {
-                                        "int": "4969663118070924411"
+                                        "int": "34218305818339258"
                                     }
                                 ]
                             }
@@ -37,7 +45,7 @@
             "name": "TezosOperationError",
             "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
             "kind": "temporary",
-            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"104\"},{\"prim\":\"Pair\",\"args\":[{\"int\":\"4970000000000000000\"},{\"int\":\"4969663118070924411\"}]}]}",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"106\"},{\"prim\":\"Pair\",\"args\":[{\"prim\":\"Pair\",\"args\":[{\"int\":\"185900000000000000\"},{\"int\":\"185903495447828381\"}]},{\"int\":\"34218305818339258\"}]}]}",
             "isError": true
         },
         {
@@ -51,21 +59,29 @@
                 {
                     "kind": "temporary",
                     "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
-                    "location": 7252,
+                    "location": 4168,
                     "with": {
                         "prim": "Pair",
                         "args": [
                             {
-                                "int": "104"
+                                "int": "106"
                             },
                             {
                                 "prim": "Pair",
                                 "args": [
                                     {
-                                        "int": "4970000000000000000"
+                                        "prim": "Pair",
+                                        "args": [
+                                            {
+                                                "int": "185900000000000000"
+                                            },
+                                            {
+                                                "int": "185903495447828381"
+                                            }
+                                        ]
                                     },
                                     {
-                                        "int": "4969663118070924411"
+                                        "int": "34218305818339258"
                                     }
                                 ]
                             }
@@ -77,7 +93,7 @@
             "name": "TezosOperationError",
             "id": "proto.015-PtLimaPt.michelson_v1.script_rejected",
             "kind": "temporary",
-            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"104\"},{\"prim\":\"Pair\",\"args\":[{\"int\":\"4970000000000000000\"},{\"int\":\"4969663118070924411\"}]}]}",
+            "message": "{\"prim\":\"Pair\",\"args\":[{\"int\":\"106\"},{\"prim\":\"Pair\",\"args\":[{\"prim\":\"Pair\",\"args\":[{\"int\":\"185900000000000000\"},{\"int\":\"185903495447828381\"}]},{\"int\":\"34218305818339258\"}]}]}",
             "isError": true
         }
     ]
