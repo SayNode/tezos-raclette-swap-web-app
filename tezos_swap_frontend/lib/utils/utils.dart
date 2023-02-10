@@ -204,7 +204,7 @@ Future<double> calcSecondTokenAmount(
     return res.toPrecision(4);
   } else {
     var liquidity = await getLiquidity2(0, amount, pl, pu, currentTick, false);
-    double res = liquidity * (sqrt(pc) - sqrt(pl)) * 0.99;
+    double res = liquidity * (sqrt(pc) - sqrt(pl)) * 1.01;
     if (res < 0) {
       res = 0;
     }
