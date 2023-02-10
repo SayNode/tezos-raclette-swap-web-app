@@ -80,7 +80,7 @@ class SwapPage extends GetView<SwapController> {
                                   testContract,
                                   yToX);
 
-                              controller.lowerController.text = a.toString();
+                              controller.lowerController.text = (a*0.99).toString();
                             },
                             enabled: controller.checkValidTokenPair(),
                             tokenProvider: controller.tokenProvider1,

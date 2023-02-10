@@ -189,13 +189,14 @@ Future<double> calcSecondTokenAmount(
     {bool isY = false}) async {
   var currentTick = await getCurrentTick(contract);
   var pc = pow(1.0001, currentTick);
+  print(isY);
   if (isY) {
     var liquidity = await getLiquidity2(amount, 0, pl, pu, currentTick, true);
     print('liquidity: $liquidity');
 
     //'dx=',liq*(math.sqrt(pu)-sqrt_pc)/(math.sqrt(pu)*sqrt_pc)
     double res =
-        liquidity * ((sqrt(pu) - sqrt(pc)) / (sqrt(pu) * sqrt(pc))) * 1.01;
+        liquidity * ((sqrt(pu) - sqrt(pc)) / (sqrt(pu) * sqrt(pc))) * 0.99;
     if (res < 0) {
       res = 0;
     }

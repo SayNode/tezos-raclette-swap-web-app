@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_core/core.dart';
+import 'package:tezos_swap_frontend/pages/pool/controllers/new_position_service.dart';
 import 'package:tezos_swap_frontend/services/contract_service.dart';
 
 import '../../../models/chart_datapoint.dart';
@@ -14,6 +15,7 @@ import '../../../utils/globals.dart';
 import '../../../utils/utils.dart';
 
 class NewPositionController extends GetxController {
+  final newPositionService = Get.put(NewPositionService());
   final List<double> feeTier = [0.01, 0.05, 0.3, 1];
   RxInt feeIndex = 2.obs;
   RxBool expandFeeSelection = false.obs;
@@ -34,8 +36,6 @@ class NewPositionController extends GetxController {
   RxInt chartEnd = 30.obs;
   RangeController rangeController = RangeController(start: 5, end: 11);
   int changedX = -1;
-  RxBool overMax = false.obs;
-  RxBool underMin = false.obs;
 
   updatedChart() async {
     //chart.value = await compute(buildChartPoints, testContract);
@@ -73,21 +73,12 @@ class NewPositionController extends GetxController {
 
   //TODO: change to more suitable way to update underMin and overMax
 
-  checkIfUnderMin() async {
-    var currentTick =
-        await getCurrentTick('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
-    var currentPrice = pow(1.0001, currentTick);
-    underMin.value = min.value > currentPrice;
-
-    return min.value > currentPrice;
+  checkIfUnderMin() {
+    return min.value > newPositionService.currentPrice.value;
   }
 
-  checkIfOverMax() async {
-    var currentTick =
-        await getCurrentTick('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
-    var currentPrice = pow(1.0001, currentTick);
-    overMax.value = max.value < currentPrice;
-    return max.value < currentPrice;
+  checkIfOverMax() {
+    return max.value < newPositionService.currentPrice.value;
   }
 
   updateMax(int newMax) async {
@@ -96,8 +87,6 @@ class NewPositionController extends GetxController {
   }
 
   updateTokenCalc() async {
-    await checkIfOverMax();
-    await checkIfUnderMin();
 
     try {
       if (changedX == 1) {

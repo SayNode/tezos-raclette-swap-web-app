@@ -4,7 +4,7 @@ import 'package:tezos_swap_frontend/pages/pool/controllers/positions_controller.
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import 'package:tezos_swap_frontend/utils/globals.dart';
 
-import '../../services/new_position_service.dart';
+import 'controllers/new_position_service.dart';
 import '../../theme/ThemeRaclette.dart';
 import '../../utils/utils.dart';
 

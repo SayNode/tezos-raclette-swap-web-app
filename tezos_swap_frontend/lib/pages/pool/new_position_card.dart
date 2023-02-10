@@ -8,7 +8,7 @@ import 'package:tezos_swap_frontend/pages/pool/controllers/new_position_controll
 import 'package:tezos_swap_frontend/pages/pool/widgets/fee_tier_card.dart';
 import 'package:tezos_swap_frontend/services/wallet_connection.dart';
 import '../../models/chart_datapoint.dart';
-import '../../services/new_position_service.dart';
+import 'controllers/new_position_service.dart';
 import '../../theme/ThemeRaclette.dart';
 import '../../utils/decimal_input_formatter.dart';
 import '../../utils/globals.dart';
@@ -355,19 +355,22 @@ class NewPositionCard extends GetView<NewPositionController> {
                                                       .numberWithOptions(
                                                   decimal: true),
                                               enabled: (controller
-                                                  .checkValidTokenPair()&&!controller.overMax.value),
+                                                      .checkValidTokenPair() &&
+                                                  !controller.checkIfOverMax()),
                                               onChanged: (value) async {
                                                 controller.changedX = 0;
                                                 controller.updateTokenCalc();
                                               },
                                               controller:
                                                   controller.upperController,
-                                              decoration:  InputDecoration
-                                                      .collapsed(
-                                                  hintText: (controller.overMax.value)?'Locked':'0.0',
-                                                  hintStyle: const TextStyle(
-                                                      color:
-                                                           ThemeRaclette.white)),
+                                              decoration:
+                                                  const InputDecoration.collapsed(
+                                                      hintText: '0.0',
+                                                      hintStyle:
+                                                          TextStyle(
+                                                              color:
+                                                                  ThemeRaclette
+                                                                      .white)),
                                               style: const TextStyle(
                                                   fontSize: 30,
                                                   color: ThemeRaclette.white),
@@ -433,19 +436,22 @@ class NewPositionCard extends GetView<NewPositionController> {
                                                       .numberWithOptions(
                                                   decimal: true),
                                               enabled: (controller
-                                                  .checkValidTokenPair()&&!controller.underMin.value),
+                                                      .checkValidTokenPair() &&
+                                                  !controller.checkIfUnderMin()),
                                               onChanged: (value) async {
                                                 controller.changedX = 1;
                                                 controller.updateTokenCalc();
                                               },
                                               controller:
                                                   controller.lowerController,
-                                              decoration:  InputDecoration
-                                                      .collapsed(
-                                                  hintText: (controller.underMin.value)?'Locked':'0.0',
-                                                  hintStyle: const TextStyle(
-                                                      color:
-                                                          ThemeRaclette.white)),
+                                              decoration:
+                                                  const InputDecoration.collapsed(
+                                                      hintText: '0.0',
+                                                      hintStyle:
+                                                          TextStyle(
+                                                              color:
+                                                                  ThemeRaclette
+                                                                      .white)),
                                               style: const TextStyle(
                                                   fontSize: 30,
                                                   color: ThemeRaclette.white),
@@ -673,29 +679,40 @@ class NewPositionCard extends GetView<NewPositionController> {
                                                 var tky;
 
                                                 if (controller.tokenInverted) {
-                                                  tkx = controller.tokenY.value!
-                                                      .tokenAddress;
-                                                  tky = controller.tokenX.value!
-                                                      .tokenAddress;
+                                                  walletService.setPosition(
+                                                      testContract,
+                                                      walletService
+                                                          .address.string,
+                                                      double.parse(controller
+                                                          .lowerController
+                                                          .text),
+                                                      double.parse(controller
+                                                          .upperController
+                                                          .text),
+                                                      controller.min.value,
+                                                      controller.max.value,
+                                                      controller.tokenX.value!
+                                                          .tokenAddress,
+                                                      controller.tokenY.value!
+                                                          .tokenAddress);
                                                 } else {
-                                                  tkx = controller.tokenX.value!
-                                                      .tokenAddress;
-                                                  tky = controller.tokenY.value!
-                                                      .tokenAddress;
+                                                  walletService.setPosition(
+                                                      testContract,
+                                                      walletService
+                                                          .address.string,
+                                                      double.parse(controller
+                                                          .upperController
+                                                          .text),
+                                                      double.parse(controller
+                                                          .lowerController
+                                                          .text),
+                                                      controller.min.value,
+                                                      controller.max.value,
+                                                      controller.tokenX.value!
+                                                          .tokenAddress,
+                                                      controller.tokenY.value!
+                                                          .tokenAddress);
                                                 }
-
-                                                walletService.setPosition(
-                                                    testContract,
-                                                    walletService
-                                                        .address.string,
-                                                    double.parse(controller
-                                                        .upperController.text),
-                                                    double.parse(controller
-                                                        .lowerController.text),
-                                                    controller.min.value,
-                                                    controller.max.value,
-                                                    tkx,
-                                                    tky);
                                               },
                                               child: Text(
                                                 'Submit',
