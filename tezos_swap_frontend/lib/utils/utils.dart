@@ -102,10 +102,10 @@ getSqrtCurrentPrice(String contract) async {
 }
 
 bool isNumeric(String s) {
- if (s == null) {
-   return false;
- }
- return double.tryParse(s) != null;
+  if (s == null) {
+    return false;
+  }
+  return double.tryParse(s) != null;
 }
 
 getFeeFromContract(String contract) async {
@@ -196,9 +196,9 @@ Future<double> calcSecondTokenAmount(
 
     //'dx=',liq*(math.sqrt(pu)-sqrt_pc)/(math.sqrt(pu)*sqrt_pc)
     double res =
-        liquidity * ((sqrt(pu) - sqrt(pc)) / (sqrt(pu) * sqrt(pc))) * 0.99;        
+        liquidity * ((sqrt(pu) - sqrt(pc)) / (sqrt(pu) * sqrt(pc))) * 0.99;
     if (res < 0) {
-      res = 0;     
+      res = 0;
     }
 
     return res.toPrecision(4);
@@ -212,7 +212,6 @@ Future<double> calcSecondTokenAmount(
     return res.toPrecision(4);
   }
 }
-
 
 ///Calculate the amount of X or Y given one of the two
 Future<double> calcSecondTokenAmountSwap(
@@ -298,7 +297,17 @@ getPositions(String contractAddress) async {
 
 Future<List<Map>> positionsOfAddress(
     String address, String contractAddress) async {
-  var positions = await getPositions(contractAddress);
+  var headers = {
+    "Accept": "application/json",
+    'Content-type': 'application/json',
+  };
+  var url = Uri.parse(
+      'https://api.ghostnet.tzkt.io/v1/contracts/$contractAddress/bigmaps/positions/keys?active=true&&value.owner=$address');
+  var res = await http.get(url, headers: headers);
+  if (res.statusCode != 200) {
+    throw Exception('http.post error: statusCode= ${res.statusCode}');
+  }
+  var positions = res.body;
   List<Map> myPositions = [];
 
   for (Map position in json.decode(positions)) {

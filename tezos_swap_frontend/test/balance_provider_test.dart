@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tezos_swap_frontend/models/token.dart';
 import 'package:tezos_swap_frontend/services/balance_provider.dart';
+import 'package:tezos_swap_frontend/utils/utils.dart';
 
 void main() {
   test('test', () async {
@@ -22,6 +25,14 @@ void main() {
     });
 
     List<Token> tokenList = [token1, token2];
+  });
+
+  test('test get positions', () async {
+    var a = await positionsOfAddress('tz1fZ3mEJdm8ugFkAx7df4nrs8FXxBiMQoQk',
+        'KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+    //var b = await getPositions('KT1TZTkhnZFPL7cdNaif9B3r5oQswM1pnCXB');
+
+    print(a);
   });
   test('test balance of token', () async {
     Token token = Token.fromJson({
