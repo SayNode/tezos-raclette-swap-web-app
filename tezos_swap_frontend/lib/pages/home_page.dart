@@ -29,11 +29,19 @@ class HomePage extends GetView<HomeController> {
             Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  height: 80,
-                  child:
-                      const Image(image: AssetImage("assets/image/Logo.png")),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(10),
+                      height: 80,
+                      child: const Image(
+                          image: AssetImage("assets/image/Logo.png")),
+                    ),
+                    Text(
+                      'v.0.0.1',
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
                 ),
               ),
             ),
@@ -177,11 +185,7 @@ class HomePage extends GetView<HomeController> {
         Obx(() {
           return IndexedStack(
             index: controller.index.value,
-            children: [
-              SwapPage(),
-              PoolCard(),
-              const VotePage()
-            ],
+            children: [SwapPage(), PoolCard(), const VotePage()],
           );
         }),
       ]),

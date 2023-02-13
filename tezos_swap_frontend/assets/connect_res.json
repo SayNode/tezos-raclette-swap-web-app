@@ -1,0 +1,10 @@
+{
+    "type": "TEMPLE_PAGE_RESPONSE",
+    "payload": {
+        "type": "PERMISSION_RESPONSE",
+        "pkh": "tz1eLA1kphjGGVP7iSABmEw5U7YChT88RZSW",
+        "publicKey": "edpkvVoNkwAEKXwcXt3LySEvi7erFLnbNU59TzHUbnsNXDPV7wwYDo",
+        "rpc": "https://uoi3x99n7c.ghostnet.tezosrpc.midl.dev"
+    },
+    "reqId": "Fj5ffvosnFyb65XKPtE-i"
+}

@@ -65,7 +65,7 @@ class WalletService extends GetxService {
 //FIXME: might be problems with tokenx and y amount calculation
   swap(String contract, String recipient, double tokenX, double tokenY,
       String tokenXAddress, String tokenYAddress,
-      {bool yToX = false}) async{
+      {bool yToX = false}) async {
     String entrypoint = "x_to_y";
     if (yToX) {
       entrypoint = "y_to_x";
@@ -301,9 +301,40 @@ class WalletService extends GetxService {
     });
   }
 
+  _signPopup() {
+    Navigator.of(Get.context!).push(CardDialogRoute(
+      builder: (context) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: 400,
+              height: 500,
+              child: Card(
+                color: ThemeRaclette.primaryStatic,
+                shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Colors.white, width: 2.0),
+                    borderRadius: BorderRadius.circular(20.0)),
+                child: Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('Waiting for Temple wallet to sign.'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    ));
+  }
+
   _request(Map payload, {String? id}) {
     id ??= nanoid();
     var msg = {'type': 'TEMPLE_PAGE_REQUEST', 'payload': payload, 'reqId': id};
+    _signPopup();
     html.window.postMessage(msg, "*");
 
     html.window.addEventListener("message", (event) {
@@ -311,13 +342,74 @@ class WalletService extends GetxService {
       if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_RESPONSE') {
-        address.value = evt.data['payload']['pkh'];
+        if (evt.data['payload']['type'] == 'PERMISSION_RESPONSE') {
+          Get.close(1);
+          address.value = evt.data['payload']['pkh'];
+        } else {
+          //evt.data['payload']['opHash']
+          Navigator.of(Get.context!).pushReplacement(CardDialogRoute(
+            builder: (context) {
+              return Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 400,
+                    height: 500,
+                    child: Card(
+                      color: ThemeRaclette.primaryStatic,
+                      shape: RoundedRectangleBorder(
+                          side:
+                              const BorderSide(color: Colors.white, width: 2.0),
+                          borderRadius: BorderRadius.circular(20.0)),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text('Operation signed. Operation-hash:'),
+                              Text(evt.data['payload']['opHash']),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ));
+        }
       } else if (evt.source == html.window &&
           evt.data['reqId'] == id &&
           evt.data['type'] == 'TEMPLE_PAGE_ERROR_RESPONSE') {
-        print('-----------');
-        print(evt.data);
-        print('-----------');
+        Navigator.of(Get.context!).pushReplacement(CardDialogRoute(
+          builder: (context) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  width: 400,
+                  height: 500,
+                  child: Card(
+                    color: ThemeRaclette.primaryStatic,
+                    shape: RoundedRectangleBorder(
+                        side: const BorderSide(color: Colors.white, width: 2.0),
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(evt.data.toString()),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ));
       }
     }, true);
   }
