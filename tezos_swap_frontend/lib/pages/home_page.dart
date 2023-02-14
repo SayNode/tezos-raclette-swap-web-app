@@ -38,7 +38,7 @@ class HomePage extends GetView<HomeController> {
                           image: AssetImage("assets/image/Logo.png")),
                     ),
                     Text(
-                      'v.0.0.2',
+                      'v.0.0.3',
                       style: TextStyle(color: Colors.white),
                     )
                   ],

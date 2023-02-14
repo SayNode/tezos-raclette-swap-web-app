@@ -81,13 +81,28 @@ class NewPositionController extends GetxController {
     return max.value < newPositionService.currentPrice.value;
   }
 
+  lockFieldUpper() {
+    if (tokenInverted) {
+      return checkIfUnderMin();
+    } else {
+      return checkIfOverMax();
+    }
+  }
+
+  lockFieldLower() {
+    if (tokenInverted) {
+      return checkIfOverMax();
+    } else {
+      return checkIfUnderMin();
+    }
+  }
+
   updateMax(int newMax) async {
     max.value = newMax;
     await updateTokenCalc();
   }
 
   updateTokenCalc() async {
-
     try {
       if (changedX == 1) {
         double input;

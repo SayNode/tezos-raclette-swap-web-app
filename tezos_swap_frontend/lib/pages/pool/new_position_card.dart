@@ -356,7 +356,7 @@ class NewPositionCard extends GetView<NewPositionController> {
                                                   decimal: true),
                                               enabled: (controller
                                                       .checkValidTokenPair() &&
-                                                  !controller.checkIfOverMax()),
+                                                  !controller.lockFieldUpper()),
                                               onChanged: (value) async {
                                                 controller.changedX = 0;
                                                 controller.updateTokenCalc();
@@ -437,7 +437,7 @@ class NewPositionCard extends GetView<NewPositionController> {
                                                   decimal: true),
                                               enabled: (controller
                                                       .checkValidTokenPair() &&
-                                                  !controller.checkIfUnderMin()),
+                                                  !controller.lockFieldLower()),
                                               onChanged: (value) async {
                                                 controller.changedX = 1;
                                                 controller.updateTokenCalc();
