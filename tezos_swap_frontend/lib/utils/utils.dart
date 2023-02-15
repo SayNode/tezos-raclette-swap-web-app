@@ -129,7 +129,7 @@ getLiquidity(double y, double x, int pl, int pu, int currentTick) {
   var pc = pow(1.0001, currentTick);
   if (pc < pl) {
     // Liq = dx/ (  (1/sqrt(Pl))   -   (1/sqrt(Pc))   )
-    return x / ((1 / sqrt(pl)) - (1 / sqrt(pu))) * 0.9;
+    return x / ((1 / sqrt(pl)) - (1 / sqrt(pu))) * 0.99;
   } else if (pu < pc) {
     //Liq= dy/( sqrt(Pc) - sqrt(Pl) )
     return y / (sqrt(pu) - sqrt(pl)) * 0.9999;

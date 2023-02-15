@@ -102,7 +102,7 @@ class PositionsCard extends GetView<PositionsController> {
                               } else if (snapshot.connectionState ==
                                   ConnectionState.done) {
                                 if (snapshot.hasError) {
-                                  return const Text('Error');
+                                  return const SizedBox();
                                 } else if (snapshot.hasData) {
                                   return Column(
                                     crossAxisAlignment:
