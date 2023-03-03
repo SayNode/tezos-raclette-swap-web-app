@@ -7,8 +7,9 @@ A V3 style swap on Tezos
 Tests have to be done manually as there is no practical way to test interactions with the blockchain, since we do all signing of transactions with the Temple wallet extension.
 
 ### Requirements
-Flutter and a way to run flutter in chrome.
-Temple Wallet extension.
+1. Flutter and a way to run flutter in chrome.
+2. Temple Wallet extension.
+
 Import this private key into the wallet: edskS1TVJqsCXgYSEEiNrv8GDwpresD4FL49ipZErZ1mH9itZNSXfEnykvzLWyQVpVLsU69KvgtBTteCXfc9ZUpuAJg61zoUTW
 This wallet has some tezos for fees as well as 2 test tokens, Token X and Token Y, which are used by the contract.
 
