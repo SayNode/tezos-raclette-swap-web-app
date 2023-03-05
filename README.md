@@ -1,9 +1,18 @@
 # Using the Website
+The final product can be seen and interacted with at https://www.raclette.finance/ .
 There are 3 different sections of the web app:
 1. The swap area: allows the user to choose two tokens (red) and trade between them;
-
+<div align="center">
+    <img src="./RacletteImages/swapV2.png">
+</div>
 2. The manage positions area: where the user can check the all the positions he currently has (green) and even remove them (blue). He can also set a new position (red);
+<div align="center">
+    <img src="./RacletteImages/pool1V2.png">
+</div>
 3. The new position zone: where the user can choose two tokens (red), the pool fee tier he wants, if it exists (green), and the price range in which he whishes to deposit liquidity (purple)
+<div align="center">
+    <img src="./RacletteImages/pool2V2.png">
+</div>
 
  
 # Tezos_swap_frontend
