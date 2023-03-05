@@ -1,3 +1,11 @@
+# Using the Website
+There are 3 different sections of the web app:
+1. The swap area: allows the user to choose two tokens (red) and trade between them;
+
+2. The manage positions area: where the user can check the all the positions he currently has (green) and even remove them (blue). He can also set a new position (red);
+3. The new position zone: where the user can choose two tokens (red), the pool fee tier he wants, if it exists (green), and the price range in which he whishes to deposit liquidity (purple)
+
+ 
 # Tezos_swap_frontend
 
 A V3 style swap on Tezos
